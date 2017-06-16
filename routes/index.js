@@ -22,12 +22,19 @@
  * SOFTWARE.
  * ********************************************************************************* */
 
+const debug = require('debug')('mpd-ui:Routes/Index');
+const config = require('../base/config');
+
 var express = require('express');
 var router = express.Router();
 
+function respond(res, view, page, title, data) {
+    res.render('templates/' + view, { title: title, page: page, config: config.items, data: data });
+}
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Express' });
+    respond(res, 'main', 'home', 'Home');
 });
 
 module.exports = router;

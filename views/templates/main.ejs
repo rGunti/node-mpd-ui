@@ -26,7 +26,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><%= title %></title>
+        <title><%= config.title %> &ndash; <%= title %></title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <link rel="stylesheet" href="/css/bootstrap.min.css" />
         <link rel="stylesheet" href="/css/datatables.min.css" />
@@ -51,7 +51,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#"><%= title %></a>
+                    <a class="navbar-brand" href="#"><%= title %> &ndash; <%= config.title %></a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
@@ -61,85 +61,10 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                     </ul>
-                </div><!-- /.navbar-collapse -->
+                </div>
             </div>
         </nav>
 
-        <div class="container">
-            <h1><%= title %></h1>
-            <p>Welcome to <%= title %></p>
-        </div>
-        <div class="container">
-            <table class="table display responsive no-wrap" id="testTable">
-                <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Artist</th>
-                    <th>Length</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>A title</td>
-                    <td>A artist</td>
-                    <td>02:34</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>B title</td>
-                    <td>B artist</td>
-                    <td>02:34</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>C title</td>
-                    <td>C artist</td>
-                    <td>02:34</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>D title</td>
-                    <td>D artist</td>
-                    <td>02:34</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>E title</td>
-                    <td>E artist</td>
-                    <td>02:34</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>F title</td>
-                    <td>F artist</td>
-                    <td>02:34</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>G title</td>
-                    <td>G artist</td>
-                    <td>02:34</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>H title</td>
-                    <td>H artist</td>
-                    <td>02:34</td>
-                    <td>-</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <script>
-            $('#testTable').DataTable({
-                responsive: true,
-                lengthMenu: [5, 10],
-                columnDefs: [
-                    { responsivePriority: 1, targets: 0 },
-                    { responsivePriority: 2, targets: -1, sortable: false }
-                ]
-            });
-        </script>
+        <%- include('../' + page, { title: title, page: page, config: config, data: data }) %>
     </body>
 </html>
