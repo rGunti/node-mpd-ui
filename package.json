@@ -1,7 +1,17 @@
 {
   "name": "mpd-ui",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "node-mpd-ui is a UI and RESTful API made to interface with the Music Player Daemon running on a Raspberry Pi.",
   "private": true,
+  "license": "MIT",
+  "author": {
+    "name": "Raphael \"rGunti\" Guntersweiler",
+    "email": "raphael@rgunti.ch",
+    "url": "http://rgunti.ch"
+  },
+  "homepage": "https://github.com/rGunti/node-mpd-ui",
+  "repository": "https://github.com/rGunti/node-mpd-ui",
+  "bugs": "https://github.com/rGunti/node-mpd-ui/issues",
   "scripts": {
     "start": "node ./bin/www"
   },
