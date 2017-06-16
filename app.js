@@ -22,6 +22,18 @@
  * SOFTWARE.
  * ********************************************************************************* */
 
+require('./base/ascii_printer');
+const debug = require('debug')('mpd-ui:MAIN');
+const config = require('./base/config');
+debug('Starting up [%s] %s ...',
+    config.getValue(config.KEYS.FLAG),
+    config.getValue(config.KEYS.TITLE)
+);
+debug('Used MPD Server: %s:%s',
+    config.getValue(config.KEYS.MPD_HOST),
+    config.getValue(config.KEYS.MPD_PORT)
+);
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
