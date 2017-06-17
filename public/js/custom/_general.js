@@ -1,4 +1,3 @@
-<%
 /*********************************************************************************** *
  * MIT License
  *
@@ -22,7 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  * ********************************************************************************* */
-%>
-<div class="container">
-    <h2>Home</h2>
-</div>
+
+$(document).ready(function() {
+    // Hide when a Nav item has been clicked
+    $('.nav a').on('click', function() { $('.navbar-toggle').click(); });
+
+    // Hide when clicked outside of the nav menu
+    $(document).click(function (event) {
+        var clickover = $(event.target);
+        var _opened = $(".navbar-collapse").hasClass("navbar-collapse in");
+        if (_opened === true && !clickover.hasClass("navbar-toggle")) {
+            $("button.navbar-toggle").click();
+        }
+    });
+});

@@ -1,3 +1,4 @@
+<%
 /*********************************************************************************** *
  * MIT License
  *
@@ -21,20 +22,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  * ********************************************************************************* */
+%>
+<div class="container" id="searchBoxContainer">
+    <div class="input-group">
+        <span class="input-group-addon">
+            <span class="glyphicon glyphicon-search"></span>
+        </span>
+    </div>
+</div>
+<div class="container">
+    <table class="table table-responsive" id="testTable">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Registered</th>
+            <th>Fruit</th>
+            <th>Eye</th>
+        </tr>
+        </thead>
+    </table>
+</div>
 
-const debug = require('debug')('mpd-ui:Routes/Index');
-const config = require('../base/config');
-
-var express = require('express');
-var router = express.Router();
-
-function respond(res, view, page, title, data) {
-    res.render('templates/' + view, { title: title, page: page, config: config.items, data: data });
-}
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-    respond(res, 'main', 'test_table', 'Test Table');
-});
-
-module.exports = router;
+<script src="/js/custom/home.js"></script>

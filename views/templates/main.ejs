@@ -28,12 +28,15 @@
     <head>
         <title><%= config.title %> &ndash; <%= title %></title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-capable" content="yes">
         <link rel="stylesheet" href="/css/bootstrap.min.css" />
         <link rel="stylesheet" href="/css/datatables.min.css" />
         <link rel="stylesheet" href="/css/custom.css" />
         <script src="/js/jquery-3.2.1.min.js"></script>
         <script src="/js/bootstrap.min.js"></script>
         <script src="/js/datatables.min.js"></script>
+        <script src="/js/custom/_general.js"></script>
     </head>
     <body>
         <!-- NAV -->
@@ -66,5 +69,9 @@
         </nav>
 
         <%- include('../' + page, { title: title, page: page, config: config, data: data }) %>
+
+        <footer class="container">
+            &COPY; 2017, rGunti
+        </footer>
     </body>
 </html>

@@ -22,5 +22,9 @@
  * SOFTWARE.
  * ********************************************************************************* */
 
+/* General Settings */
 body { margin-top: 70px; }
 table { width: 100%; }
+
+/* Hide DataTable Filter Block */
+.dataTables_filter { display: none; }
