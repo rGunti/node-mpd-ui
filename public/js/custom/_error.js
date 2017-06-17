@@ -1,4 +1,3 @@
-<%
 /*********************************************************************************** *
  * MIT License
  *
@@ -22,25 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  * ********************************************************************************* */
-%>
-<div class="container">
-    <div class="input-group" id="searchBoxTarget">
-		<span class="input-group-addon">
-			<i class="material-icons">search</i>
-		</span>
-    </div>
-</div>
-<div class="container">
-    <table class="table table-responsive" id="testTable">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Registered</th>
-            <th>Fruit</th>
-            <th>Eye</th>
-        </tr>
-        </thead>
-    </table>
-</div>
 
-<script src="/js/custom/home.js"></script>
+$(document).ready(function() {
+    $('#copyErrorDetail').click(function() {
+
+    });
+});

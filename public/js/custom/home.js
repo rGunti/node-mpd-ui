@@ -2684,8 +2684,8 @@ $(document).ready(function() {
 
     // Calculate Table Height
     var screenHeight = $(window).height();
-    var navHeight = 70;
-    var searchBoxHeight = $('#searchBoxContainer').height();
+    var navHeight = 100;
+    var searchBoxHeight = $('#searchBoxTarget').parent().height();
     var footerHeight = $('footer').height();
     var bottomTableRowHeight = 71;
     var topTableRowHeight = 38;
@@ -2737,7 +2737,7 @@ $(document).ready(function() {
         initComplete: function(settings, json) {
             // Move Text Box out to Destination
             var searchBox = $('.dataTables_filter input[type=search]').each(function() {
-                $('#searchBoxContainer span.input-group-addon').after(this);
+                $('#searchBoxTarget').append(this);
             });
 
             console.log('Init Completed');

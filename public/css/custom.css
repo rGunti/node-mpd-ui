@@ -22,9 +22,40 @@
  * SOFTWARE.
  * ********************************************************************************* */
 
+/* Include Google's Material Icons Font */
+/*
+@font-face {
+    font-family: 'material-icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url(/fonts/material-font.eot); /* For IE6-8 *//*
+    src: url(/fonts/material-font.woff2) format('woff2'),
+         url(/fonts/material-font.woff) format('woff'),
+         url(/fonts/material-font.ttf) format('truetype');
+}
+.material-icons {
+    font-family: 'material-icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
+*/
+
 /* General Settings */
-body { margin-top: 70px; }
+/*body { margin-top: 100px; }*/
+.main { padding-top: 145px; }
 table { width: 100%; }
+footer { text-align: center; }
+.alert h4 { font-weight: bold; }
 
 /* Hide DataTable Filter Block */
 .dataTables_filter { display: none; }

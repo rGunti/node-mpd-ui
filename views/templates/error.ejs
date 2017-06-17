@@ -53,59 +53,105 @@
 <head>
     <title><%= config.title %> &ndash; <%= title %></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="stylesheet" href="/css/iconfont/material-icons.css" />
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/material-kit.css" />
     <link rel="stylesheet" href="/css/datatables.min.css" />
     <link rel="stylesheet" href="/css/custom.css" />
+
     <script src="/js/jquery-3.2.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/material.min.js"></script>
+    <script src="/js/material-kit.js"></script>
     <script src="/js/datatables.min.js"></script>
+    <script src="/js/custom/_general.js"></script>
 </head>
 <body>
 <!-- NAV -->
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <a class="navbar-brand" href="#">
                 <span class="glyphicon glyphicon-exclamation-sign"></span>
-                <%= config.title %>
+                <b><%= title %></b>
+                <small><%= config.title %></small>
             </a>
         </div>
     </div>
 </nav>
 
-<div class="container">
-    <h1 class="text-danger text-center">
-        <span class="glyphicon glyphicon-exclamation-sign"></span><br>
-        <b><%= title %></b>
-    </h1>
-    <h2 class="text-danger text-center">
-        WE HAVE A SYSTEM FAILURE! EVERYONE PANIC!!! WE ARE ALL GONNA DIE!!! AAAAAARGH!!!
-    </h2>
-    <p>
-        Okay, a little overexaggerated... But seriously we had a serious error which may or may not have caused the
-        web server to crash... I don't know.
-    </p>
-    <p>
-        If you know the developer or the owner of this server, please send them the error detail below so they can
-        fix it... maybe.
-    </p>
+<!-- CONTENT -->
+<div class="main main-raised">
+    <div class="container">
+        <div class="alert alert-danger">
+            <div class="container-fluid">
+                <div class="alert-icon">
+                    <i class="material-icons">error_outline</i>
+                </div>
+                <h4><%= title %></h4>
+                <p>
+                    <b>WE HAVE A SYSTEM FAILURE!
+                        EVERYONE PANIC!!
+                        WE ARE ALL GONNA DIE!!!
+                        AAAAAARGH!!!</b>
+                </p>
+                <p>
+                    Okay, a little overexaggerated... But seriously we had a serious error which may or may not have caused the
+                    web server to crash... I don't know.
+                </p>
+                <p>
+                    If you know the developer or the owner of this server, please send them the error detail below so they can
+                    fix it... maybe.
+                </p>
 
-    <blockquote>
-        <h3>Error Detail<br><small>a.k.a. The stuff you should send to the dev</small></h3>
+                <h4>
+                    Error Detail:
+                    <span class="label label-warning">
+                        a.k.a. The stuff you should send to the dev
+                    </span>
+                </h4>
+                <p>
+                    <b>Note:</b> Don't screenshot this page. Instead use the copy button
+                    at the bottom of the page to get the error info. Also, include a
+                    report of the error so the dev can try to recreate the error. That makes
+                    work easier for them and they will thank you for this.
+                </p>
+                <dl class="dl-horizontal">
+                    <dt><b>Message</b></dt>
+                    <dd><%= message %></dd>
 
-        <dl class="dl-horizontal">
-            <dt>Message</dt>
-            <dd><%= message %></dd>
+                    <dt><b>Status</b></dt>
+                    <dd><%= error.status || '-' %></dd>
 
-            <dt>Status</dt>
-            <dd><%= error.status || '-' %></dd>
-
-            <dt>Stack Trace</dt>
-            <dd><pre><%= error.stack %></pre></dd>
-        </dl>
-    </blockquote>
+                    <dt><b>Stack Trace</b></dt>
+                    <dd><pre><%= error.stack %></pre></dd>
+                </dl>
+                <div>
+                    <div class="sr-only" id="jsonErrorContent">
+                        <%= JSON.stringify({ message: message, error: error, stack: error.stack }) %>
+                    </div>
+                    <button class="btn btn-warning" id="copyErrorDetail">
+                        Copy Error Detail to Clipboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#copyErrorDetail').click(function() {
+            window.prompt(
+                'Copy the provided information and send it to the dev:',
+                $('#jsonErrorContent').text()
+            );
+        });
+    });
+</script>
 
 </body>
 </html>
