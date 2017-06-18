@@ -34,6 +34,11 @@ function respond(res, view, page, title, data) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+    respond(res, 'main', 'home', 'Now Playing');
+});
+
+/* GET test_table page. */
+router.get('/test_table', function(req, res, next) {
     respond(res, 'main', 'test_table', 'Test Table');
 });
 
