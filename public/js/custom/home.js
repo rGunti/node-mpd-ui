@@ -22,42 +22,66 @@
  * SOFTWARE.
  * ********************************************************************************* */
 
+function calculateArtworkWidth() {
+    // Calculate Album Cover Height
+    var screenHeight = $(window).height();
+    var screenWidth = $(window).width();
+    var contentWidth = $('.main-raised > .container').width();
+    var contentMargin = Number($('.main-raised > .container').css('padding-left').replace('px',''));
+
+    var footerHeight = $('footer').height();
+    var navHeight = 100;
+    var currentTitleHeight = $('#currentTitle').parent().height();
+    var currentArtistAlbumHeight = $('#currentArtist').parent().height();
+    var timestampHeight = $('#currentTimestamp').parent().parent().height();
+    var timestampBarHeight = $('#timestampProgressBar').parent().parent().height();
+    var buttonHeight = $('.row.text-center').height();
+    var failSafe = 30;
+
+    var songInfoHeight = currentTitleHeight + currentArtistAlbumHeight + timestampHeight + timestampBarHeight;
+
+    var albumCoverHeight = screenHeight
+        - footerHeight
+        - navHeight
+        - songInfoHeight
+        - buttonHeight
+        - failSafe
+    ;
+    albumCoverHeight = Math.min(albumCoverHeight, screenWidth);
+
+    $('.album-cover-row').css({ height: albumCoverHeight + 15, position: 'relative' });
+    $('.album-cover-row > img')
+        .height(albumCoverHeight)
+        .width(albumCoverHeight)
+        .css({
+            left: (contentWidth / 2) - (albumCoverHeight / 2) + contentMargin,
+            position: 'absolute'
+        })
+    ;
+    $('.album-cover-row').show();
+}
+
+/**
+ * Updates a given Song Info and triggers the recalculation method, unless prevented by parameter
+ * @param target Target Object (jQuery Selector)
+ * @param value Value
+ * @param preventEvent If given and true, the recalculation will not be triggered
+ */
+function updateSongInfoText(target, value, preventEvent) {
+    $(target).text(value);
+    if (!preventEvent) calculateArtworkWidth();
+}
+
+function updateSongTitle(value, preventEvent) { updateSongInfoText('#currentTitle', value, preventEvent) }
+function updateSongArtist(value, preventEvent) { updateSongInfoText('#currentArtist', value, preventEvent) }
+function updateSongAlbum(value, preventEvent) { updateSongInfoText('#currentAlbum', value, preventEvent) }
+function updateSongTimestamp(value) { updateSongInfoText('#currentSongLength', value, true); }
+function updateCurrentTimestamp(value) { updateSongInfoText('#currentTimestamp', value, true); }
+
 $(document).ready(function() {
-    function calculateArtworkWidth() {
-        // Calculate Album Cover Height
-        var screenHeight = $(window).height();
-        var screenWidth = $(window).width();
-        var contentWidth = $('.main-raised > .container').width();
-        var contentMargin = Number($('.main-raised > .container').css('padding-left').replace('px',''));
-
-        var footerHeight = $('footer').height();
-        var navHeight = 100;
-        var songInfoHeight = 25 + 21 + 21 + 24;
-        var buttonHeight = 61;
-        var failSafe = 30;
-
-        var albumCoverHeight = screenHeight
-            - footerHeight
-            - navHeight
-            - songInfoHeight
-            - buttonHeight
-            - failSafe
-        ;
-        albumCoverHeight = Math.min(albumCoverHeight, screenWidth);
-
-        $('.album-cover-row').css({ height: albumCoverHeight + 15, position: 'relative' });
-        $('.album-cover-row > img')
-            .height(albumCoverHeight)
-            .width(albumCoverHeight)
-            .css({
-                left: (contentWidth / 2) - (albumCoverHeight / 2) + contentMargin,
-                position: 'absolute'
-            })
-        ;
-        $('.album-cover-row').show();
-    }
-
+    // Resize Stuff if the Window Size changes
     $(window).resize(calculateArtworkWidth);
 
+    // Initial Recalc Method
     calculateArtworkWidth();
 });
