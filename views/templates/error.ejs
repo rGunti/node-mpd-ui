@@ -130,9 +130,9 @@
                     <dd><pre><%= error.stack %></pre></dd>
                 </dl>
                 <div>
-                    <div class="sr-only" id="jsonErrorContent">
-                        <%= JSON.stringify({ message: message, error: error, stack: error.stack }) %>
-                    </div>
+                    <div class="sr-only" id="jsonErrorContent"><%=
+                        JSON.stringify({ message: message, error: error, stack: error.stack })
+                        %></div>
                     <button class="btn btn-warning" id="copyErrorDetail">
                         Copy Error Detail to Clipboard
                     </button>
