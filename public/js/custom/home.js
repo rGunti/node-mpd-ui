@@ -78,10 +78,52 @@ function updateSongAlbum(value, preventEvent) { updateSongInfoText('#currentAlbu
 function updateSongTimestamp(value) { updateSongInfoText('#currentSongLength', value, true); }
 function updateCurrentTimestamp(value) { updateSongInfoText('#currentTimestamp', value, true); }
 
+function updateTimestampProgressBar(val, max) {
+    $('#timestampProgressBar').css({
+        width: ((val / max) * 100) + '%'
+    });
+}
+
+function updateAllSongInfo(title, artist, album, length, lengthString, timestamp, timestampString, state) {
+    updateSongTitle(title, false);
+    updateSongArtist(artist, false);
+    updateSongAlbum(album, false);
+    updateSongTimestamp(lengthString);
+    updateCurrentTimestamp(timestampString);
+    // updateState(state)
+    updateTimestampProgressBar(timestamp, length);
+
+    calculateArtworkWidth();
+}
+
+function updateUILoop() {
+    $.ajax({
+        url: '/mpd/status'
+    }).done(function(response) {
+        if (response.ok) {
+            updateAllSongInfo(
+                response.data.currentSong.Title || '-',
+                response.data.currentSong.Artist || '-',
+                response.data.currentSong.Album || '-',
+                response.data.songLength,
+                response.data.songLengthString,
+                response.data.currentTimestamp,
+                response.data.currentTimestampString,
+                response.data.state
+            );
+        }
+
+        setTimeout(updateUILoop, 250);
+    });
+}
+
 $(document).ready(function() {
     // Resize Stuff if the Window Size changes
     $(window).resize(calculateArtworkWidth);
 
     // Initial Recalc Method
     calculateArtworkWidth();
+
+    // Initialize UI Loop
+    updateUILoop();
 });
