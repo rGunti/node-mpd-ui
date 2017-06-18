@@ -26,12 +26,21 @@
 /*body { margin-top: 100px; }*/
 .main { padding-top: 145px; }
 table { width: 100%; }
-footer { text-align: center; font-size: x-small; }
+footer {
+    font-family: 'Roboto Condensed', "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-align: center;
+    font-size: x-small;
+}
 .alert h4 { font-weight: bold; }
+.font-condensed { font-family: 'Roboto Condensed'; }
 
 /* Hide DataTable Filter Block */
 .dataTables_filter { display: none; }
 
 /* Current Song Page */
 .album-cover-row { display: none; }
-#currentTitle { font-weight: bold; font-size: x-large; }
+#currentTitle {
+    font-family: 'Roboto Condensed', "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    font-size: x-large;
+}

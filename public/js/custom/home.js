@@ -78,6 +78,10 @@ function updateSongAlbum(value, preventEvent) { updateSongInfoText('#currentAlbu
 function updateSongTimestamp(value) { updateSongInfoText('#currentSongLength', value, true); }
 function updateCurrentTimestamp(value) { updateSongInfoText('#currentTimestamp', value, true); }
 
+function updatePlayPauseButton(state) {
+    $('#playPauseButton > i.material-icons').text((state === 'play' ? 'pause' : 'play_arrow'));
+}
+
 function updateTimestampProgressBar(val, max) {
     $('#timestampProgressBar').css({
         width: ((val / max) * 100) + '%'
@@ -90,7 +94,7 @@ function updateAllSongInfo(title, artist, album, length, lengthString, timestamp
     updateSongAlbum(album, false);
     updateSongTimestamp(lengthString);
     updateCurrentTimestamp(timestampString);
-    // updateState(state)
+    updatePlayPauseButton(state);
     updateTimestampProgressBar(timestamp, length);
 
     calculateArtworkWidth();
@@ -102,9 +106,9 @@ function updateUILoop() {
     }).done(function(response) {
         if (response.ok) {
             updateAllSongInfo(
-                response.data.currentSong.Title || '-',
-                response.data.currentSong.Artist || '-',
-                response.data.currentSong.Album || '-',
+                (response.data.currentSong ? response.data.currentSong.Title || '-' : '-'),
+                (response.data.currentSong ? response.data.currentSong.Artist || '-' : '-'),
+                (response.data.currentSong ? response.data.currentSong.Album || '-' : '-'),
                 response.data.songLength,
                 response.data.songLengthString,
                 response.data.currentTimestamp,
@@ -117,6 +121,10 @@ function updateUILoop() {
     });
 }
 
+function executeSimpleRequest(url, method) {
+    $.ajax({ url: url, method: method || 'post' });
+}
+
 $(document).ready(function() {
     // Resize Stuff if the Window Size changes
     $(window).resize(calculateArtworkWidth);
@@ -126,4 +134,9 @@ $(document).ready(function() {
 
     // Initialize UI Loop
     updateUILoop();
+
+    // Set Button Events
+    $('#previousSongButton').click(function() { executeSimpleRequest('/mpd/control/prev') });
+    $('#playPauseButton').click(function() { executeSimpleRequest('/mpd/control/playPause') });
+    $('#nextSongButton').click(function() { executeSimpleRequest('/mpd/control/skip') });
 });

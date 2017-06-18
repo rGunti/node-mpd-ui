@@ -31,6 +31,7 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="mobile-web-app-capable" content="yes">
 
+        <link rel="stylesheet" href="/css/font-roboto.css" />
         <link rel="stylesheet" href="/css/iconfont/material-icons.css" />
         <link rel="stylesheet" href="/css/bootstrap.min.css" />
         <link rel="stylesheet" href="/css/material-kit.css" />
@@ -63,7 +64,9 @@
                     <a class="navbar-brand" href="#">
                         <b><%= title %></b>
                         &ndash;
-                        <%= config.title %>
+                        <span class="font-condensed">
+                            <%= config.title %>
+                        </span>
                     </a>
                 </div>
 

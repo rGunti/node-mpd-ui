@@ -25,6 +25,7 @@
 const debug = require('debug')('mpd-ui:MPDUtils');
 const config = require('./config');
 const mpd = require('mpd');
+const cmd = mpd.cmd;
 
 const mpdConfig = {
     host: config.getValue(config.KEYS.MPD_HOST),
@@ -40,7 +41,11 @@ var MpdUtils = {
     Commands: {
         PING: "ping",
         STATUS: "status",
-        CURRENT_SONG: "currentsong"
+        CURRENT_SONG: "currentsong",
+        SKIP: "next",
+        PREV: "previous",
+        PAUSE: "pause",
+        PLAY: "play"
     },
     CachedData: {
         Status: {
@@ -97,7 +102,7 @@ var MpdUtils = {
         MpdUtils.sendCommand(
             MpdUtils.Commands.STATUS,
             function(err, msg) {
-                debug(msg);
+                //debug(msg);
 
                 var resp = {
                     mpdObject: null,
@@ -157,7 +162,46 @@ var MpdUtils = {
             }
         );
     },
-    getCachedStatus: function() { return MpdUtils.CachedData.Status; }
+    getCachedStatus: function() { return MpdUtils.CachedData.Status; },
+    controlPlayback: function(action, callback) {
+        switch (action) {
+            case 'playPause':
+                var state = MpdUtils.CachedData.Status.state;
+                var command;
+                if (state === 'play') command = cmd(MpdUtils.Commands.PAUSE, [ 1 ]);
+                else if (state === 'pause') command = cmd(MpdUtils.Commands.PAUSE, [ 0 ]);
+                else command = MpdUtils.Commands.PLAY;
+
+                MpdUtils.sendCommand(
+                    command,
+                    function (err, msg) {
+                        if (err) debug('ERROR while trying to play / pause song');
+                        if (callback) callback(err, msg);
+                    }
+                );
+                break;
+            case 'skip':
+                MpdUtils.sendCommand(
+                    MpdUtils.Commands.SKIP,
+                    function(err, msg) {
+                        if (err) debug('ERROR while trying to skip song');
+                        if (callback) callback(err, msg);
+                    }
+                );
+                break;
+            case 'prev':
+                MpdUtils.sendCommand(
+                    MpdUtils.Commands.PREV,
+                    function(err, msg) {
+                        if (err) debug('ERROR while trying to skip to previous song');
+                        if (callback) callback(err, msg);
+                    }
+                );
+                break;
+            default:
+                if (callback) callback({ error: 'UNKNOWN_ACTION' }, null);
+        }
+    }
 };
 
 client.on('ready', function() {

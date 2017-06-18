@@ -56,4 +56,25 @@ router.get('/status', function(req, res, next) {
     //});
 });
 
+// Control Basic Playback
+router.post('/control/:action', function(req, res, next) {
+    switch (req.params.action) {
+        case 'playPause':
+        case 'skip':
+        case 'prev':
+            mpd.controlPlayback(req.params.action, function(err, msg) {
+                if (err) {
+                    debug('ERROR while trying to control playback using %s', req.params.action);
+                    ResponseUtil.sendError(res, 'FAILED to control playback', err);
+                } else {
+                    ResponseUtil.sendEmptyResponse(res);
+                }
+            });
+            break;
+        default:
+            ResponseUtil.sendError(res, 'Unknown Action', req.params.action);
+            break;
+    }
+});
+
 module.exports = router;
