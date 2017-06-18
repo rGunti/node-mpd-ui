@@ -40,17 +40,20 @@ router.get('/', function(req, res, next) {
 
 // Request Current Song
 router.get('/status', function(req, res, next) {
-    mpd.getCurrentStatus(function(err, resp, msg) {
-        if (err) {
-            ResponseUtil.sendError(
-                res,
-                'Error while trying to receive current status.',
-                { mpdError: err, message: msg }
-            );
-        } else {
-            ResponseUtil.sendData(res, resp);
-        }
-    });
+    ResponseUtil.sendData(res, mpd.getCachedStatus());
+
+    // Code disabled to reduce strain
+    //mpd.getCurrentStatus(function(err, resp, msg) {
+    //    if (err) {
+    //        ResponseUtil.sendError(
+    //            res,
+    //            'Error while trying to receive current status.',
+    //            { mpdError: err, message: msg }
+    //        );
+    //    } else {
+    //        ResponseUtil.sendData(res, resp);
+    //    }
+    //});
 });
 
 module.exports = router;

@@ -42,6 +42,18 @@ var MpdUtils = {
         STATUS: "status",
         CURRENT_SONG: "currentsong"
     },
+    CachedData: {
+        Status: {
+            mpd: null,
+            state: null,
+            currentTimestamp: 0,
+            currentTimestampString: '00:00:00',
+            songLength: 0,
+            songLengthString: '00:00:00',
+            currentSong: null
+        },
+        StatusInterval: null
+    },
     getPadded: function(num) { return ("0"+num).slice(-2); },
     getTimestampHHMMSS: function(secs) {
         var minutes = Math.floor(secs / 60);
@@ -144,16 +156,29 @@ var MpdUtils = {
                 }
             }
         );
-    }
+    },
+    getCachedStatus: function() { return MpdUtils.CachedData.Status; }
 };
 
 client.on('ready', function() {
     debug('Connected to MPD!');
     MpdUtils.KeepAlive = setInterval(
         MpdUtils.ping,
-        15000,
-        null
+        15000
     );
+    MpdUtils.CachedData.StatusInterval = setInterval(
+        function() {
+            MpdUtils.getCurrentStatus(function(err, status, msg) {
+                if (err) {
+                    debug('ERROR in Status Interval!');
+                } else {
+                    MpdUtils.CachedData.Status = status;
+                }
+            });
+        },
+        250
+    );
+
     MpdUtils.ping();
 });
 
