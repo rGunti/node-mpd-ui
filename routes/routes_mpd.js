@@ -31,14 +31,14 @@ var router = express.Router();
 const ResponseUtil = require('../base/response_utils');
 const mpd = require('../base/mpd_utils');
 
-// Connected Status
+// GET Connected Status
 router.get('/', function(req, res, next) {
     ResponseUtil.sendData(res, {
         connected: mpd.isConnected()
     });
 });
 
-// Request Current Song
+// GET Current Song
 router.get('/status', function(req, res, next) {
     ResponseUtil.sendData(res, mpd.getCachedStatus());
 
@@ -56,7 +56,7 @@ router.get('/status', function(req, res, next) {
     //});
 });
 
-// Control Basic Playback
+// POST Control Basic Playback
 router.post('/control/:action', function(req, res, next) {
     switch (req.params.action) {
         case 'playPause':
@@ -75,6 +75,17 @@ router.post('/control/:action', function(req, res, next) {
             ResponseUtil.sendError(res, 'Unknown Action', req.params.action);
             break;
     }
+});
+
+// GET Queue
+router.get('/queue', function(req, res, next) {
+    mpd.getQueue(function(err, queue, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to get Queue', err);
+        } else {
+            ResponseUtil.sendData(res, queue);
+        }
+    });
 });
 
 module.exports = router;

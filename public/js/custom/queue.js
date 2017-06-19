@@ -22,42 +22,40 @@
  * SOFTWARE.
  * ********************************************************************************* */
 
-function pad(num) {
-    return ("0"+num).slice(-2);
-}
-
-function formatTimeWithMinutes(secs) {
-    var minutes = Math.floor(secs / 60);
-    secs = secs % 60;
-    return minutes + ":" + pad(secs);
-}
-
-function formatTimeWithHours(secs) {
-    var minutes = Math.floor(secs / 60);
-    secs = secs % 60;
-    var hours = Math.floor(minutes/60);
-    minutes = minutes % 60;
-    return pad(hours) + ":" + pad(minutes) + ":" + pad(secs);
-}
-
-function autoFormatTime(secs) {
-    if (secs >= 3600) { // >= 1h / 60min
-        return formatTimeWithHours(secs);
-    } else { // < 1h / 60min
-        return formatTimeWithMinutes(secs);
-    }
-}
-
 $(document).ready(function() {
-    // Hide when a Nav item has been clicked
-    $('.nav a').on('click', function() { $('.navbar-toggle').click(); });
+    $('#queueTable').DataTable({
+        ajax: "/mpd/queue",
+        columns: [
+            { responsivePriority: 1, data: "Pos", render: function(d,t,r,m) {
+                return (Number(d) + 1); // Display Natural Index instead of Zero-based
+            } },
+            { responsivePriority: 1, data: "Title" },
+            { responsivePriority: 2, data: "Artist", defaultContent: "-" },
+            { responsivePriority: 3, data: "Album", defaultContent: "-" },
+            { responsivePriority: 4, data: "Time", render: function(d,t,r,m) {
+                return autoFormatTime(d);
+            } }
+        ],
+        lengthChange: false,
+        responsive: true,
+        language: {
+            search: "",
+            paginate: {
+                previous: "<b>&laquo;</b> Back",
+                next: "Next <b>&raquo;</b>"
+            },
+            info: "_START_ - _END_ / _TOTAL_ entries",
+            infoFiltered: "(Total: _MAX_)"
+        },
+        pagingType: "simple",
+        pageLength: 10,
+        initComplete: function(settings, json) {
+            // Move Text Box out to Destination
+            var searchBox = $('.dataTables_filter input[type=search]').each(function() {
+                $('#searchBoxTarget').append(this);
+            });
 
-    // Hide when clicked outside of the nav menu
-    $(document).click(function (event) {
-        var clickover = $(event.target);
-        var _opened = $(".navbar-collapse").hasClass("navbar-collapse in");
-        if (_opened === true && !clickover.hasClass("navbar-toggle")) {
-            $("button.navbar-toggle").click();
+            console.log('Init Completed');
         }
     });
 });

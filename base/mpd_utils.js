@@ -45,7 +45,8 @@ var MpdUtils = {
         SKIP: "next",
         PREV: "previous",
         PAUSE: "pause",
-        PLAY: "play"
+        PLAY: "play",
+        LIST_QUEUE: "playlistinfo"
     },
     CachedData: {
         Status: {
@@ -85,6 +86,22 @@ var MpdUtils = {
         var splitData = line.split(/(.*)(: )(.+)/);
         targetObject[splitData[1]] = splitData[3];
         return targetObject;
+    },
+    parseSongList: function(msg) {
+        var lines = msg.split('\n');
+        var songs = [];
+        var currentSong = null;
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            if (line.startsWith('file:') || line.startsWith('directory:')) {
+                if (currentSong) songs.push(currentSong);
+                currentSong = {};
+            }
+            MpdUtils.parseResponseLine(line, currentSong);
+        }
+        songs.push(currentSong);
+        return songs;
+
     },
     ping: function(callback) {
         debug('PING...');
@@ -201,6 +218,23 @@ var MpdUtils = {
             default:
                 if (callback) callback({ error: 'UNKNOWN_ACTION' }, null);
         }
+    },
+    getQueue: function(callback) {
+        MpdUtils.sendCommand(
+            MpdUtils.Commands.LIST_QUEUE,
+            function(err, msg) {
+                debug(msg);
+
+                var queue = [];
+                if (err) {
+                    debug('ERROR while requesting Queue (current playlist)');
+                } else {
+                    queue = MpdUtils.parseSongList(msg);
+                }
+
+                if (callback) callback(err, queue, msg);
+            }
+        );
     }
 };
 

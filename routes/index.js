@@ -32,9 +32,14 @@ function respond(res, view, page, title, data) {
     res.render('templates/' + view, { title: title, page: page, config: config.items, data: data });
 }
 
-/* GET home page. */
+/* GET "Now Playing" */
 router.get('/', function(req, res, next) {
     respond(res, 'main', 'home', 'Now Playing');
+});
+
+/* GET "Queue" */
+router.get('/queue', function(req, res, next) {
+    respond(res, 'main', 'queue', 'Queue');
 });
 
 /* GET test_table page. */
