@@ -48,9 +48,63 @@ function autoFormatTime(secs) {
     }
 }
 
+function generateFunctionColumnOutput(items) {
+    if (!items) return '-';
+    //var returnVal = '<div class="row">';
+    for (var i = 0; i < items.length; i++) {
+        //returnVal += '<div class="col-xs-6">';
+        returnVal += items[i];
+        //returnVal += '</div>';
+    }
+    //returnVal += '</div>';
+    return returnVal;
+}
+
+function sendSimpleAjaxRequest(url, method, data, callback, errorCallback) {
+    $.ajax({ method: method, url: url, data: data }).done(function(res) {
+        if (!res.ok) {
+            console.error(res, url, method);
+            if (errorCallback) errorCallback({
+                url: url,
+                method: method,
+                data: data,
+                response: res
+            });
+            else $.toaster({
+                title: 'Error in AJAX Request',
+                message: 'An error occurred while sending the following AJAX request:<br>' +
+                    '<pre>' + method + ' ' + url + '</pre>',
+                priority: 'danger'
+            });
+        } else if (callback) {
+            callback(res);
+        }
+    });
+}
+
+// Datatables Plugin: page.jumpToData()
+// Source: https://datatables.net/plug-ins/api/page.jumpToData()
+jQuery.fn.dataTable.Api.register( 'page.jumpToData()', function ( data, column ) {
+    var pos = this.column(column, {order:'current'}).data().indexOf( data );
+
+    if ( pos >= 0 ) {
+        var page = Math.floor( pos / this.page.info().length );
+        this.page( page ).draw( false );
+    }
+
+    return this;
+});
+
 $(document).ready(function() {
     // Hide when a Nav item has been clicked
     $('.nav a').on('click', function() { $('.navbar-toggle').click(); });
+
+    // Pre-Set Toaster Settings
+    $.toaster({
+        settings: {
+            timeout: 5000
+        }
+    });
 
     // Hide when clicked outside of the nav menu
     $(document).click(function (event) {

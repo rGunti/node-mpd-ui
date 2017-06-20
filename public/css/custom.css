@@ -44,3 +44,11 @@ footer {
     font-weight: bold;
     font-size: x-large;
 }
+
+/* Toaster Plugin: Hide close button */
+#toaster button { display: none; }
+#toaster span.title {
+    color: white;
+    text-transform: uppercase;
+    font-size: 12px;
+}

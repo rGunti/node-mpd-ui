@@ -88,4 +88,80 @@ router.get('/queue', function(req, res, next) {
     });
 });
 
+// POST Play in Queue at Position
+router.post('/queue/:queuePos/play', function(req, res, next) {
+    var songPos = req.params.queuePos;
+    mpd.playAtPosInQueue(songPos, function(err, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to play Song at Pos ' + songPos, err);
+        } else {
+            ResponseUtil.sendEmptyResponse(res);
+        }
+    });
+});
+
+// POST Move item in Queue
+router.post('/queue/:queuePos/move/:targetPos', function(req, res, next) {
+    var songPos = req.params.queuePos;
+    var targetPos = req.params.targetPos;
+
+    if (isNaN(Number(targetPos))) {
+        if (targetPos.startsWith('NOW_PLAYING')) {
+            var currentStatus = mpd.getCachedStatus();
+            if (currentStatus.state !== 'play' && currentStatus.state !== 'pause') {
+                targetPos = 0;
+            } else {
+                var currentPos = Number(currentStatus.mpdObject.song);
+                if (targetPos === 'NOW_PLAYING') {
+                    targetPos = currentPos;
+                } else if (targetPos.startsWith('NOW_PLAYING+')) {
+                    var add = targetPos.split('+');
+                    var offset = Number(add[1]);
+                    if (!isNaN(offset)) {
+                        targetPos = currentPos + offset;
+                    } else {
+                        ResponseUtil.sendError(res, 'Unknown Target Offset for ' + targetPos + ', is NaN or invalid keyword?');
+                        return;
+                    }
+                } else if (targetPos.startsWith('NOW_PLAYING-')) {
+                    var sub = targetPos.split('-');
+                    var offset = Number(sub[1]);
+                    if (!isNaN(offset)) {
+                        targetPos = currentPos + offset;
+                    } else {
+                        ResponseUtil.sendError(res, 'Unknown Target Offset for ' + targetPos + ', is NaN or invalid keyword?');
+                        return;
+                    }
+                } else {
+                    ResponseUtil.sendError(res, 'Unknown Target ' + targetPos + ', is NaN or invalid keyword?');
+                    return;
+                }
+            }
+        } else {
+            ResponseUtil.sendError(res, 'Unknown Target ' + targetPos + ', is NaN or invalid keyword?');
+            return;
+        }
+    }
+
+    if (songPos === targetPos) {
+        ResponseUtil.sendData(res, {
+            ignored: 'SONG_EQ_TARGET',
+            source: songPos,
+            target: targetPos
+        });
+        return;
+    }
+
+    mpd.moveItemInQueue(songPos, targetPos, function(err, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to move Song at Pos ' + songPos + ' to Pos ' + targetPos, err);
+        } else {
+            ResponseUtil.sendData(res, {
+                source: songPos,
+                target: targetPos
+            });
+        }
+    });
+});
+
 module.exports = router;

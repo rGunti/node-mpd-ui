@@ -46,7 +46,8 @@ var MpdUtils = {
         PREV: "previous",
         PAUSE: "pause",
         PLAY: "play",
-        LIST_QUEUE: "playlistinfo"
+        LIST_QUEUE: "playlistinfo",
+        MOVE_IN_QUEUE: "move"
     },
     CachedData: {
         Status: {
@@ -223,8 +224,6 @@ var MpdUtils = {
         MpdUtils.sendCommand(
             MpdUtils.Commands.LIST_QUEUE,
             function(err, msg) {
-                debug(msg);
-
                 var queue = [];
                 if (err) {
                     debug('ERROR while requesting Queue (current playlist)');
@@ -233,6 +232,29 @@ var MpdUtils = {
                 }
 
                 if (callback) callback(err, queue, msg);
+            }
+        );
+    },
+    playAtPosInQueue: function(pos, callback) {
+        MpdUtils.sendCommand(
+            cmd(MpdUtils.Commands.PLAY, [ pos ]),
+            function(err, msg) {
+                if (err) {
+                    debug('ERROR while trying to play song at position %s', pos);
+                }
+
+                if (callback) callback(err, msg);
+            }
+        );
+    },
+    moveItemInQueue: function(source, destination, callback) {
+        MpdUtils.sendCommand(
+            cmd(MpdUtils.Commands.MOVE_IN_QUEUE, [ source, destination ]),
+            function(err, msg) {
+                if (err) {
+                    debug('ERROR while moving Song from %s to %s', source, destination);
+                }
+                if (callback) callback(err, msg);
             }
         );
     }

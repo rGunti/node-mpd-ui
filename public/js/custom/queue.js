@@ -22,8 +22,29 @@
  * SOFTWARE.
  * ********************************************************************************* */
 
+function calculateTableScrollHeight() {
+    // Calculate Table Height
+    var screenHeight = $(window).height();
+    var navHeight = 100;
+    var searchBoxHeight = $('#searchBoxTarget').parent().height();
+    var footerHeight = $('footer').height();
+    var bottomTableRowHeight = 71;
+    var topTableRowHeight = 38;
+    var failSafe = 30;
+
+    var tableScrollHeight = screenHeight
+        - navHeight
+        - searchBoxHeight
+        - footerHeight
+        - bottomTableRowHeight
+        - topTableRowHeight
+        - failSafe
+    ;
+    return tableScrollHeight;
+}
+
 $(document).ready(function() {
-    $('#queueTable').DataTable({
+    var queueTable = $('#queueTable').DataTable({
         ajax: "/mpd/queue",
         columns: [
             { responsivePriority: 1, data: "Pos", render: function(d,t,r,m) {
@@ -34,7 +55,18 @@ $(document).ready(function() {
             { responsivePriority: 3, data: "Album", defaultContent: "-" },
             { responsivePriority: 4, data: "Time", render: function(d,t,r,m) {
                 return autoFormatTime(d);
-            } }
+            } },
+            { responsivePriority: 5, data: null, sortable: false,
+                defaultContent: '<button class="btn btn-primary btn-xs action-queue-play-at-pos">' +
+                '<i class="material-icons">play_arrow</i> Play' +
+                '</button>' +
+                '<button class="btn btn-primary btn-xs action-queue-move-to-top">' +
+                '<i class="material-icons">arrow_drop_up</i> Move to Top' +
+                '</button>' +
+                '<button class="btn btn-primary btn-xs action-queue-play-next">' +
+                '<i class="material-icons">play_circle_outline</i> Play Next' +
+                '</button>'
+            }
         ],
         lengthChange: false,
         responsive: true,
@@ -49,6 +81,8 @@ $(document).ready(function() {
         },
         pagingType: "simple",
         pageLength: 10,
+        scrollCollapse: true,
+        scrollY: calculateTableScrollHeight(),
         initComplete: function(settings, json) {
             // Move Text Box out to Destination
             var searchBox = $('.dataTables_filter input[type=search]').each(function() {
@@ -56,6 +90,72 @@ $(document).ready(function() {
             });
 
             console.log('Init Completed');
+        }
+    });
+
+    console.log(queueTable.settings());
+
+    $(window).resize(function() {
+        if (!queueTable) return;
+        queueTable.settings();
+    });
+
+    function generateSongInfoText(song) {
+        return '<b>' + song.Title + '</b>' + (song.Artist ? ' by <b>' + song.Artist + '</b>' : '')
+    }
+
+    $('#queueTable tbody').on('click', 'button', function(e) {
+        var source = e.currentTarget;
+        var rowIndex = $(this).parents('tr');
+
+        // If Table is collapsed (responsive), we need to take an extra step
+        if (rowIndex.hasClass('child')) rowIndex = rowIndex.prev();
+
+        var row = queueTable.row(rowIndex).data();
+
+        if (!row) {
+            console.error('Cannot execute action, no data has been found!');
+            return;
+        } else if (!source) {
+            console.error('Unknown Source!');
+            return;
+        } else {
+            source = $(source);
+            if (source.hasClass('action-queue-play-at-pos')) {
+                console.log('Play at Pos %s', row.Pos);
+                sendSimpleAjaxRequest('/mpd/queue/' + row.Pos + '/play', 'post', null, function(r) {
+                    $.toaster({
+                        title: 'Now Playing',
+                        message: generateSongInfoText(row)
+                    });
+                });
+            } else if (source.hasClass('action-queue-move-to-top')) {
+                console.log('Move to top from Pos %s', row.Pos);
+                sendSimpleAjaxRequest('/mpd/queue/' + row.Pos + '/move/0', 'post', null, function (r) {
+                    queueTable.ajax.reload();
+                    $.toaster({
+                        title: 'Success',
+                        message: 'Moved ' + generateSongInfoText(row) +
+                        ' from #<b>' + (Number(r.data.source) + 1) + '</b>' +
+                        ' to the <b>first</b> position.'
+                    });
+                });
+            } else if (source.hasClass('action-queue-play-next')) {
+                console.log('Move Pos %s after current song', row.Pos);
+                sendSimpleAjaxRequest('/mpd/queue/' + row.Pos + '/move/NOW_PLAYING+1', 'post', null, function(r) {
+                    console.log(r);
+                    queueTable.ajax.reload(false);
+                    queueTable.page.jumpToData(r.data.target, 0);
+                    $.toaster({
+                        title: 'Success',
+                        message: 'Moved ' + generateSongInfoText(row) +
+                        ' from #<b>' + (Number(r.data.source) + 1) + '</b>' +
+                        ' to #<b>' + (Number(r.data.target) + 1) + '</b>'
+                    });
+                });
+            } else {
+                console.error('Unknown Action for Button', source);
+            }
         }
     });
 });
