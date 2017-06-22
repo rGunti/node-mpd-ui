@@ -37,7 +37,7 @@ function formatTimeWithHours(secs) {
     secs = secs % 60;
     var hours = Math.floor(minutes/60);
     minutes = minutes % 60;
-    return pad(hours) + ":" + pad(minutes) + ":" + pad(secs);
+    return hours + ":" + pad(minutes) + ":" + pad(secs);
 }
 
 function autoFormatTime(secs) {
