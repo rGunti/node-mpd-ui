@@ -33,6 +33,7 @@ footer {
 }
 .alert h4 { font-weight: bold; }
 .font-condensed { font-family: 'Roboto Condensed'; }
+.dataTable th, .dataTable td { vertical-align: middle !important; }
 
 /* Hide DataTable Filter Block */
 .dataTables_filter { display: none; }
@@ -51,4 +52,7 @@ footer {
     color: white;
     text-transform: uppercase;
     font-size: 12px;
+}
+#toaster > .alert {
+    box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)
 }
