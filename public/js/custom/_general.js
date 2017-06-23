@@ -82,6 +82,14 @@ function sendSimpleAjaxRequest(url, method, data, callback, errorCallback) {
     });
 }
 
+function iOSLinkFixer() {
+    $('a').each(function() {
+        var href = $(this).attr('href');
+        $(this).attr('onclick', "window.location='" + href + "'")
+            .removeAttr('href');
+    });
+}
+
 // Datatables Plugin: page.jumpToData()
 // Source: https://datatables.net/plug-ins/api/page.jumpToData()
 jQuery.fn.dataTable.Api.register( 'page.jumpToData()', function ( data, column ) {
@@ -114,4 +122,7 @@ $(document).ready(function() {
             $("button.navbar-toggle").click();
         }
     });
+
+    // Full Screen Apps throw you out into Safari on iOS if you click a regular <a> link
+    iOSLinkFixer();
 });
