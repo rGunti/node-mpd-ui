@@ -50,7 +50,7 @@ $(document).ready(function() {
             { responsivePriority: 1, data: "Pos", render: function(d,t,r,m) {
                 return (Number(d) + 1); // Display Natural Index instead of Zero-based
             } },
-            { responsivePriority: 1, data: "Title" },
+            { responsivePriority: 1, data: "Title", defaultContent: "<i>No title</i>" },
             { responsivePriority: 2, data: "Artist", defaultContent: "-" },
             { responsivePriority: 3, data: "Album", defaultContent: "-" },
             { responsivePriority: 4, data: "Time", render: function(d,t,r,m) {
