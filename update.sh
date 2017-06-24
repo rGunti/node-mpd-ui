@@ -13,3 +13,6 @@ git pull
 
 echo "Making Bash Scripts executable..."
 chmod +x *.sh
+
+echo "Checking NPM Dependencies..."
+npm install .
