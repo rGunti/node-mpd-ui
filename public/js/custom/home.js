@@ -88,7 +88,25 @@ function updateTimestampProgressBar(val, max) {
     });
 }
 
-function updateAllSongInfo(title, artist, album, length, lengthString, timestamp, timestampString, state) {
+function updateStatusButton(id, val) {
+    var hasClass = $(id).hasClass('btn-success');
+    if (val === "1" && !hasClass) {
+        $(id).addClass('btn-success');
+    } else if (val === "0" && hasClass) {
+        $(id).removeClass('btn-success');
+    }
+}
+
+function updateAllSongInfo(title,
+                           artist,
+                           album,
+                           length,
+                           lengthString,
+                           timestamp,
+                           timestampString,
+                           state,
+                           repeat,
+                           random) {
     updateSongTitle(title, false);
     updateSongArtist(artist, false);
     updateSongAlbum(album, false);
@@ -96,6 +114,9 @@ function updateAllSongInfo(title, artist, album, length, lengthString, timestamp
     updateCurrentTimestamp(timestampString);
     updatePlayPauseButton(state);
     updateTimestampProgressBar(timestamp, length);
+
+    updateStatusButton('#repeatButton', repeat);
+    updateStatusButton('#randomButton', random);
 
     calculateArtworkWidth();
 }
@@ -113,7 +134,9 @@ function updateUILoop() {
                 response.data.songLengthString,
                 response.data.currentTimestamp,
                 response.data.currentTimestampString,
-                response.data.state
+                response.data.state,
+                response.data.mpdObject.repeat,
+                response.data.mpdObject.random
             );
         }
 
@@ -139,4 +162,23 @@ $(document).ready(function() {
     $('#previousSongButton').click(function() { executeSimpleRequest('/mpd/control/prev') });
     $('#playPauseButton').click(function() { executeSimpleRequest('/mpd/control/playPause') });
     $('#nextSongButton').click(function() { executeSimpleRequest('/mpd/control/skip') });
+
+    $('#repeatButton').click(function() {
+        $.ajax({
+            url: '/mpd/repeat',
+            data: {
+                repeat: ($('#repeatButton').hasClass('btn-success') ? 0 : 1)
+            },
+            method: 'post'
+        });
+    });
+    $('#randomButton').click(function() {
+        $.ajax({
+            url: '/mpd/random',
+            data: {
+                random: ($('#randomButton').hasClass('btn-success') ? 0 : 1)
+            },
+            method: 'post'
+        });
+    });
 });

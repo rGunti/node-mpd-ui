@@ -71,10 +71,40 @@ router.post('/control/:action', function(req, res, next) {
                 }
             });
             break;
+        case 'repeat':
+            mpd.setRepeat(req.body.newState);
+            res.json({ ok: true });
+            break;
+        case 'random':
+            mpd.setRandom(req.body.newState);
+            res.json({ ok: true });
+            break;
         default:
             ResponseUtil.sendError(res, 'Unknown Action', req.params.action);
             break;
     }
+});
+
+// POST
+router.post('/repeat', function(req, res, next) {
+    mpd.setRepeat(req.body.repeat, function(err, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to set Repeat', err);
+        } else {
+            ResponseUtil.sendEmptyResponse(res);
+        }
+    });
+});
+
+// POST
+router.post('/random', function(req, res, next) {
+    mpd.setRandom(req.body.random, function(err, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to set Random', err);
+        } else {
+            ResponseUtil.sendEmptyResponse(res);
+        }
+    });
 });
 
 // GET Queue

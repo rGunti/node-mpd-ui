@@ -47,7 +47,9 @@ var MpdUtils = {
         PAUSE: "pause",
         PLAY: "play",
         LIST_QUEUE: "playlistinfo",
-        MOVE_IN_QUEUE: "move"
+        MOVE_IN_QUEUE: "move",
+        RANDOM: "random",
+        REPEAT: "repeat"
     },
     CachedData: {
         Status: {
@@ -65,7 +67,7 @@ var MpdUtils = {
     getTimestampHHMMSS: function(secs) {
         var minutes = Math.floor(secs / 60);
         secs = secs%60;
-        var hours = Math.floor(minutes/60)
+        var hours = Math.floor(minutes/60);
         minutes = minutes%60;
         return MpdUtils.getPadded(hours)
             + ":" + MpdUtils.getPadded(minutes)
@@ -219,6 +221,34 @@ var MpdUtils = {
             default:
                 if (callback) callback({ error: 'UNKNOWN_ACTION' }, null);
         }
+    },
+    setRandom: function(randomState, callback) {
+        var command = MpdUtils.Commands.RANDOM + " " + randomState;
+        debug(command);
+        MpdUtils.sendCommand(
+            command,
+            function(err, msg) {
+                if (err) {
+                    debug('ERROR while setting Random');
+                }
+
+                if (callback) callback(err, msg);
+            }
+        );
+    },
+    setRepeat: function(repeatState, callback) {
+        var command = MpdUtils.Commands.REPEAT + " " + repeatState;
+        debug(command);
+        MpdUtils.sendCommand(
+            command,
+            function(err, msg) {
+                if (err) {
+                    debug('ERROR while setting Repeat');
+                }
+
+                if (callback) callback(err, msg);
+            }
+        );
     },
     getQueue: function(callback) {
         MpdUtils.sendCommand(
