@@ -186,6 +186,7 @@ router.post('/queue/:queuePos/move/:targetPos', function(req, res, next) {
         if (err) {
             ResponseUtil.sendError(res, 'FAILED to move Song at Pos ' + songPos + ' to Pos ' + targetPos, err);
         } else {
+            mpd.setPrio(targetPos, 5);
             ResponseUtil.sendData(res, {
                 source: songPos,
                 target: targetPos

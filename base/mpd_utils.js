@@ -49,7 +49,9 @@ var MpdUtils = {
         LIST_QUEUE: "playlistinfo",
         MOVE_IN_QUEUE: "move",
         RANDOM: "random",
-        REPEAT: "repeat"
+        REPEAT: "repeat",
+        PRIO: "prio",
+        PRIO_ID: "prioid"
     },
     CachedData: {
         Status: {
@@ -283,6 +285,17 @@ var MpdUtils = {
             function(err, msg) {
                 if (err) {
                     debug('ERROR while moving Song from %s to %s', source, destination);
+                }
+                if (callback) callback(err, msg);
+            }
+        );
+    },
+    setPrio: function(pos, prio, callback) {
+        MpdUtils.sendCommand(
+            cmd(MpdUtils.Commands.PRIO, [ prio, pos ]),
+            function(err, msg) {
+                if (err) {
+                    debug('ERROR while setting priority to %s on Pos %s', prio, pos);
                 }
                 if (callback) callback(err, msg);
             }
