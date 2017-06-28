@@ -16,3 +16,5 @@ chmod +x *.sh
 
 echo "Checking NPM Dependencies..."
 npm install .
+
+echo " === YOU ARE READY TO GO! === "
