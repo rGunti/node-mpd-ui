@@ -105,7 +105,7 @@ jQuery.fn.dataTable.Api.register( 'page.jumpToData()', function ( data, column )
 
 $(document).ready(function() {
     // Hide when a Nav item has been clicked
-    $('.nav a').on('click', function() { $('.navbar-toggle').click(); });
+    $('.nav a').on('click', function(e) { if (!$(e.currentTarget).hasClass('dropdown-toggle')) $('.navbar-toggle').click(); });
 
     // Pre-Set Toaster Settings
     $.toaster({
