@@ -23,6 +23,24 @@
  * ********************************************************************************* */
 
 $(document).ready(function() {
+    function onSongClick(e) {
+        var target = $(e.currentTarget);
+        var song = target.data('song');
+
+        $('#selectActionModal .result-title').text(song.Title || song.file);
+        $('#selectActionModal .result-artist').text(song.Artist || '');
+        $('#selectActionModal').data('song', song);
+        $('#selectActionModal').modal('show');
+    }
+
+    function onSongModalPlayClick(e) {
+        var song = $('#selectActionModal').data('song');
+    }
+
+    function onSongModalAddToPlaylistClick(e) {
+        var song = $('#selectActionModal').data('song');
+    }
+
     $('#librarySearchForm').submit(function(e) {
         e.preventDefault();
 
@@ -34,6 +52,12 @@ $(document).ready(function() {
         };
 
         if (!data.title && !data.artist && !data.album && !data.genre) {
+            $.toaster({
+                title: 'Nothing entered',
+                message: 'Please enter something to search for.',
+                priority: 'warning'
+            });
+            $('#librarySearchTitle').focus().select();
             return;
         }
 
@@ -63,6 +87,9 @@ $(document).ready(function() {
                             $('.result-artist', item).hide();
                         }
                         $('.result-length', item).text(formatTimeWithMinutes(song.Time));
+
+                        item.data('song', song);
+                        item.click(onSongClick);
                         item.appendTo('#searchResultRenderTarget');
                     }
 

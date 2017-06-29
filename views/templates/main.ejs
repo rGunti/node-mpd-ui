@@ -116,6 +116,10 @@ function getNavItemActiveCss(currentPage, requiredPage) {
             <%- include('../' + page, { title: title, page: page, config: config, data: data }) %>
         </div>
 
+        <% additionalIncludes.forEach(function(includeItem){ %>
+        <%- include('../' + includeItem) %>
+        <% }) %>
+
         <footer class="container text-muted">
             &COPY; 2017, rGunti
             &ndash; <a href="/license">License Info</a>
