@@ -47,4 +47,9 @@ router.get('/test_table', function(req, res, next) {
     respond(res, 'main', 'test_table', 'Test Table');
 });
 
+/* GET "Library Search" */
+router.get('/library/search', function(req, res, next) {
+    respond(res, 'main', 'lib_search', 'Search in Library');
+});
+
 module.exports = router;

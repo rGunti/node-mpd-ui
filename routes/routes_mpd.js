@@ -195,4 +195,15 @@ router.post('/queue/:queuePos/move/:targetPos', function(req, res, next) {
     });
 });
 
+// POST Search in Library
+router.post('/library/search', function(req, res, next) {
+    mpd.search(req.body, function(err, list, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to search for songs', err);
+        } else {
+            ResponseUtil.sendData(res, list);
+        }
+    });
+});
+
 module.exports = router;

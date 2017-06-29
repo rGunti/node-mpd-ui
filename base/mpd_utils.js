@@ -51,7 +51,9 @@ var MpdUtils = {
         RANDOM: "random",
         REPEAT: "repeat",
         PRIO: "prio",
-        PRIO_ID: "prioid"
+        PRIO_ID: "prioid",
+        SEARCH_CASE_SENSITIVE: "find",
+        SEARCH: "search"
     },
     CachedData: {
         Status: {
@@ -298,6 +300,45 @@ var MpdUtils = {
                     debug('ERROR while setting priority to %s on Pos %s', prio, pos);
                 }
                 if (callback) callback(err, msg);
+            }
+        );
+    },
+    search: function(searchAttributes, callback) {
+        var args = [];
+
+        // Add Search Parameters
+        if (searchAttributes.title) {
+            args.push("title");
+            args.push(searchAttributes.title);
+        }
+        if (searchAttributes.artist) {
+            args.push("artist");
+            args.push(searchAttributes.artist);
+        }
+        if (searchAttributes.album) {
+            args.push("album");
+            args.push(searchAttributes.album);
+        }
+        if (searchAttributes.genre) {
+            args.push("genre");
+            args.push(searchAttributes.genre);
+        }
+
+        // Create Command
+        var command = cmd(MpdUtils.Commands.SEARCH, args);
+        MpdUtils.sendCommand(
+            command,
+            function(err, msg) {
+                //debug(msg);
+
+                var list = [];
+                if (err) {
+                    debug('ERROR while trying to search for songs.');
+                } else if (msg) {
+                    list = MpdUtils.parseSongList(msg);
+                }
+
+                if (callback) callback(err, list, msg);
             }
         );
     }
