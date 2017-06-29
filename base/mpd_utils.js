@@ -53,7 +53,8 @@ var MpdUtils = {
         PRIO: "prio",
         PRIO_ID: "prioid",
         SEARCH_CASE_SENSITIVE: "find",
-        SEARCH: "search"
+        SEARCH: "search",
+        ADD_URI: "add"
     },
     CachedData: {
         Status: {
@@ -266,6 +267,18 @@ var MpdUtils = {
                 }
 
                 if (callback) callback(err, queue, msg);
+            }
+        );
+    },
+    addToQueue: function(uri, callback) {
+        MpdUtils.sendCommand(
+            cmd(MpdUtils.Commands.ADD_URI, [uri]),
+            function(err, msg) {
+                debug(msg);
+                if (err) {
+                    debug('ERROR while adding song to queue by URI %s', uri);
+                }
+                if (callback) callback(err, msg);
             }
         );
     },

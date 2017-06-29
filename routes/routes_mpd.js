@@ -118,6 +118,18 @@ router.get('/queue', function(req, res, next) {
     });
 });
 
+// POST Add Song to Queue
+router.post('/queue/add', function(req, res, next) {
+    var songUri = req.body.uri;
+    mpd.addToQueue(songUri, function(err, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to add song to queue', err);
+        } else {
+            ResponseUtil.sendEmptyResponse(res);
+        }
+    });
+});
+
 // POST Play in Queue at Position
 router.post('/queue/:queuePos/play', function(req, res, next) {
     var songPos = req.params.queuePos;

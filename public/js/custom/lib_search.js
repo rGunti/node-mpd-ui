@@ -33,13 +33,35 @@ $(document).ready(function() {
         $('#selectActionModal').modal('show');
     }
 
-    function onSongModalPlayClick(e) {
+    $('#songActionPlayButton').click(function(e) {
         var song = $('#selectActionModal').data('song');
-    }
+        $('#selectActionModal').modal('hide');
+    });
 
-    function onSongModalAddToPlaylistClick(e) {
+    $('#songActionAddToPlaylistButton').click(function(e) {
         var song = $('#selectActionModal').data('song');
-    }
+        $('#selectActionModal').modal('hide');
+        $.ajax({
+            url: '/mpd/queue/add',
+            method: 'post',
+            data: {
+                uri: song.file
+            }
+        }).done(function(data, textStatus, jqXHR) {
+            if (data.ok) {
+                $.toaster({
+                    title: 'Added to Queue',
+                    message: song.Title || song.file
+                });
+            } else {
+                $.toaster({
+                    title: 'Error',
+                    message: data.message,
+                    priority: 'danger'
+                });
+            }
+        });
+    });
 
     $('#librarySearchForm').submit(function(e) {
         e.preventDefault();
