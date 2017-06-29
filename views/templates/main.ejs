@@ -22,6 +22,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  * ********************************************************************************* */
+
+function getNavItemActiveCss(currentPage, requiredPage) {
+    if (currentPage == requiredPage) {
+        return 'class=active';
+    } else {
+        return '';
+    }
+}
 %>
 <!DOCTYPE html>
 <html>
@@ -77,8 +85,8 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="/">Now Playing</a></li>
-                        <li><a href="/queue">Queue</a></li>
+                        <li <%= getNavItemActiveCss(page, 'home') %>><a href="/">Now Playing</a></li>
+                        <li <%= getNavItemActiveCss(page, 'queue') %>><a href="/queue">Queue</a></li>
                         <li class="dropdown">
                             <a href="#"
                                class="dropdown-toggle"
@@ -89,7 +97,7 @@
                                 Library <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li>
+                                <li <%= getNavItemActiveCss(page, 'lib_search') %>>
                                     <a href="/library/search">
                                         <i class="material-icons">search</i>
                                         Search
