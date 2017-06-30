@@ -46,8 +46,11 @@ footer {
     font-size: x-large;
 }
 
-/* Toaster Plugin: Hide close button */
-#toaster button { display: none; }
+/* Toaster Plugin: Fix close button */
+/* Toaster Plugin: Fix close button */
+#toaster .alert-dismissible .close {
+    position: static;
+}
 #toaster span.title {
     color: white;
     text-transform: uppercase;

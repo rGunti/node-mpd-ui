@@ -103,6 +103,11 @@ jQuery.fn.dataTable.Api.register( 'page.jumpToData()', function ( data, column )
     return this;
 });
 
+// -
+function closeToast(e) {
+    console.log(e);
+}
+
 $(document).ready(function() {
     // Hide when a Nav item has been clicked
     $('.nav a').on('click', function(e) { if (!$(e.currentTarget).hasClass('dropdown-toggle')) $('.navbar-toggle').click(); });
@@ -110,7 +115,17 @@ $(document).ready(function() {
     // Pre-Set Toaster Settings
     $.toaster({
         settings: {
-            timeout: 5000
+            timeout: 5000,
+            toast: {
+                template:
+                '<div class="alert alert-%priority% alert-dismissible" role="alert">' +
+                    '<button type="button" class="close" data-dismiss="alert" onclick="closeToast">' +
+                        '<span aria-hidden="true">&times;</span>' +
+                        '<span class="sr-only">Close</span>' +
+                    '</button>' +
+                    '<span class="title"></span>: <span class="message"></span>' +
+                '</div>'
+            }
         }
     });
 

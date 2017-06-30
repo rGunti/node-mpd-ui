@@ -321,21 +321,25 @@ var MpdUtils = {
 
         // Add Search Parameters
         if (searchAttributes.title) {
-            args.push("title");
-            args.push(searchAttributes.title);
+            args.push("title", searchAttributes.title);
         }
         if (searchAttributes.artist) {
-            args.push("artist");
-            args.push(searchAttributes.artist);
+            args.push("artist", searchAttributes.artist);
         }
         if (searchAttributes.album) {
-            args.push("album");
-            args.push(searchAttributes.album);
+            args.push("album", searchAttributes.album);
         }
         if (searchAttributes.genre) {
-            args.push("genre");
-            args.push(searchAttributes.genre);
+            args.push("genre", searchAttributes.genre);
         }
+
+        // For some reason, the window parameter does not work even though it exists in the
+        // documentation. We do this on our own.
+        //if (searchAttributes.window) {
+        //    args.push("window " + searchAttributes.window.from + ':' + searchAttributes.window.to);
+        //} else {
+        //    args.push("window " + 0 + ':' + 10);
+        //}
 
         // Create Command
         var command = cmd(MpdUtils.Commands.SEARCH, args);

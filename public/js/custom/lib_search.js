@@ -23,6 +23,50 @@
  * ********************************************************************************* */
 
 $(document).ready(function() {
+    var songs = [];
+    var renderedItems = 0;
+
+    function renderSongs(startIndex) {
+        for (var i = startIndex; i < startIndex + 10 && i < songs.length; i++) {
+            var song = songs[i];
+            var item = $('#searchResultItemTemplate').clone();
+
+            $('.result-title', item).text(song.Title || song.file);
+            if (song.Artist) {
+                $('.result-artist', item).text(song.Artist);
+            } else {
+                $('.result-artist', item).hide();
+            }
+            $('.result-length', item).text(formatTimeWithMinutes(song.Time));
+
+            item.data('song', song);
+            item.click(onSongClick);
+            item.appendTo('#searchResultRenderTarget').hide();
+
+            renderedItems++;
+        }
+        fadeInHiddenElement();
+        if (!hasMoreSongs()) {
+            $('#searchResultLoadMoreButton').attr('disabled', true);
+        }
+    }
+
+    function fadeInHiddenElement() {
+        console.log('Fade In');
+        var item = $('#searchResultRenderTarget .list-group-item:hidden:first');
+        if (item.length > 0) {
+            item.fadeIn(100, fadeInHiddenElement);
+        }
+    }
+
+    $('#searchResultLoadMoreButton').click(function(e) {
+        renderSongs(renderedItems);
+    });
+
+    function hasMoreSongs() {
+        return (renderedItems < songs.length);
+    }
+
     function onSongClick(e) {
         var target = $(e.currentTarget);
         var song = target.data('song');
@@ -98,22 +142,8 @@ $(document).ready(function() {
             //console.log(data);
             if (data.ok) {
                 if (data.data && data.data.length >= 1) {
-                    for (var i = 0; i < data.data.length; i++) {
-                        var song = data.data[i];
-                        var item = $('#searchResultItemTemplate').clone();
-
-                        $('.result-title', item).text(song.Title || song.file);
-                        if (song.Artist) {
-                            $('.result-artist', item).text(song.Artist);
-                        } else {
-                            $('.result-artist', item).hide();
-                        }
-                        $('.result-length', item).text(formatTimeWithMinutes(song.Time));
-
-                        item.data('song', song);
-                        item.click(onSongClick);
-                        item.appendTo('#searchResultRenderTarget');
-                    }
+                    songs = data.data;
+                    renderSongs(0);
 
                     $('#collapseSearchForm').collapse('hide');
                     $('#collapseSearchResult').collapse('show');
@@ -143,6 +173,10 @@ $(document).ready(function() {
         $('#collapseSearchForm').collapse('show');
         $('#collapseSearchResult').collapse('hide');
         $('#librarySearchTitle').focus().select();
+
+        $('#searchResultLoadMoreButton').attr('disabled', false);
+        songs = [];
+        renderedItems = 0;
     });
 
     $('#librarySearchTitle').focus().select();
