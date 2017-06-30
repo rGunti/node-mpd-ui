@@ -179,5 +179,9 @@ $(document).ready(function() {
         renderedItems = 0;
     });
 
+    $.get('/mpd/library/genres', function(data) {
+        $('#librarySearchGenre').typeahead({ source: data.data }, 'json');
+    });
+
     $('#librarySearchTitle').focus().select();
 });

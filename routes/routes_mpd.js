@@ -218,4 +218,27 @@ router.post('/library/search', function(req, res, next) {
     });
 });
 
+// GET List of Genres
+router.get('/library/genres', function(req, res, next) {
+    mpd.getGenreList(function(err, list, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to get genre list', err);
+        } else {
+            if (req.query.query) {
+                var query = req.query.query.toLowerCase();
+                var filtered = [];
+                for (var i = 0; i < list.length; i++) {
+                    var item = list[i];
+                    if (item && item.toLowerCase().match(query)) {
+                        filtered.push(item);
+                    }
+                }
+                res.json(filtered);
+            } else {
+                ResponseUtil.sendData(res, list);
+            }
+        }
+    });
+});
+
 module.exports = router;

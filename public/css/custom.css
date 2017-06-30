@@ -47,7 +47,6 @@ footer {
 }
 
 /* Toaster Plugin: Fix close button */
-/* Toaster Plugin: Fix close button */
 #toaster .alert-dismissible .close {
     position: static;
 }

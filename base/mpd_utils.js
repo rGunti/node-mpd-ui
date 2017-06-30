@@ -54,7 +54,8 @@ var MpdUtils = {
         PRIO_ID: "prioid",
         SEARCH_CASE_SENSITIVE: "find",
         SEARCH: "search",
-        ADD_URI: "add"
+        ADD_URI: "add",
+        LIST: "list"
     },
     CachedData: {
         Status: {
@@ -92,6 +93,7 @@ var MpdUtils = {
     },
     parseResponseLine: function(line, targetObject) {
         var splitData = line.split(/(.*)(: )(.+)/);
+        if (!targetObject) targetObject = {};
         targetObject[splitData[1]] = splitData[3];
         return targetObject;
     },
@@ -353,6 +355,30 @@ var MpdUtils = {
                     debug('ERROR while trying to search for songs.');
                 } else if (msg) {
                     list = MpdUtils.parseSongList(msg);
+                }
+
+                if (callback) callback(err, list, msg);
+            }
+        );
+    },
+    getGenreList: function(callback) {
+        MpdUtils.sendCommand(
+            cmd(MpdUtils.Commands.LIST, ['genre']),
+            function(err, msg) {
+                var list = [];
+                if (err) {
+                    debug('ERROR while trying to get Genre list.');
+                } else if (msg) {
+                    var lines = msg.split('\n');
+                    for (var i = 0; i < lines.length; i++) {
+                        var line = lines[i];
+                        if (line.startsWith('Genre: ')) {
+                            var genre = MpdUtils.parseResponseLine(line);
+                            if (genre.Genre) {
+                                list.push(genre.Genre);
+                            }
+                        }
+                    }
                 }
 
                 if (callback) callback(err, list, msg);
