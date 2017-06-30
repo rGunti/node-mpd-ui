@@ -24,24 +24,30 @@
  * ********************************************************************************* */
 %>
 <div class="container">
-    <div class="input-group" id="searchBoxTarget">
-		<span class="input-group-addon">
-			<i class="material-icons">search</i>
-		</span>
+    <div class="list-group" id="queueRenderTarget"></div>
+    <div class="container-fluid text-center">
+        <button id="queueLoadMoreButton" class="btn btn-primary">
+            <i class="material-icons">keyboard_arrow_down</i>
+            Show more
+        </button>
     </div>
-</div>
-<div class="container">
-    <table class="table table-responsive" id="queueTable">
-        <thead>
-        <tr>
-            <th>Pos</th>
-            <th>Title</th>
-            <th>Arist</th>
-            <th>Album</th>
-            <th>Length</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-    </table>
+
+    <!-- Item Template -->
+    <div class="list-group hidden" id="queueRenderTargetTemplates">
+        <button type="button" class="list-group-item" id="queueItemTemplate">
+            <div class="row">
+                <div class="col-xs-2">
+                    <span class="result-pos">{{#}}</span>
+                </div>
+                <div class="col-xs-6">
+                    <span class="result-title">{{title}}</span><br>
+                    <span class="result-artist">{{artist}}</span>
+                </div>
+                <div class="col-xs-4 text-right">
+                    <span class="result-length">00:00</span>
+                </div>
+            </div>
+        </button>
+    </div>
 </div>
 <script src="/js/custom/queue.js"></script>

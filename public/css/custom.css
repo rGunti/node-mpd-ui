@@ -63,4 +63,4 @@ footer {
 button img.loading { max-height: 17px; display: none; }
 
 /* Result View */
-.result-title { font-weight: bold; }
+.result-title, .result-pos { font-weight: bold; }

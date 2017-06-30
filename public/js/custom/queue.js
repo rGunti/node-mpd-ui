@@ -22,140 +22,92 @@
  * SOFTWARE.
  * ********************************************************************************* */
 
-function calculateTableScrollHeight() {
-    // Calculate Table Height
-    var screenHeight = $(window).height();
-    var navHeight = 100;
-    var searchBoxHeight = $('#searchBoxTarget').parent().height();
-    var footerHeight = $('footer').height();
-    var bottomTableRowHeight = 71;
-    var topTableRowHeight = 38;
-    var failSafe = 30;
-
-    var tableScrollHeight = screenHeight
-        - navHeight
-        - searchBoxHeight
-        - footerHeight
-        - bottomTableRowHeight
-        - topTableRowHeight
-        - failSafe
-    ;
-    return tableScrollHeight;
-}
-
 $(document).ready(function() {
-    var queueTable = $('#queueTable').DataTable({
-        ajax: "/mpd/queue",
-        columns: [
-            { responsivePriority: 1, data: "Pos", render: function(d,t,r,m) {
-                return (Number(d) + 1); // Display Natural Index instead of Zero-based
-            } },
-            { responsivePriority: 1, data: "Title", defaultContent: "<i>No title</i>" },
-            { responsivePriority: 2, data: "Artist", defaultContent: "-" },
-            { responsivePriority: 3, data: "Album", defaultContent: "-" },
-            { responsivePriority: 4, data: "Time", render: function(d,t,r,m) {
-                return autoFormatTime(d);
-            } },
-            { responsivePriority: 5, data: null, sortable: false,
-                defaultContent: '<button class="btn btn-primary btn-xs action-queue-play-at-pos">' +
-                '<i class="material-icons">play_arrow</i> Play' +
-                '</button>' +
-                '<button class="btn btn-primary btn-xs action-queue-move-to-top">' +
-                '<i class="material-icons">arrow_drop_up</i> Move to Top' +
-                '</button>' +
-                '<button class="btn btn-primary btn-xs action-queue-play-next">' +
-                '<i class="material-icons">play_circle_outline</i> Play Next' +
-                '</button>'
+    var songs = [];
+    var renderedItems = 0;
+
+    function renderSongs(startIndex) {
+        for (var i = startIndex; i < startIndex + 10 && i < songs.length; i++) {
+            var song = songs[i];
+            var item = $('#queueItemTemplate').clone();
+
+            $('.result-title', item).text(song.Title || song.file);
+            if (song.Artist) {
+                $('.result-artist', item).text(song.Artist);
+            } else {
+                $('.result-artist', item).hide();
             }
-        ],
-        lengthChange: false,
-        responsive: true,
-        language: {
-            search: "",
-            paginate: {
-                previous: "<b>&laquo;</b> Back",
-                next: "Next <b>&raquo;</b>"
-            },
-            info: "_START_ - _END_ / _TOTAL_ entries",
-            infoFiltered: "(Total: _MAX_)"
-        },
-        pagingType: "simple",
-        pageLength: 10,
-        scrollCollapse: true,
-        scrollY: calculateTableScrollHeight(),
-        initComplete: function(settings, json) {
-            // Move Text Box out to Destination
-            var searchBox = $('.dataTables_filter input[type=search]').each(function() {
-                $('#searchBoxTarget').append(this);
-            });
+            $('.result-length', item).text(formatTimeWithMinutes(song.Time));
+            $('.result-pos', item).text(Number(song.Pos) + 1);
 
-            console.log('Init Completed');
+            item.data('song', song);
+            item.click(onSongClick);
+            item.appendTo('#queueRenderTarget').hide();
+
+            renderedItems++;
         }
-    });
-
-    console.log(queueTable.settings());
-
-    $(window).resize(function() {
-        if (!queueTable) return;
-        queueTable.settings();
-    });
-
-    function generateSongInfoText(song) {
-        return '<b>' + song.Title + '</b>' + (song.Artist ? ' by <b>' + song.Artist + '</b>' : '')
+        fadeInHiddenElement();
+        if (!hasMoreSongs()) {
+            $('#queueLoadMoreButton').attr('disabled', true);
+        } else {
+            $('#queueLoadMoreButton').attr('disabled', false);
+        }
     }
 
-    $('#queueTable tbody').on('click', 'button', function(e) {
-        var source = e.currentTarget;
-        var rowIndex = $(this).parents('tr');
-
-        // If Table is collapsed (responsive), we need to take an extra step
-        if (rowIndex.hasClass('child')) rowIndex = rowIndex.prev();
-
-        var row = queueTable.row(rowIndex).data();
-
-        if (!row) {
-            console.error('Cannot execute action, no data has been found!');
-            return;
-        } else if (!source) {
-            console.error('Unknown Source!');
-            return;
-        } else {
-            source = $(source);
-            if (source.hasClass('action-queue-play-at-pos')) {
-                console.log('Play at Pos %s', row.Pos);
-                sendSimpleAjaxRequest('/mpd/queue/' + row.Pos + '/play', 'post', null, function(r) {
-                    $.toaster({
-                        title: 'Now Playing',
-                        message: generateSongInfoText(row)
-                    });
-                });
-            } else if (source.hasClass('action-queue-move-to-top')) {
-                console.log('Move to top from Pos %s', row.Pos);
-                sendSimpleAjaxRequest('/mpd/queue/' + row.Pos + '/move/0', 'post', null, function (r) {
-                    queueTable.ajax.reload();
-                    $.toaster({
-                        title: 'Success',
-                        message: 'Moved ' + generateSongInfoText(row) +
-                        ' from #<b>' + (Number(r.data.source) + 1) + '</b>' +
-                        ' to the <b>first</b> position.'
-                    });
-                });
-            } else if (source.hasClass('action-queue-play-next')) {
-                console.log('Move Pos %s after current song', row.Pos);
-                sendSimpleAjaxRequest('/mpd/queue/' + row.Pos + '/move/NOW_PLAYING+1', 'post', null, function(r) {
-                    console.log(r);
-                    queueTable.ajax.reload(false);
-                    queueTable.page.jumpToData(r.data.target, 0);
-                    $.toaster({
-                        title: 'Success',
-                        message: 'Moved ' + generateSongInfoText(row) +
-                        ' from #<b>' + (Number(r.data.source) + 1) + '</b>' +
-                        ' to #<b>' + (Number(r.data.target) + 1) + '</b>'
-                    });
-                });
-            } else {
-                console.error('Unknown Action for Button', source);
-            }
+    function fadeInHiddenElement() {
+        console.log('Fade In');
+        var item = $('#queueRenderTarget .list-group-item:hidden:first');
+        if (item.length > 0) {
+            item.fadeIn(100, fadeInHiddenElement);
         }
+    }
+
+    function hasMoreSongs() {
+        return (renderedItems < songs.length);
+    }
+
+    function onSongClick(e) {
+        var target = $(e.currentTarget);
+        var song = target.data('song');
+
+        //$('#selectActionModal .result-title').text(song.Title || song.file);
+        //$('#selectActionModal .result-artist').text(song.Artist || '');
+        //$('#selectActionModal').data('song', song);
+        //$('#selectActionModal').modal('show');
+    }
+
+    $('#queueLoadMoreButton').click(function(e) {
+        renderSongs(renderedItems);
+    });
+
+    $.ajax({
+        url: '/mpd/queue',
+        method: 'get',
+        beforeSend: function() {
+
+        }
+    }).done(function(data, textStatus, jqXHR) {
+        if (data.ok) {
+            if (data.data && data.data.length >= 1) {
+                songs = data.data;
+                renderSongs(0);
+            } else {
+                $.toaster({
+                    title: 'No Songs found',
+                    message: 'Add a few songs to the queue to start the party.',
+                    priority: 'info'
+                });
+            }
+        } else {
+            $.toaster({
+                title: 'Error',
+                message: data.message,
+                priority: 'danger'
+            });
+        }
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        // -
+    }).always(function(data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
+        // -
     });
 });
