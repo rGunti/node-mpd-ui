@@ -70,21 +70,26 @@ $(document).ready(function() {
         var target = $(e.currentTarget);
         var song = target.data('song');
 
-        //$('#selectActionModal .result-title').text(song.Title || song.file);
-        //$('#selectActionModal .result-artist').text(song.Artist || '');
-        //$('#selectActionModal').data('song', song);
-        //$('#selectActionModal').modal('show');
+        $('#selectActionModal .result-pos').text(Number(song.Pos) + 1);
+        $('#selectActionModal .result-title').text(song.Title || song.file);
+        $('#selectActionModal .result-artist').text(song.Artist || '');
+        $('#selectActionModal').data('song', song);
+        $('#selectActionModal').modal('show');
     }
 
     $('#queueLoadMoreButton').click(function(e) {
         renderSongs(renderedItems);
     });
 
+    $('#songActionPlayButton').click(function(e) {
+        $('#selectActionModal').modal('hide');
+    });
+
     $.ajax({
         url: '/mpd/queue',
         method: 'get',
         beforeSend: function() {
-
+            $('.loading-indicator').fadeIn();
         }
     }).done(function(data, textStatus, jqXHR) {
         if (data.ok) {
@@ -106,8 +111,12 @@ $(document).ready(function() {
             });
         }
     }).fail(function(jqXHR, textStatus, errorThrown) {
-        // -
+        $.toaster({
+            title: 'Error',
+            message: 'Something went horribly wrong here D:\nSome more detail for you: ' + textStatus,
+            priority: 'danger'
+        });
     }).always(function(data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
-        // -
+        $('.loading-indicator').fadeOut();
     });
 });

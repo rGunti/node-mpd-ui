@@ -60,7 +60,15 @@ footer {
 }
 
 /* Loading */
-button img.loading { max-height: 17px; display: none; }
+button img.loading, button img.loading-shown { max-height: 17px; }
+button img.loading { display: none; }
+
+.loading-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 2000;
+}
 
 /* Result View */
 .result-title, .result-pos { font-weight: bold; }

@@ -45,7 +45,9 @@ router.get('/', function(req, res, next) {
 
 /* GET "Queue" */
 router.get('/queue', function(req, res, next) {
-    respond(res, 'main', 'queue', 'Queue');
+    respond(res, 'main', 'queue', 'Queue', [
+        'modals/queue_select'
+    ]);
 });
 
 /* GET test_table page. */
