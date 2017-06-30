@@ -77,11 +77,6 @@ $(document).ready(function() {
         $('#selectActionModal').modal('show');
     }
 
-    $('#songActionPlayButton').click(function(e) {
-        var song = $('#selectActionModal').data('song');
-        $('#selectActionModal').modal('hide');
-    });
-
     $('#songActionAddToPlaylistButton').click(function(e) {
         var song = $('#selectActionModal').data('song');
         $('#selectActionModal').modal('hide');
