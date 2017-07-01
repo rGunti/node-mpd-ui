@@ -35,6 +35,13 @@ $(document).ready(function() {
         renderedItems = startIndex;
         for (var i = startIndex; i < startIndex + PAGE_SIZE && i < songs.length; i++) {
             var song = songs[i];
+
+            // Song can be null (for some reason)
+            if (!song) {
+                songs.splice(i, 1);
+                continue;
+            }
+
             var item = $('#queueItemTemplate').clone();
             item.attr('id', '');
 
@@ -55,8 +62,6 @@ $(document).ready(function() {
         }
         fadeInHiddenElement();
         $('.queuePositionIndicator').text((startIndex + 1) + '-' + renderedItems + '/' + songs.length);
-        //$('#queueLoadMoreButton').attr('disabled', !hasMoreSongs());
-        //$('#queueLoadLessButton').attr('disabled', !hasLessSongs());
     }
 
     function fadeInHiddenElement() {
