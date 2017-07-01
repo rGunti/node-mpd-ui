@@ -88,29 +88,17 @@ function getNavItemActiveCss(currentPage, requiredPage) {
                     <ul class="nav navbar-nav">
                         <li <%= getNavItemActiveCss(page, 'home') %>><a href="/">Now Playing</a></li>
                         <li <%= getNavItemActiveCss(page, 'queue') %>><a href="/queue">Queue</a></li>
-                        <li class="dropdown">
-                            <a href="#"
-                               class="dropdown-toggle"
-                               data-toggle="dropdown"
-                               role="button"
-                               aria-haspopup="true"
-                               aria-expanded="false">
-                                Library <span class="caret"></span>
+                        <li <%= getNavItemActiveCss(page, 'library') %>>
+                            <a href="/library">
+                                <i class="material-icons">library_music</i>
+                                Show Library
                             </a>
-                            <ul class="dropdown-menu">
-                                <li <%= getNavItemActiveCss(page, 'library') %>>
-                                    <a href="/library">
-                                        <i class="material-icons">library_music</i>
-                                        Show Library
-                                    </a>
-                                </li>
-                                <li <%= getNavItemActiveCss(page, 'lib_search') %>>
-                                    <a href="/library/search">
-                                        <i class="material-icons">search</i>
-                                        Search
-                                    </a>
-                                </li>
-                            </ul>
+                        </li>
+                        <li <%= getNavItemActiveCss(page, 'lib_search') %>>
+                            <a href="/library/search">
+                                <i class="material-icons">search</i>
+                                Search
+                            </a>
                         </li>
                     </ul>
                 </div>
