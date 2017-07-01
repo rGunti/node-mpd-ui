@@ -413,6 +413,10 @@ $(document).ready(function() {
             $('#queueLoading').fadeIn();
             sendSimpleAjaxRequest('/mpd/queue/addsearch', 'post', songRestrictions, function() {
                 $('#queueLoading').fadeOut();
+                $.toaster({
+                    title: 'Added to queue',
+                    message: songItems.length + ' song(s) added to queue.'
+                });
             });
         }
     });
