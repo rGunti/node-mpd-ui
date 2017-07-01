@@ -60,7 +60,7 @@ $(document).ready(function() {
     }
 
     function fadeInHiddenElement() {
-        console.log('Fade In');
+        //console.log('Fade In');
         var item = $('#queueRenderTarget .list-group-item:hidden:first');
         if (item.length > 0) {
             item.fadeIn(100, fadeInHiddenElement);
@@ -68,7 +68,7 @@ $(document).ready(function() {
     }
 
     function fadeOutVisibleElements(callback) {
-        console.log('Fade Out');
+        //console.log('Fade Out');
         var item = $('#queueRenderTarget .list-group-item:visible:last');
         if (item.length > 0) {
             item.fadeOut(50, function() {
@@ -93,7 +93,7 @@ $(document).ready(function() {
     $('.queueLoadMoreButton').click(function(e) {
         var target = renderedItems;
         reloadQueueData(function(d,o) {
-            console.log(d.length, o.length, renderedItems);
+            //console.log(d.length, o.length, renderedItems);
             if (d.length === o.length && target === o.length) {
                 $.toaster({
                     title: 'Info',
@@ -121,7 +121,7 @@ $(document).ready(function() {
         var target = renderedItems - (renderedItems % PAGE_SIZE);
         if (target === renderedItems) target -= PAGE_SIZE;
         reloadQueueData(function(d) {
-            console.log(renderedItems, target, d.length);
+            //console.log(renderedItems, target, d.length);
 
             if (d.length < target) {
                 target = d.length - 1;
@@ -147,10 +147,10 @@ $(document).ready(function() {
         } else {
             target -= PAGE_SIZE;
         }
-        console.log(renderedItems, mod, target);
+        //console.log(renderedItems, mod, target);
 
         reloadQueueData(function(d, o) {
-            console.log(d.length);
+            //console.log(d.length);
 
             if (d.length < target) {
                 target = d.length - 1;
@@ -171,7 +171,7 @@ $(document).ready(function() {
     $('#selectActionModal button').click(function(e) {
         var song = $('#selectActionModal').data('song');
         var action = $(e.currentTarget).data('action');
-        console.log(song, action);
+        //console.log(song, action);
 
         switch (action) {
             case 'play':
