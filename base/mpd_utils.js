@@ -362,6 +362,38 @@ var MpdUtils = {
             }
         );
     },
+    find: function(findAttributes, callback) {
+        var args = [];
+
+        // Add Search Parameters
+        if (findAttributes.artist || findAttributes.emptySearch === 'artist') {
+            args.push("artist", findAttributes.artist || "");
+        }
+        if (findAttributes.album || findAttributes.emptySearch === 'album') {
+            args.push("album", findAttributes.album || "");
+        }
+        if (findAttributes.genre || findAttributes.emptySearch === 'genre') {
+            args.push("genre", findAttributes.genre || "");
+        }
+
+        // Create Command
+        var command = cmd(MpdUtils.Commands.SEARCH_CASE_SENSITIVE, args);
+        MpdUtils.sendCommand(
+            command,
+            function(err, msg) {
+                //debug(msg);
+
+                var list = [];
+                if (err) {
+                    debug('ERROR while trying to search for songs.');
+                } else if (msg) {
+                    list = MpdUtils.parseSongList(msg);
+                }
+
+                if (callback) callback(err, list, msg);
+            }
+        );
+    },
     getGenreList: function(callback) {
         MpdUtils.sendCommand(
             cmd(MpdUtils.Commands.LIST, ['genre']),

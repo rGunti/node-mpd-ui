@@ -230,6 +230,17 @@ router.post('/library/search', function(req, res, next) {
     });
 });
 
+// POST Find in Library
+router.post('/library/find', function(req, res, next) {
+    mpd.find(req.body, function(err, list, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to find songs', err);
+        } else {
+            ResponseUtil.sendData(res, list);
+        }
+    });
+});
+
 // GET List of Genres
 router.get('/library/genres', function(req, res, next) {
     mpd.getGenreList(function(err, list, msg) {

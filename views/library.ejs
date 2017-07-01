@@ -198,4 +198,57 @@
     </div>
 </div>
 
+<!-- Song Browser -->
+<div class="container collapse" id="collapseLibraryBrowserSongs">
+    <h6>
+        <button class="btn btn-sm btn-just-icon selectLibraryFilterButton" data-type="songs">
+            <i class="material-icons">arrow_back</i>
+        </button>
+        Songs
+    </h6>
+
+    <div class="container-fluid text-center">
+        <button data-type="songs" class="btn btn-primary btn-just-icon librarySongBrowserNavigationButtons libraryBrowserLoadLessButton">
+            <i class="material-icons">keyboard_arrow_up</i>
+        </button>
+        <button data-type="songs" class="btn btn-primary btn-just-icon librarySongBrowserNavigationButtons libraryBrowserReloadButton">
+            <i class="material-icons">refresh</i>
+            <span class="libraryBrowserPositionIndicator">0-0/0</span>
+        </button>
+        <button data-type="songs" class="btn btn-primary btn-just-icon librarySongBrowserNavigationButtons libraryBrowserLoadMoreButton">
+            <i class="material-icons">keyboard_arrow_down</i>
+        </button>
+    </div>
+
+    <div class="list-group" id="libraryBrowserSongsRenderTarget"></div>
+
+    <div class="container-fluid text-center">
+        <button data-type="songs" class="btn btn-primary btn-just-icon librarySongBrowserNavigationButtons libraryBrowserLoadLessButton">
+            <i class="material-icons">keyboard_arrow_up</i>
+        </button>
+        <button data-type="songs" class="btn btn-primary btn-just-icon librarySongBrowserNavigationButtons libraryBrowserReloadButton">
+            <i class="material-icons">refresh</i>
+            <span class="libraryBrowserPositionIndicator">0-0/0</span>
+        </button>
+        <button data-type="songs" class="btn btn-primary btn-just-icon librarySongBrowserNavigationButtons libraryBrowserLoadMoreButton">
+            <i class="material-icons">keyboard_arrow_down</i>
+        </button>
+    </div>
+
+    <!-- Item Template -->
+    <div class="list-group hidden">
+        <button type="button" class="list-group-item" id="libraryBrowserSongsTemplate">
+            <div class="row">
+                <div class="col-xs-8">
+                    <span class="result-title">{{title}}</span><br>
+                    <span class="result-artist">{{artist}}</span>
+                </div>
+                <div class="col-xs-4 text-right">
+                    <span class="result-length">00:00</span>
+                </div>
+            </div>
+        </button>
+    </div>
+</div>
+
 <script src="/js/custom/library.js"></script>
