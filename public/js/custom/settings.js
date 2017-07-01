@@ -34,13 +34,6 @@ $(document).ready(function() {
             priority: 'danger'
         });
     };
-    var DEFAULT_SERVER_ERROR_TOAST = function(d) {
-        $.toaster({
-            title: 'Error',
-            message: d.message,
-            priority: 'danger'
-        });
-    };
 
     var ACTIONS = {
         'mpd-rescan-library': function(callback) {
@@ -55,6 +48,18 @@ $(document).ready(function() {
                 DEFAULT_ERROR_TOAST();
                 if (callback) callback();
             });
+        },
+        'mpd-clear-queue': function(callback) {
+            sendSimpleAjaxRequest('/mpd/queue/clear', 'post', null, function(d) {
+                $.toaster({
+                    title: 'Queue cleared',
+                    message: 'The queue has been cleared'
+                });
+                if (callback) callback();
+            }, function() {
+                DEFAULT_ERROR_TOAST();
+                if (callback) callback();
+            });
         }
     };
     var CONFIRMS = {
@@ -62,6 +67,10 @@ $(document).ready(function() {
             title: 'Update Library',
             message: 'Would you like to start the update process? Depending on your library size ' +
                 'this might take a while.'
+        },
+        'mpd-clear-queue': {
+            title: 'Clear Queue',
+            message: 'Would you like to clear the queue?'
         }
     };
     var CONFIRM_MODAL = $('#confirmActionModal');

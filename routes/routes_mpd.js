@@ -230,6 +230,17 @@ router.post('/queue/:queuePos/move/:targetPos', function(req, res, next) {
     });
 });
 
+// POST Clear Queue
+router.post('/queue/clear', function(req, res, next) {
+    mpd.clearQueue(function(err, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to clear the queue', err);
+        } else {
+            ResponseUtil.sendEmptyResponse(res);
+        }
+    });
+});
+
 // POST Search in Library
 router.post('/library/search', function(req, res, next) {
     mpd.search(req.body, function(err, list, msg) {

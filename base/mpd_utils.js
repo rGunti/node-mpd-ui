@@ -59,7 +59,8 @@ var MpdUtils = {
         REMOVE_FROM_QUEUE: "delete",
         UPDATE: "update",
         RESCAN: "rescan",
-        SEARCH_ADD: "searchadd"
+        SEARCH_ADD: "searchadd",
+        CLEAR_QUEUE: "clear"
     },
     CachedData: {
         Status: {
@@ -518,6 +519,17 @@ var MpdUtils = {
             function (err, msg) {
                 if (err) {
                     debug('ERROR while updating library');
+                }
+                if (callback) callback(err, msg);
+            }
+        );
+    },
+    clearQueue: function(callback) {
+        MpdUtils.sendCommand(
+            MpdUtils.Commands.CLEAR_QUEUE,
+            function (err, msg) {
+                if (err) {
+                    debug('ERROR while clearing queue');
                 }
                 if (callback) callback(err, msg);
             }
