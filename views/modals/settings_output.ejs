@@ -23,32 +23,32 @@
  * SOFTWARE.
  * ********************************************************************************* */
 %>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-6">
-            <h4>MPD Settings</h4>
-            <div class="list-group">
-                <button class="list-group-item settings-action" data-action="mpd-rescan-library" data-need-confirm="true">
-                    <h4 class="list-group-item-heading">Update Library</h4>
-                    <p class="list-group-item-text">
-                        If you've recently added songs you might need to rescan your library.
-                    </p>
+
+<div class="modal fade" id="setOutputModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
                 </button>
-                <button class="list-group-item settings-action" data-action="mpd-clear-queue" data-need-confirm="true">
-                    <h4 class="list-group-item-heading">Clear Queue</h4>
-                    <p class="list-group-item-text">
-                        Use this option if you have a large queue to clear.
-                    </p>
-                </button>
-                <button class="list-group-item" id="changeOutputsButton">
-                    <h4 class="list-group-item-heading">Change Outputs</h4>
-                    <p class="list-group-item-text">
-                        Enable more than one way to play your music.
-                    </p>
-                </button>
+                <h4 class="modal-title confirm-title">Outputs</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Select the outputs you want to use:
+                </p>
+
+                <form id="outputsRenderTarget">
+                </form>
+
+                <div class="checkbox hidden" id="mpdOutputTemplate">
+                    <label>
+                        <input type="checkbox"> <span class="output-name">{{output_name}}</span>
+                    </label>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="/js/custom/settings.js"></script>
+<script src="/js/custom/modal/settings_output.js"></script>

@@ -319,4 +319,26 @@ router.post('/rescan', function(req, res, next) {
     });
 });
 
+// GET Outputs
+router.get('/outputs', function(req, res, next) {
+    mpd.getOutputs(function(err, list, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to get outputs', err);
+        } else {
+            ResponseUtil.sendData(res, list);
+        }
+    });
+});
+
+// POST Set Output
+router.post('/output/:id', function(req, res, next) {
+    mpd.setOutput(req.params.id, req.body.state == 'true', function(err, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to set output', err);
+        } else {
+            ResponseUtil.sendEmptyResponse(res);
+        }
+    });
+});
+
 module.exports = router;

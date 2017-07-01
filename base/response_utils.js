@@ -25,7 +25,9 @@
 const debug = require('debug')('mpd-ui:ResponseUtils');
 
 var ResponseUtils = {
-    respondWithJson: function(res, data) { res.json(data); },
+    respondWithJson: function(res, data) {
+        res.json(data);
+    },
     sendError: function(res, errorMessage, errorData) {
         ResponseUtils.respondWithJson(res, {
             ok: false,

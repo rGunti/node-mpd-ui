@@ -60,7 +60,10 @@ var MpdUtils = {
         UPDATE: "update",
         RESCAN: "rescan",
         SEARCH_ADD: "searchadd",
-        CLEAR_QUEUE: "clear"
+        CLEAR_QUEUE: "clear",
+        OUTPUTS: "outputs",
+        ENABLE_OUTPUT: "enableoutput",
+        DISABLE_OUTPUT: "disableoutput"
     },
     CachedData: {
         Status: {
@@ -534,6 +537,42 @@ var MpdUtils = {
                 if (callback) callback(err, msg);
             }
         );
+    },
+    getOutputs: function(callback) {
+        MpdUtils.sendCommand(
+            MpdUtils.Commands.OUTPUTS,
+            function(err, msg) {
+                var list = [];
+                if (err) {
+                    debug('ERROR while trying to get outputs');
+                } else if (msg) {
+                    var lines = msg.split('\n');
+                    var output = null;
+                    for (var i = 0; i < lines.length; i++) {
+                        var line = lines[i];
+                        if (line.startsWith('outputid: ')) {
+                            if (output) list.push(output);
+                            output = {};
+                        }
+                        MpdUtils.parseResponseLine(line, output);
+                    }
+                    list.push(output);
+                }
+
+                if (callback) callback(err, list, msg);
+            }
+        );
+    },
+    setOutput: function(id, state, callback) {
+        MpdUtils.sendCommand(
+            cmd((state ? MpdUtils.Commands.ENABLE_OUTPUT : MpdUtils.Commands.DISABLE_OUTPUT), [ Number(id) ]),
+            function(err, msg) {
+                if (err) {
+                    debug('ERROR while trying to set Output %s to %s', id, (state ? 'on': 'off'))
+                }
+                if (callback) callback(err, msg);
+            }
+        )
     }
 };
 
