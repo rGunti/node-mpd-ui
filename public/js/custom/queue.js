@@ -178,6 +178,8 @@ $(document).ready(function() {
         var action = $(e.currentTarget).data('action');
         //console.log(song, action);
 
+        if (!action) { return; }
+
         switch (action) {
             case 'play':
                 sendSimpleAjaxRequest('/mpd/queue/' + song.Pos + '/play', 'post', null, function(r) {
@@ -185,6 +187,22 @@ $(document).ready(function() {
                         title: 'Now Playing',
                         message: generateSongInfoText(song)
                     });
+                });
+                break;
+            case 'remove':
+                sendSimpleAjaxRequest('/mpd/queue/' + song.Pos + '/remove', 'post', null, function(r) {
+                    $.toaster({
+                        title: 'Removed from queue',
+                        message: generateSongInfoText(song)
+                    });
+                    $('.queueReloadButton').first().click();
+                });
+                break;
+            default:
+                $.toaster({
+                    title: 'Unknown Action',
+                    message: action,
+                    priority: 'danger'
                 });
                 break;
         }

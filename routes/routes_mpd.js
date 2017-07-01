@@ -142,6 +142,18 @@ router.post('/queue/:queuePos/play', function(req, res, next) {
     });
 });
 
+// POST Remove item from Queue
+router.post('/queue/:queuePos/remove', function(req, res, next) {
+    var songPos = req.params.queuePos;
+    mpd.removeItemFromQueue(songPos, function(err, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to remove Song from queue at Pos ' + songPos, err);
+        } else {
+            ResponseUtil.sendEmptyResponse(res);
+        }
+    });
+});
+
 // POST Move item in Queue
 router.post('/queue/:queuePos/move/:targetPos', function(req, res, next) {
     var songPos = req.params.queuePos;

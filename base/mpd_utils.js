@@ -55,7 +55,8 @@ var MpdUtils = {
         SEARCH_CASE_SENSITIVE: "find",
         SEARCH: "search",
         ADD_URI: "add",
-        LIST: "list"
+        LIST: "list",
+        REMOVE_FROM_QUEUE: "delete"
     },
     CachedData: {
         Status: {
@@ -382,6 +383,17 @@ var MpdUtils = {
                 }
 
                 if (callback) callback(err, list, msg);
+            }
+        );
+    },
+    removeItemFromQueue: function(pos, callback) {
+        MpdUtils.sendCommand(
+            cmd(MpdUtils.Commands.REMOVE_FROM_QUEUE, [pos]),
+            function(err, msg) {
+                if (err) {
+                    debug('ERROR while removing item from queue');
+                }
+                if (callback) callback(err, msg);
             }
         );
     }
