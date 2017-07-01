@@ -23,6 +23,7 @@
  * ********************************************************************************* */
 
 $(document).ready(function() {
+    var lastSearch = {};
     var songs = [];
     var renderedItems = 0;
 
@@ -86,6 +87,7 @@ $(document).ready(function() {
             album: $('#librarySearchAlbum').val(),
             genre: $('#librarySearchGenre').val()
         };
+        lastSearch = data;
 
         if (!data.title && !data.artist && !data.album && !data.genre) {
             $.toaster({
@@ -149,9 +151,23 @@ $(document).ready(function() {
         renderedItems = 0;
     });
 
+    $('#addEverythingButton').click(function(e) {
+        if (confirm('Would you like to add ' + songs.length + ' song(s) to the queue?')) {
+            $('#queueLoading').fadeIn();
+            sendSimpleAjaxRequest('/mpd/queue/addsearch', 'post', lastSearch, function() {
+                $('#queueLoading').fadeOut();
+                $.toaster({
+                    title: 'Added to queue',
+                    message: songs.length + ' song(s) added to queue.'
+                });
+            });
+        }
+    });
+
     $.get('/mpd/library/genres', function(data) {
         $('#librarySearchGenre').typeahead({ source: data.data }, 'json');
     });
 
+    $('#queueLoading').hide();
     $('#librarySearchTitle').focus().select();
 });

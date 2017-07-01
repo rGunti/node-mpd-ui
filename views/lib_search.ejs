@@ -23,6 +23,13 @@
  * SOFTWARE.
  * ********************************************************************************* */
 %>
+<div class="text-center loading-indicator">
+    <button type="submit" id="queueLoading" class="btn btn-primary" disabled>
+        <img class="loading-shown" src="/img/loading32_colored.gif">
+        Loading &hellip;
+    </button>
+</div>
+
 <div class="container collapse in" id="collapseSearchForm">
     <form id="librarySearchForm">
         <div class="form-group label-floating">
@@ -53,6 +60,9 @@
 
 <div class="container collapse" id="collapseSearchResult">
     <div class="text-center">
+        <button class="btn btn-primary btn-sm" id="addEverythingButton">
+            <i class="material-icons">library_add</i>
+        </button>
         <button class="btn btn-sm" id="searchAgainButton">
             <i class="material-icons">search</i>
             Search Again
