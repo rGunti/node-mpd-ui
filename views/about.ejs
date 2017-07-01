@@ -43,6 +43,11 @@ function getLocation(href) {
         <dt>Version</dt>
         <dd><b><samp><%= data.packageInfo.version %></samp></b></dd>
 
+        <dt>License</dt>
+        <dd>
+            <a href="/license"><%= data.packageInfo.license %> License</a>
+        </dd>
+
         <dt>Author</dt>
         <dd>
             <%= data.packageInfo.author.name %>
