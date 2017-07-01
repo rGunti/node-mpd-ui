@@ -25,11 +25,14 @@
 $(document).ready(function() {
     var songs = [];
     var renderedItems = 0;
+    var PAGE_SIZE = 10;
 
     function renderSongs(startIndex) {
-        for (var i = startIndex; i < startIndex + 10 && i < songs.length; i++) {
+        renderedItems = startIndex;
+        for (var i = startIndex; i < startIndex + PAGE_SIZE && i < songs.length; i++) {
             var song = songs[i];
             var item = $('#queueItemTemplate').clone();
+            item.attr('id', '');
 
             $('.result-title', item).text(song.Title || song.file);
             if (song.Artist) {
@@ -47,11 +50,9 @@ $(document).ready(function() {
             renderedItems++;
         }
         fadeInHiddenElement();
-        if (!hasMoreSongs()) {
-            $('#queueLoadMoreButton').attr('disabled', true);
-        } else {
-            $('#queueLoadMoreButton').attr('disabled', false);
-        }
+        $('.queuePositionIndicator').text((startIndex + 1) + '-' + renderedItems + '/' + songs.length);
+        //$('#queueLoadMoreButton').attr('disabled', !hasMoreSongs());
+        //$('#queueLoadLessButton').attr('disabled', !hasLessSongs());
     }
 
     function fadeInHiddenElement() {
@@ -62,8 +63,17 @@ $(document).ready(function() {
         }
     }
 
-    function hasMoreSongs() {
-        return (renderedItems < songs.length);
+    function fadeOutVisibleElements(callback) {
+        console.log('Fade Out');
+        var item = $('#queueRenderTarget .list-group-item:visible:last');
+        if (item.length > 0) {
+            item.fadeOut(50, function() {
+                item.remove();
+                fadeOutVisibleElements(callback);
+            });
+        } else {
+            if (callback) callback();
+        }
     }
 
     function onSongClick(e) {
@@ -73,50 +83,132 @@ $(document).ready(function() {
         $('#selectActionModal .result-pos').text(Number(song.Pos) + 1);
         $('#selectActionModal .result-title').text(song.Title || song.file);
         $('#selectActionModal .result-artist').text(song.Artist || '');
-        $('#selectActionModal').data('song', song);
-        $('#selectActionModal').modal('show');
+        $('#selectActionModal').data('song', song).modal('show');
     }
 
-    $('#queueLoadMoreButton').click(function(e) {
-        renderSongs(renderedItems);
+    $('.queueLoadMoreButton').click(function(e) {
+        var target = renderedItems;
+        reloadQueueData(function(d,o) {
+            console.log(d.length, o.length, renderedItems);
+            if (d.length === o.length && target === o.length) {
+                $.toaster({
+                    title: 'Info',
+                    message: 'You\'ve reached the end of the queue.',
+                    priority: 'info'
+                });
+                return;
+            }
+            if (d.length <= target) {
+                target = d.length - 1;
+                var mod = target % PAGE_SIZE;
+                if (mod > 0) {
+                    target -= mod;
+                } else {
+                    target -= PAGE_SIZE;
+                }
+            }
+            fadeOutVisibleElements(function() {
+                renderSongs(target);
+            });
+        });
+    });
+
+    $('.queueReloadButton').click(function(e) {
+        var target = renderedItems - (renderedItems % PAGE_SIZE);
+        if (target === renderedItems) target -= PAGE_SIZE;
+        reloadQueueData(function(d) {
+            console.log(renderedItems, target, d.length);
+
+            if (d.length < target) {
+                target = d.length - 1;
+                var mod = target % PAGE_SIZE;
+                if (mod > 0) {
+                    target -= mod;
+                } else {
+                    target -= PAGE_SIZE;
+                }
+            }
+
+            fadeOutVisibleElements(function() {
+                renderSongs(Math.max(0, target));
+            });
+        });
+    });
+
+    $('.queueLoadLessButton').click(function(e) {
+        var target = renderedItems - PAGE_SIZE;
+        var mod = target % PAGE_SIZE;
+        if (mod > 0) {
+            target -= mod;
+        } else {
+            target -= PAGE_SIZE;
+        }
+        console.log(renderedItems, mod, target);
+
+        reloadQueueData(function(d, o) {
+            console.log(d.length);
+
+            if (d.length < target) {
+                target = d.length - 1;
+                mod = target % PAGE_SIZE;
+                if (mod > 0) {
+                    target -= mod;
+                } else {
+                    target -= PAGE_SIZE;
+                }
+            }
+
+            fadeOutVisibleElements(function() {
+                renderSongs(Math.max(0, target));
+            });
+        });
     });
 
     $('#songActionPlayButton').click(function(e) {
         $('#selectActionModal').modal('hide');
     });
 
-    $.ajax({
-        url: '/mpd/queue',
-        method: 'get',
-        beforeSend: function() {
-            $('.loading-indicator').fadeIn();
-        }
-    }).done(function(data, textStatus, jqXHR) {
-        if (data.ok) {
-            if (data.data && data.data.length >= 1) {
-                songs = data.data;
-                renderSongs(0);
+    function reloadQueueData(renderCallback) {
+        $.ajax({
+            url: '/mpd/queue',
+            method: 'get',
+            beforeSend: function() {
+                $('.loading-indicator').fadeIn();
+                $('.queueNavigationButtons').attr('disabled', true);
+            }
+        }).done(function(data, textStatus, jqXHR) {
+            if (data.ok) {
+                if (data.data && data.data.length >= 1) {
+                    var oldSongs = songs;
+                    songs = data.data;
+                    renderCallback(songs, oldSongs);
+                } else {
+                    $.toaster({
+                        title: 'No Songs found',
+                        message: 'Add a few songs to the queue to start the party.',
+                        priority: 'info'
+                    });
+                }
             } else {
                 $.toaster({
-                    title: 'No Songs found',
-                    message: 'Add a few songs to the queue to start the party.',
-                    priority: 'info'
+                    title: 'Error',
+                    message: data.message,
+                    priority: 'danger'
                 });
             }
-        } else {
+        }).fail(function(jqXHR, textStatus, errorThrown) {
             $.toaster({
                 title: 'Error',
-                message: data.message,
+                message: 'Something went horribly wrong here D:\nSome more detail for you: ' + textStatus,
                 priority: 'danger'
             });
-        }
-    }).fail(function(jqXHR, textStatus, errorThrown) {
-        $.toaster({
-            title: 'Error',
-            message: 'Something went horribly wrong here D:\nSome more detail for you: ' + textStatus,
-            priority: 'danger'
+        }).always(function(data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
+            $('.loading-indicator').fadeOut();
+            $('.queueNavigationButtons').attr('disabled', false);
         });
-    }).always(function(data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
-        $('.loading-indicator').fadeOut();
+    }
+
+    reloadQueueData(function(data) {
+        renderSongs(0);
     });
 });
