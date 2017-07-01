@@ -1,0 +1,195 @@
+<%
+/*********************************************************************************** *
+ * MIT License
+ *
+ * Copyright (c) 2017 Raphael "rGunti" Guntersweiler
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * ********************************************************************************* */
+%>
+
+<div class="text-center loading-indicator">
+    <button type="submit" id="queueLoading" class="btn btn-primary" disabled>
+        <img class="loading-shown" src="/img/loading32_colored.gif">
+        Loading &hellip;
+    </button>
+</div>
+
+<div class="container collapse in" id="collapseLibrarySection">
+    <div class="list-group">
+        <button type="button" class="list-group-item" data-library-filter="artists">
+            <span class="glyphicon glyphicon-user"></span>
+            Artist
+        </button>
+        <button type="button" class="list-group-item" data-library-filter="albums">
+            <span class="glyphicon glyphicon-cd"></span>
+            Album
+        </button>
+        <button type="button" class="list-group-item" data-library-filter="genres">
+            <span class="glyphicon glyphicon-music"></span>
+            Genre
+        </button>
+    </div>
+</div>
+
+<!-- Artist Browser -->
+<div class="container collapse" id="collapseLibraryBrowserArtist">
+    <h6>Artist Browser</h6>
+
+    <div class="container-fluid text-center">
+        <button class="btn btn-sm btn-just-icon selectLibraryFilterButton" data-source="#collapseLibraryBrowserArtist">
+            <i class="material-icons">filter_list</i>
+        </button>
+        |
+        <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadLessButton">
+            <i class="material-icons">keyboard_arrow_up</i>
+        </button>
+        <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserReloadButton">
+            <i class="material-icons">refresh</i>
+            <span class="libraryBrowserPositionIndicator">0-0/0</span>
+        </button>
+        <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadMoreButton">
+            <i class="material-icons">keyboard_arrow_down</i>
+        </button>
+    </div>
+
+    <div class="list-group" id="libraryBrowserArtistRenderTarget"></div>
+
+    <div class="container-fluid text-center">
+        <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadLessButton">
+            <i class="material-icons">keyboard_arrow_up</i>
+        </button>
+        <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserReloadButton">
+            <i class="material-icons">refresh</i>
+            <span class="libraryBrowserPositionIndicator">0-0/0</span>
+        </button>
+        <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadMoreButton">
+            <i class="material-icons">keyboard_arrow_down</i>
+        </button>
+    </div>
+
+    <!-- Item Template -->
+    <div class="list-group hidden">
+        <button type="button" class="list-group-item" id="libraryBrowserArtistTemplate">
+            <div class="row">
+                <div class="col-xs-12">
+                    <span class="result-artist">{{artist}}</span>
+                </div>
+            </div>
+        </button>
+    </div>
+</div>
+
+<!-- Album Browser -->
+<div class="container collapse" id="collapseLibraryBrowserAlbum">
+    <h6>Album Browser</h6>
+
+    <div class="container-fluid text-center">
+        <button class="btn btn-sm btn-just-icon selectLibraryFilterButton" data-source="#collapseLibraryBrowserAlbum">
+            <i class="material-icons">filter_list</i>
+        </button>
+        |
+        <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadLessButton">
+            <i class="material-icons">keyboard_arrow_up</i>
+        </button>
+        <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserReloadButton">
+            <i class="material-icons">refresh</i>
+            <span class="libraryBrowserPositionIndicator">0-0/0</span>
+        </button>
+        <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadMoreButton">
+            <i class="material-icons">keyboard_arrow_down</i>
+        </button>
+    </div>
+
+    <div class="list-group" id="libraryBrowserAlbumRenderTarget"></div>
+
+    <div class="container-fluid text-center">
+        <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadLessButton">
+            <i class="material-icons">keyboard_arrow_up</i>
+        </button>
+        <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserReloadButton">
+            <i class="material-icons">refresh</i>
+            <span class="libraryBrowserPositionIndicator">0-0/0</span>
+        </button>
+        <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadMoreButton">
+            <i class="material-icons">keyboard_arrow_down</i>
+        </button>
+    </div>
+
+    <!-- Item Template -->
+    <div class="list-group hidden">
+        <button type="button" class="list-group-item" id="libraryBrowserAlbumTemplate">
+            <div class="row">
+                <div class="col-xs-12">
+                    <span class="result-album">{{album}}</span>
+                </div>
+            </div>
+        </button>
+    </div>
+</div>
+
+<!-- Genre Browser -->
+<div class="container collapse" id="collapseLibraryBrowserGenre">
+    <h6>Genre Browser</h6>
+
+    <div class="container-fluid text-center">
+        <button class="btn btn-sm btn-just-icon selectLibraryFilterButton" data-source="#collapseLibraryBrowserGenre">
+            <i class="material-icons">filter_list</i>
+        </button>
+        |
+        <button data-type="genres" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadLessButton">
+            <i class="material-icons">keyboard_arrow_up</i>
+        </button>
+        <button data-type="genres" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserReloadButton">
+            <i class="material-icons">refresh</i>
+            <span class="libraryBrowserPositionIndicator">0-0/0</span>
+        </button>
+        <button data-type="genres" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadMoreButton">
+            <i class="material-icons">keyboard_arrow_down</i>
+        </button>
+    </div>
+
+    <div class="list-group" id="libraryBrowserGenreRenderTarget"></div>
+
+    <div class="container-fluid text-center">
+        <button data-type="genres" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadLessButton">
+            <i class="material-icons">keyboard_arrow_up</i>
+        </button>
+        <button data-type="genres" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserReloadButton">
+            <i class="material-icons">refresh</i>
+            <span class="libraryBrowserPositionIndicator">0-0/0</span>
+        </button>
+        <button data-type="genres" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadMoreButton">
+            <i class="material-icons">keyboard_arrow_down</i>
+        </button>
+    </div>
+
+    <!-- Item Template -->
+    <div class="list-group hidden">
+        <button type="button" class="list-group-item" id="libraryBrowserGenreTemplate">
+            <div class="row">
+                <div class="col-xs-12">
+                    <span class="result-genre">{{genre}}</span>
+                </div>
+            </div>
+        </button>
+    </div>
+</div>
+
+<script src="/js/custom/library.js"></script>

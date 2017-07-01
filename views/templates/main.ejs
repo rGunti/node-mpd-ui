@@ -98,6 +98,12 @@ function getNavItemActiveCss(currentPage, requiredPage) {
                                 Library <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
+                                <li <%= getNavItemActiveCss(page, 'library') %>>
+                                    <a href="/library">
+                                        <i class="material-icons">library_music</i>
+                                        Show Library
+                                    </a>
+                                </li>
                                 <li <%= getNavItemActiveCss(page, 'lib_search') %>>
                                     <a href="/library/search">
                                         <i class="material-icons">search</i>
