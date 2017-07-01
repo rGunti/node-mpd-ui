@@ -1,4 +1,3 @@
-<%
 /*********************************************************************************** *
  * MIT License
  *
@@ -22,31 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  * ********************************************************************************* */
-%>
 
-<div class="modal fade" id="selectActionModal" tabindex="-1" role="dialog" aria-labelledby="selectActionModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="selectActionModalLabel">
-                    Select an action
-                </h4>
-            </div>
-            <div class="modal-body">
-                <p><span class="result-title"></span></p>
-                <p><span class="result-artist"></span></p>
-                <div class="list-group">
-                    <button type="button" class="list-group-item" id="songActionAddToPlaylistButton">
-                        <span class="glyphicon glyphicon-plus"></span>
-                        Add Song to Queue
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="/js/custom/modal/lib_play.js"></script>
+$(document).ready(function() {
+    $('#songActionAddToPlaylistButton').click(function(e) {
+        var modal = $('#selectActionModal');
+        var song = modal.data('song');
+        modal.modal('hide');
+        $.ajax({
+            url: '/mpd/queue/add',
+            method: 'post',
+            data: {
+                uri: song.file
+            }
+        }).done(function(data, textStatus, jqXHR) {
+            if (data.ok) {
+                $.toaster({
+                    title: 'Added to Queue',
+                    message: song.Title || song.file
+                });
+            } else {
+                $.toaster({
+                    title: 'Error',
+                    message: data.message,
+                    priority: 'danger'
+                });
+            }
+        });
+    });
+});

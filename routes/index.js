@@ -59,7 +59,7 @@ router.get('/test_table', function(req, res, next) {
 /* GET "Library" */
 router.get('/library', function(req, res, next) {
     respond(res, 'main', 'library', 'Library', [
-        //'modals/lib_play'
+        'modals/lib_play'
     ]);
 });
 
