@@ -107,8 +107,6 @@ function getNavItemActiveCss(currentPage, requiredPage) {
                             </ul>
                         </li>
                     </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                    </ul>
                 </div>
             </div>
         </nav>
@@ -118,7 +116,7 @@ function getNavItemActiveCss(currentPage, requiredPage) {
         </div>
 
         <% additionalIncludes.forEach(function(includeItem){ %>
-        <%- include('../' + includeItem) %>
+        <%- include('../' + includeItem, { config: config }) %>
         <% }) %>
 
         <%- include('footer') %>

@@ -86,7 +86,8 @@ router.get('/about', function(req, res, next) {
             memoryUsage: process.memoryUsage()
         },
 
-        packageInfo: config.packageInfo
+        packageInfo: config.packageInfo,
+        config: config.items
     });
 });
 

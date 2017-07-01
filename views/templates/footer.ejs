@@ -25,6 +25,9 @@
 %>
 <footer class="container text-muted">
     &COPY; <%= new Date().getFullYear() %>, rGunti
+    <% if (config.flag) { %>
+    &ndash; <i><%= config.flag || '-' %></i>
+    <% } %>
     &ndash; <a href="/about">About</a>
     &ndash; <a href="/license">License Info</a>
 </footer>
