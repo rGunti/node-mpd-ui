@@ -386,6 +386,30 @@ var MpdUtils = {
             }
         );
     },
+    getArtistList: function(callback) {
+        MpdUtils.sendCommand(
+            cmd(MpdUtils.Commands.LIST, ['artist']),
+            function(err, msg) {
+                var list = [];
+                if (err) {
+                    debug('ERROR while trying to get Artist list.');
+                } else if (msg) {
+                    var lines = msg.split('\n');
+                    for (var i = 0; i < lines.length; i++) {
+                        var line = lines[i];
+                        if (line.startsWith('Artist: ')) {
+                            var artist = MpdUtils.parseResponseLine(line);
+                            if (artist.Artist) {
+                                list.push(artist.Artist);
+                            }
+                        }
+                    }
+                }
+
+                if (callback) callback(err, list, msg);
+            }
+        );
+    },
     removeItemFromQueue: function(pos, callback) {
         MpdUtils.sendCommand(
             cmd(MpdUtils.Commands.REMOVE_FROM_QUEUE, [pos]),

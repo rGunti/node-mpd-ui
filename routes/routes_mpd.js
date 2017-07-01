@@ -253,4 +253,15 @@ router.get('/library/genres', function(req, res, next) {
     });
 });
 
+// GET List of Artists
+router.get('/library/artists', function(req, res, next) {
+    mpd.getArtistList(function(err, list, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to get artist list', err);
+        } else {
+            ResponseUtil.sendData(res, list);
+        }
+    });
+});
+
 module.exports = router;

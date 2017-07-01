@@ -50,21 +50,22 @@
 
 <!-- Artist Browser -->
 <div class="container collapse" id="collapseLibraryBrowserArtist">
-    <h6>Artist Browser</h6>
-
-    <div class="container-fluid text-center">
-        <button class="btn btn-sm btn-just-icon selectLibraryFilterButton" data-source="#collapseLibraryBrowserArtist">
+    <h6>
+        <button class="btn btn-sm btn-just-icon selectLibraryFilterButton" data-source="#collapseLibraryBrowserArtist" data-type="artists">
             <i class="material-icons">filter_list</i>
         </button>
-        |
-        <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadLessButton">
+        Artist Browser
+    </h6>
+
+    <div class="container-fluid text-center">
+        <button data-type="artists" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadLessButton">
             <i class="material-icons">keyboard_arrow_up</i>
         </button>
-        <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserReloadButton">
+        <button data-type="artists" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserReloadButton">
             <i class="material-icons">refresh</i>
             <span class="libraryBrowserPositionIndicator">0-0/0</span>
         </button>
-        <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadMoreButton">
+        <button data-type="artists" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadMoreButton">
             <i class="material-icons">keyboard_arrow_down</i>
         </button>
     </div>
@@ -72,14 +73,14 @@
     <div class="list-group" id="libraryBrowserArtistRenderTarget"></div>
 
     <div class="container-fluid text-center">
-        <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadLessButton">
+        <button data-type="artists" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadLessButton">
             <i class="material-icons">keyboard_arrow_up</i>
         </button>
-        <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserReloadButton">
+        <button data-type="artists" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserReloadButton">
             <i class="material-icons">refresh</i>
             <span class="libraryBrowserPositionIndicator">0-0/0</span>
         </button>
-        <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadMoreButton">
+        <button data-type="artists" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadMoreButton">
             <i class="material-icons">keyboard_arrow_down</i>
         </button>
     </div>
@@ -98,13 +99,14 @@
 
 <!-- Album Browser -->
 <div class="container collapse" id="collapseLibraryBrowserAlbum">
-    <h6>Album Browser</h6>
-
-    <div class="container-fluid text-center">
-        <button class="btn btn-sm btn-just-icon selectLibraryFilterButton" data-source="#collapseLibraryBrowserAlbum">
+    <h6>
+        <button class="btn btn-sm btn-just-icon selectLibraryFilterButton" data-source="#collapseLibraryBrowserAlbum" data-type="albums">
             <i class="material-icons">filter_list</i>
         </button>
-        |
+        Album Browser
+    </h6>
+
+    <div class="container-fluid text-center">
         <button class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadLessButton">
             <i class="material-icons">keyboard_arrow_up</i>
         </button>
@@ -146,13 +148,14 @@
 
 <!-- Genre Browser -->
 <div class="container collapse" id="collapseLibraryBrowserGenre">
-    <h6>Genre Browser</h6>
-
-    <div class="container-fluid text-center">
-        <button class="btn btn-sm btn-just-icon selectLibraryFilterButton" data-source="#collapseLibraryBrowserGenre">
+    <h6>
+        <button class="btn btn-sm btn-just-icon selectLibraryFilterButton" data-source="#collapseLibraryBrowserGenre" data-type="genres">
             <i class="material-icons">filter_list</i>
         </button>
-        |
+        Genre Browser
+    </h6>
+
+    <div class="container-fluid text-center">
         <button data-type="genres" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadLessButton">
             <i class="material-icons">keyboard_arrow_up</i>
         </button>

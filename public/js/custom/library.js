@@ -26,9 +26,11 @@ $(document).ready(function() {
     $('#queueLoading').hide();
 
     var ITEM_TEMPLATES = {
+        artists: '#libraryBrowserArtistTemplate',
         genres: '#libraryBrowserGenreTemplate'
     };
     var RENDER_TARGETS = {
+        artists: '#libraryBrowserArtistRenderTarget',
         genres: '#libraryBrowserGenreRenderTarget'
     };
 
@@ -48,6 +50,11 @@ $(document).ready(function() {
             var item = $(ITEM_TEMPLATES[type]).clone();
             item.removeAttr('id');
             switch (type) {
+                case 'artists':
+                    $('.result-artist', item).text(itemObject || '<none>');
+                    item.data('artist', itemObject);
+                    item.click(onArtistClick);
+                    break;
                 case 'genres':
                     $('.result-genre', item).text(itemObject || '<none>');
                     item.data('genre', itemObject);
@@ -92,6 +99,7 @@ $(document).ready(function() {
             method: 'get',
             beforeSend: function() {
                 $('#queueLoading').fadeIn();
+                $('.libraryBrowserNavigationButtons').attr('disabled', true);
             }
         }).done(function(data, textStatus, jqXHR) {
             if (data.ok) {
@@ -122,6 +130,7 @@ $(document).ready(function() {
             });
         }).always(function(data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
             $('#queueLoading').fadeOut();
+            $('.libraryBrowserNavigationButtons').attr('disabled', false);
         });
     }
 
@@ -157,10 +166,12 @@ $(document).ready(function() {
 
     $('.selectLibraryFilterButton').click(function(e) {
         var source = $(e.currentTarget).data('source');
+        var dataType = $(e.currentTarget).data('type');
 
         prefilteredItems = [];
         renderedPrefilteredItems = 0;
 
+        $(RENDER_TARGETS[dataType]).empty();
         $(source).collapse('hide');
         $('#collapseLibrarySection').collapse('show');
     });
@@ -196,8 +207,10 @@ $(document).ready(function() {
     $('.libraryBrowserReloadButton').click(function(e) {
         var dataType = $(e.currentTarget).data('type');
 
-        var target = renderedPrefilteredItems - (renderedPrefilteredItems & PAGE_SIZE);
+        var target = renderedPrefilteredItems - (renderedPrefilteredItems % PAGE_SIZE);
         if (target === renderedPrefilteredItems) target -= PAGE_SIZE;
+
+        console.log('rendered:', renderedPrefilteredItems, 'target:', target);
 
         loadPrefilterItems(dataType, function(type, d) {
             if (d.length < target) {
@@ -209,6 +222,7 @@ $(document).ready(function() {
                     target -= PAGE_SIZE;
                 }
             }
+            console.log('rendered:', renderedPrefilteredItems, 'target:', target, 'length:', d.length);
 
             fadeOutVisibleElements(RENDER_TARGETS[type], function() {
                 renderPrefilterItems(type, Math.max(0, target));
@@ -238,11 +252,21 @@ $(document).ready(function() {
                     target -= PAGE_SIZE;
                 }
             }
-            fadeOutVisibleElements(type, function() {
+            fadeOutVisibleElements(RENDER_TARGETS[type], function() {
                 renderPrefilterItems(type, target);
             });
         });
     });
+
+    function onArtistClick(e) {
+        var artist = $(e.currentTarget).data('artist');
+        console.log('Artist: ', artist);
+    }
+
+    function onAlbumClick(e) {
+        var album = $(e.currentTarget).data('album');
+        console.log('Album: ', album);
+    }
 
     function onGenreClick(e) {
         var genre = $(e.currentTarget).data('genre');
