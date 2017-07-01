@@ -286,4 +286,15 @@ router.get('/library/albums', function(req, res, next) {
     });
 });
 
+// POST Rescan Library
+router.post('/rescan', function(req, res, next) {
+    mpd.updateLibrary(req.body.rescan || false, function(err, list, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to update library', err);
+        } else {
+            ResponseUtil.sendData(res, list);
+        }
+    });
+});
+
 module.exports = router;

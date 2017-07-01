@@ -106,4 +106,11 @@ router.get('/license', function(req, res, next) {
     });
 });
 
+/* GET "Settings" */
+router.get('/settings', function(req, res, next) {
+    respond(res, 'main', 'settings', 'Settings', [
+        'modals/settings_confirm'
+    ]);
+});
+
 module.exports = router;

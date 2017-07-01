@@ -56,7 +56,9 @@ var MpdUtils = {
         SEARCH: "search",
         ADD_URI: "add",
         LIST: "list",
-        REMOVE_FROM_QUEUE: "delete"
+        REMOVE_FROM_QUEUE: "delete",
+        UPDATE: "update",
+        RESCAN: "rescan"
     },
     CachedData: {
         Status: {
@@ -472,6 +474,17 @@ var MpdUtils = {
             function(err, msg) {
                 if (err) {
                     debug('ERROR while removing item from queue');
+                }
+                if (callback) callback(err, msg);
+            }
+        );
+    },
+    updateLibrary: function(rescan, callback) {
+        MpdUtils.sendCommand(
+            (rescan ? MpdUtils.Commands.RESCAN : MpdUtils.Commands.UPDATE),
+            function (err, msg) {
+                if (err) {
+                    debug('ERROR while updating library');
                 }
                 if (callback) callback(err, msg);
             }
