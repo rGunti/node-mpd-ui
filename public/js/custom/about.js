@@ -1,4 +1,3 @@
-<%
 /*********************************************************************************** *
  * MIT License
  *
@@ -22,10 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  * ********************************************************************************* */
-%>
-<footer class="container text-muted">
-    &COPY; <%= new Date().getFullYear() %>, rGunti
-    &ndash; <a href="/about">About</a>
-    &ndash; <a href="/license">License Info</a>
-    &ndash; <a href="/tos">Terms of Service</a>
-</footer>
+
+$(document).ready(function() {
+});

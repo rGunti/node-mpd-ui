@@ -83,11 +83,17 @@ function sendSimpleAjaxRequest(url, method, data, callback, errorCallback) {
 }
 
 function iOSLinkFixer() {
-    $('a').each(function() {
+    $('a[target!=_blank]').each(function() {
         var href = $(this).attr('href');
         $(this).attr('onclick', "window.location='" + href + "'")
             .removeAttr('href');
     });
+}
+
+var getLocation = function(href) {
+    var l = document.createElement("a");
+    l.href = href;
+    return l;
 }
 
 // Datatables Plugin: page.jumpToData()
@@ -110,7 +116,7 @@ function closeToast(e) {
 
 $(document).ready(function() {
     // Hide when a Nav item has been clicked
-    $('.nav a').on('click', function(e) { if (!$(e.currentTarget).hasClass('dropdown-toggle')) $('.navbar-toggle').click(); });
+    $('nav .nav a').on('click', function(e) { if (!$(e.currentTarget).hasClass('dropdown-toggle')) $('.navbar-toggle').click(); });
 
     // Pre-Set Toaster Settings
     $.toaster({

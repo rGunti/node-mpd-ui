@@ -37,6 +37,8 @@ var config = {
         debug('Initializing Config ...');
         var configFilePath = process.env.CONFIG_PATH || config.DEFAULT_CONFIG;
         config.readFromFile(configFilePath);
+
+        config.packageInfo = JSON.parse(fs.readFileSync('package.json'));
     },
     readFromFile: function(filename) {
         debug('Reading Config File %s ...', filename);
@@ -55,7 +57,8 @@ var config = {
             }
         }
         return value;
-    }
+    },
+    packageInfo: []
 };
 config.init();
 module.exports = config;

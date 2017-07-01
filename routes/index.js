@@ -24,6 +24,7 @@
 
 const debug = require('debug')('mpd-ui:Routes/Index');
 const config = require('../base/config');
+const os = require('os');
 
 var express = require('express');
 var router = express.Router();
@@ -60,6 +61,33 @@ router.get('/library/search', function(req, res, next) {
     respond(res, 'main', 'lib_search', 'Search in Library', [
         'modals/lib_play'
     ]);
+});
+
+/* GET "About" */
+router.get('/about', function(req, res, next) {
+    respond(res, 'main', 'about', 'About', null, {
+        arch: os.arch(),
+        cpus: os.cpus(),
+        memoryFree: os.freemem(),
+        memoryTotal: os.totalmem(),
+        homeDir: os.homedir(),
+        hostname: os.hostname(),
+        network: os.networkInterfaces(),
+        osPlatform: os.platform(),
+        osType: os.type(),
+        osRelease: os.release(),
+        userInfo: os.userInfo(),
+
+        processEnv: process.env,
+
+        nodeInfo: {
+            version: process.version,
+            versions: process.versions,
+            memoryUsage: process.memoryUsage()
+        },
+
+        packageInfo: config.packageInfo
+    });
 });
 
 module.exports = router;

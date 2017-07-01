@@ -1,0 +1,165 @@
+<%
+/*********************************************************************************** *
+ * MIT License
+ *
+ * Copyright (c) 2017 Raphael "rGunti" Guntersweiler
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * ********************************************************************************* */
+
+function printWithThousandSeparators(v,sep) {
+    return v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, sep || " ");
+}
+
+
+function getLocation(href) {
+    var l = document.createElement("a");
+    l.href = href;
+    return l;
+}
+%>
+<div class="container">
+    <h4>App Version</h4>
+    <dl class="dl-horizontal">
+        <dt>Name</dt>
+        <dd><b><samp><%= data.packageInfo.name %></samp></b></dd>
+
+        <dt>Version</dt>
+        <dd><b><samp><%= data.packageInfo.version %></samp></b></dd>
+
+        <dt>Author</dt>
+        <dd>
+            <%= data.packageInfo.author.name %>
+            &lt;<a href="mailto:<%= data.packageInfo.author.email %>"><%= data.packageInfo.author.email %></a>&gt;
+        </dd>
+
+        <dt>Links</dt>
+        <dd>
+            <a target="_blank" href="<%= data.packageInfo.homepage %>">
+                <i class="material-icons">web</i>
+                Homepage</a>
+            <br>
+            <a target="_blank" href="<%= data.packageInfo.repository %>">
+                <i class="material-icons">code</i>
+                Repository</a>
+            <br>
+            <a target="_blank" href="<%= data.packageInfo.bugs %>">
+                <i class="material-icons">bug_report</i>
+                Bug Report</a>
+        </dd>
+
+        <dt>Dependencies</dt>
+        <dd>
+            <ul>
+                <% for (var key in data.packageInfo.dependencies) { var moduleVersion = data.packageInfo.dependencies[key]; %>
+                <li>
+                    <b><%= key %></b>
+                    <samp><%= moduleVersion %></samp>
+                </li>
+                <% } %>
+            </ul>
+        </dd>
+    </dl>
+
+    <h4>Node.JS</h4>
+    <dl class="dl-horizontal">
+        <dt>Node.JS</dt>
+        <dd><samp><%= data.nodeInfo.version %></samp></dd>
+
+        <dt>Node Modules</dt>
+        <dd>
+            <ul>
+                <% for (var key in data.nodeInfo.versions) { var moduleVersion = data.nodeInfo.versions[key]; %>
+                <li>
+                    <b><%= key %></b>
+                    <samp><%= moduleVersion %></samp>
+                </li>
+                <% } %>
+            </ul>
+        </dd>
+
+        <dt>Memory Usage</dt>
+        <dd>
+            Heap:
+            <samp><%= Math.floor(data.nodeInfo.memoryUsage.heapTotal / 1024) %></samp> kB
+            <br>
+            Heap Used:
+            <samp><%= Math.floor(data.nodeInfo.memoryUsage.heapUsed / 1024) %></samp> kB
+            <br>
+            External:
+            <samp><%= Math.floor(data.nodeInfo.memoryUsage.external / 1024) %></samp> kB
+        </dd>
+    </dl>
+
+    <h4>OS Info</h4>
+    <dl class="dl-horizontal">
+        <dt>Host</dt>
+        <dd><samp><%= data.hostname %></samp></dd>
+
+        <dt>Architecture</dt>
+        <dd><samp><%= data.arch %></samp></dd>
+
+        <dt>OS</dt>
+        <dd><%= data.osType %> <%= data.osRelease %> (<%= data.osPlatform %>)</dd>
+
+        <dt>User</dt>
+        <dd>
+            <%= data.userInfo.username %><br>
+            <samp><%= data.userInfo.homedir %></samp>
+        </dd>
+
+        <dt>Memory</dt>
+        <dd>
+            <samp><%= Math.floor(data.memoryFree / 1024) %>
+                / <%= Math.floor(data.memoryTotal / 1024) %></samp>
+            kB free
+        </dd>
+
+        <dt>CPUs / Cores</dt>
+        <dd>
+            <% for(var i=0; i < data.cpus.length; i++) { var cpu = data.cpus[i]; %>
+            <%= cpu.model %> at
+            <samp><%= cpu.speed %> MHz</samp>
+            <br>
+            <% } %>
+        </dd>
+    </dl>
+
+    <h4>Networking</h4>
+    <dl class="dl-horizontal">
+        <% for (var key in data.network) { var adapters = data.network[key]; %>
+        <dt><%= key %></dt>
+        <dd>
+            <samp><%= adapters[0].mac %></samp>
+            <% for(var i=0; i < adapters.length; i++) { var adapter = adapters[i]; %>
+            <br><%= adapter.address %>
+            <% } %>
+        </dd>
+        <% } %>
+    </dl>
+
+    <h4>Environment Variables</h4>
+    <dl class="dl-horizontal">
+        <% for (var key in data.processEnv) { var envVar = data.processEnv[key]; %>
+        <dt><%= key %></dt>
+        <dd><pre><%= envVar %></pre></dd>
+        <% } %>
+    </dl>
+</div>
+<script src="/js/custom/about.js"></script>
