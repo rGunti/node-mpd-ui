@@ -27,6 +27,10 @@ $(document).ready(function() {
     var renderedItems = 0;
     var PAGE_SIZE = 10;
 
+    function generateSongInfoText(song) {
+        return '<b>' + (song.Title || song.file) + '</b>' + (song.Artist ? ' by <b>' + song.Artist + '</b>' : '')
+    }
+
     function renderSongs(startIndex) {
         renderedItems = startIndex;
         for (var i = startIndex; i < startIndex + PAGE_SIZE && i < songs.length; i++) {
@@ -164,7 +168,21 @@ $(document).ready(function() {
         });
     });
 
-    $('#songActionPlayButton').click(function(e) {
+    $('#selectActionModal button').click(function(e) {
+        var song = $('#selectActionModal').data('song');
+        var action = $(e.currentTarget).data('action');
+        console.log(song, action);
+
+        switch (action) {
+            case 'play':
+                sendSimpleAjaxRequest('/mpd/queue/' + song.Pos + '/play', 'post', null, function(r) {
+                    $.toaster({
+                        title: 'Now Playing',
+                        message: generateSongInfoText(song)
+                    });
+                });
+                break;
+        }
         $('#selectActionModal').modal('hide');
     });
 
