@@ -94,6 +94,9 @@ function getLocation(href) {
         <dt>Node.JS</dt>
         <dd><samp><%= data.nodeInfo.version %></samp></dd>
 
+        <dt>Server Uptime</dt>
+        <dd class="server-uptime"><%= Math.floor(process.uptime()) %></dd>
+
         <dt>Node Modules</dt>
         <dd>
             <ul>
@@ -122,7 +125,7 @@ function getLocation(href) {
     <h4>MPD Info</h4>
     <dl class="dl-horizontal">
         <dt>Host</dt>
-        <dd><%= data.config.MPD.host %>:<%= data.config.MPD.port %></dd>
+        <dd><%= data.config.MPD.host %>:<%= data.config.MPD.port %>
     </dl>
 
     <h4>OS Info</h4>

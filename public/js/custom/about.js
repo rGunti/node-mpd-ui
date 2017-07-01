@@ -23,4 +23,6 @@
  * ********************************************************************************* */
 
 $(document).ready(function() {
+    var uptimeSec = Number($('.server-uptime').text());
+    $('.server-uptime').text(uptimeSec + ' sec (' + formatTimeWithHours(uptimeSec) + ')');
 });
