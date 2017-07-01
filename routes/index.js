@@ -90,4 +90,12 @@ router.get('/about', function(req, res, next) {
     });
 });
 
+/* GET "License" */
+router.get('/license', function(req, res, next) {
+    respond(res, 'main', 'license', 'License Info', null, {
+        config: config.items,
+        packageInfo: config.packageInfo
+    });
+});
+
 module.exports = router;

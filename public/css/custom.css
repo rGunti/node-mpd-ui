@@ -73,3 +73,6 @@ button img.loading { display: none; }
 /* Result View */
 .result-title, .result-pos { font-weight: bold; }
 .queuePositionIndicator { font-size: small; }
+
+/* License View */
+.license-text p { font-size: small; }

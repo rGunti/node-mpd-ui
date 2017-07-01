@@ -1,0 +1,200 @@
+<%
+/*********************************************************************************** *
+ * MIT License
+ *
+ * Copyright (c) 2017 Raphael "rGunti" Guntersweiler
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * ********************************************************************************* */
+
+var title = data.config.title;
+var package = data.packageInfo.name;
+%>
+<div class="container">
+    <p class="lead">
+        <b><%= title %></b> (<code><%= package %></code>)
+        is licensed under the following license:
+    </p>
+    <h4>MIT License</h4>
+    <p>
+        <b>
+            Copyright &COPY;
+            <%= new Date().getFullYear() %>
+            <%= data.packageInfo.author.name %>
+        </b>
+    </p><p>
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+        of the Software, and to permit persons to whom the Software is furnished to do
+        so, subject to the following conditions:
+    </p><p>
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+    </p><p>
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+        WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+        CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+    </p><p>
+        You can find more information about the MIT License here:<br>
+        <a target="_blank" href="https://opensource.org/licenses/mit-license.php">
+            opensource.org/licenses/mit-license.php
+        </a>
+    </p>
+</div>
+<div class="container license-text">
+    <h4>Used Libraries</h4>
+
+    <!-- Express -->
+    <h5>Express</h5>
+    <p>
+        <a target="_blank" href="http://expressjs.com">
+            <i class="material-icons">link</i>
+            expressjs.com
+        </a>
+    </p><p>
+        Copyright &COPY; 2009-2014 TJ Holowaychuk
+        &lt;tj@vision-media.ca&gt;
+        <br>
+        Copyright &COPY; 2013-2014 Roman Shtylman
+        &lt;shtylman+expressjs@gmail.com&gt;
+        <br>
+        Copyright &COPY; 2014-2015 Douglas Christopher Wilson <>
+        &lt;doug@somethingdoug.com&gt;
+    </p><p>
+        <%= title %> (<code><%= package %></code>) uses Express as a base for serving
+        web pages and providing a REST API for controlling playback.
+    </p><p>
+        Express is licensed under the MIT License.
+    </p><p>
+        More information about the MIT License can be found here:<br>
+        <a target="_blank" href="https://opensource.org/licenses/mit-license.php">
+            opensource.org/licenses/mit-license.php
+        </a>
+    </p>
+
+    <!-- EJS -->
+    <h5>EJS</h5>
+    <p>
+        <a target="_blank" href="http://ejs.co/">
+            <i class="material-icons">link</i>
+            ejs.co
+        </a>
+    </p><p>
+        <%= title %> (<code><%= package %></code>) uses EJS to provide web pages.
+    </p><p>
+        EJS is licensed under the Apache License, version 2.0.
+    </p><p>
+        More information can be found here:
+        <a target="_blank" href="http://www.apache.org/licenses/">
+            apache.org/licenses
+        </a>
+    </p>
+
+    <!-- Debug -->
+    <h5>Debug</h5>
+    <p>
+        <a target="_blank" href="https://github.com/visionmedia/debug">
+            <i class="material-icons">link</i>
+            github.com/visionmedia/debug
+        </a>
+    </p><p>
+        Copyright &COPY; 2014-2016 TJ Holowaychuk
+        &lt;tj@vision-media.ca&gt;
+    </p><p>
+        <%= title %> (<code><%= package %></code>) uses Debug to print debug log messages
+        and to provide insight in the inner workings of the application.
+    </p><p>
+        Debug is licensed under the MIT License.
+    </p><p>
+        More information about the MIT License can be found here:<br>
+        <a target="_blank" href="https://opensource.org/licenses/mit-license.php">
+            opensource.org/licenses/mit-license.php
+        </a>
+    </p>
+
+    <!-- MPD -->
+    <h5>MPD</h5>
+    <p>
+        <a target="_blank" href="https://github.com/andrewrk/mpd.js">
+            <i class="material-icons">link</i>
+            github.com/andrewrk/mpd.js
+        </a>
+    </p><p>
+        Copyright &COPY; 2014 Andrew Kelley
+    </p><p>
+        <%= title %> (<code><%= package %></code>) uses MPD.js to communicate with the
+        Music Player Daemon and serve data about music playback and the music library.
+    </p><p>
+        MPD.js is licensed under the MIT License.
+    </p><p>
+        More information about the MIT License can be found here:<br>
+        <a target="_blank" href="https://opensource.org/licenses/mit-license.php">
+            opensource.org/licenses/mit-license.php
+        </a>
+    </p>
+</div>
+<div class="container license-text">
+    <h4>Other Used Software</h4>
+    <h5>Music Player Daemon (MPD)</h5>
+    <p>
+        <a target="_blank" href="https://www.musicpd.org/">
+            <i class="material-icons">link</i>
+            musicpd.org
+        </a>
+    </p><p>
+        <%= title %> (<code><%= package %></code>) uses Music Player Daemon (MPD)
+        for central music playback and library management.
+        MPD is released under the GNU General Public License version 2.
+    </p><p>
+        More information about the GNU General Public License can be found here:
+        <a target="_blank" href="https://www.gnu.org/licenses/gpl-2.0">
+            www.gnu.org/licenses/gpl-2.0
+        </a>
+    </p>
+
+    <h5>py-dot3k-mpd</h5>
+    <p>
+        <a target="_blank" href="https://github.com/rGunti/py-dot3k-mpd">
+            <i class="material-icons">link</i>
+            github.com/rGunti/py-dot3k-mpd
+        </a>
+    </p><p>
+        If you are using <%= title %> (<code><%= package %></code>) on a Raspberry Pi,
+        chances are you are also using <i>py-dot3k-mpd</i>.
+    </p><p>
+        py-dot3k-mpd is a Python program that displays current song information on a
+        LCD display (known as Display-O-Tron 3000 or Display-O-Tron HAT by
+        <a target="_blank" href="https://shop.pimoroni.com/products/display-o-tron-hat">
+            Pimoroni</a>) and provides basic playback control.
+    </p><p>
+        Copyright &COPY; 2017 Raphael "rGunti" Guntersweiler
+    </p><p>
+        py-dot3k-mpd is licensed under the MIT License.
+    </p><p>
+        More information about the MIT License can be found here:<br>
+        <a target="_blank" href="https://opensource.org/licenses/mit-license.php">
+            opensource.org/licenses/mit-license.php
+        </a>
+    </p>
+</div>
