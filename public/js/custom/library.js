@@ -408,6 +408,15 @@ $(document).ready(function() {
         }
     });
 
+    $('#addSearchResultToQueue').click(function() {
+        if (confirm('Would you like to add ' + songItems.length + ' song(s) to the queue?')) {
+            $('#queueLoading').fadeIn();
+            sendSimpleAjaxRequest('/mpd/queue/addsearch', 'post', songRestrictions, function() {
+                $('#queueLoading').fadeOut();
+            });
+        }
+    });
+
     function onArtistClick(e) {
         var artist = $(e.currentTarget).data('artist');
         console.log('Artist: ', artist);

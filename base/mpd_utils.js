@@ -58,7 +58,8 @@ var MpdUtils = {
         LIST: "list",
         REMOVE_FROM_QUEUE: "delete",
         UPDATE: "update",
-        RESCAN: "rescan"
+        RESCAN: "rescan",
+        SEARCH_ADD: "searchadd"
     },
     CachedData: {
         Status: {
@@ -284,6 +285,38 @@ var MpdUtils = {
                     debug('ERROR while adding song to queue by URI %s', uri);
                 }
                 if (callback) callback(err, msg);
+            }
+        );
+    },
+    addSearchToQueue: function(searchAttributes, callback) {
+        var args = [];
+
+        // Add Search Parameters
+        if (searchAttributes.artist || searchAttributes.emptySearch === 'artist') {
+            args.push("artist", searchAttributes.artist || "");
+        }
+        if (searchAttributes.album || searchAttributes.emptySearch === 'album') {
+            args.push("album", searchAttributes.album || "");
+        }
+        if (searchAttributes.genre || searchAttributes.emptySearch === 'genre') {
+            args.push("genre", searchAttributes.genre || "");
+        }
+
+        // Create Command
+        var command = cmd(MpdUtils.Commands.SEARCH_ADD, args);
+        MpdUtils.sendCommand(
+            command,
+            function(err, msg) {
+                //debug(msg);
+
+                var list = [];
+                if (err) {
+                    debug('ERROR while trying to search-adding songs.');
+                } else if (msg) {
+                    list = MpdUtils.parseSongList(msg);
+                }
+
+                if (callback) callback(err, list, msg);
             }
         );
     },

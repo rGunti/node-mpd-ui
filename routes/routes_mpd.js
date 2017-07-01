@@ -130,6 +130,17 @@ router.post('/queue/add', function(req, res, next) {
     });
 });
 
+// POST Add Songs from Search
+router.post('/queue/addsearch', function(req, res, next) {
+    mpd.addSearchToQueue(req.body, function(err, list, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to search-add songs', err);
+        } else {
+            ResponseUtil.sendData(res, list);
+        }
+    });
+});
+
 // POST Play in Queue at Position
 router.post('/queue/:queuePos/play', function(req, res, next) {
     var songPos = req.params.queuePos;
