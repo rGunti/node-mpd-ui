@@ -86,8 +86,18 @@ function getNavItemActiveCss(currentPage, requiredPage) {
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li <%= getNavItemActiveCss(page, 'home') %>><a href="/">Now Playing</a></li>
-                        <li <%= getNavItemActiveCss(page, 'queue') %>><a href="/queue">Queue</a></li>
+                        <li <%= getNavItemActiveCss(page, 'home') %>>
+                            <a href="/">
+                                <i class="material-icons">play_circle_outline</i>
+                                Now Playing
+                            </a>
+                        </li>
+                        <li <%= getNavItemActiveCss(page, 'queue') %>>
+                            <a href="/queue">
+                                <i class="material-icons">queue_music</i>
+                                Queue
+                            </a>
+                        </li>
                         <li <%= getNavItemActiveCss(page, 'library') %>>
                             <a href="/library">
                                 <i class="material-icons">library_music</i>
@@ -98,6 +108,12 @@ function getNavItemActiveCss(currentPage, requiredPage) {
                             <a href="/library/search">
                                 <i class="material-icons">search</i>
                                 Search
+                            </a>
+                        </li>
+                        <li <%= getNavItemActiveCss(page, 'settings') %>>
+                            <a href="/settings">
+                                <i class="material-icons">settings</i>
+                                Settings
                             </a>
                         </li>
                     </ul>
