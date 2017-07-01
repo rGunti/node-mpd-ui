@@ -264,4 +264,15 @@ router.get('/library/artists', function(req, res, next) {
     });
 });
 
+// GET List of Albums
+router.get('/library/albums', function(req, res, next) {
+    mpd.getAlbumList(function(err, list, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to get albums list', err);
+        } else {
+            ResponseUtil.sendData(res, list);
+        }
+    });
+});
+
 module.exports = router;

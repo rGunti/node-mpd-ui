@@ -410,6 +410,30 @@ var MpdUtils = {
             }
         );
     },
+    getAlbumList: function(callback) {
+        MpdUtils.sendCommand(
+            cmd(MpdUtils.Commands.LIST, ['album']),
+            function(err, msg) {
+                var list = [];
+                if (err) {
+                    debug('ERROR while trying to get Album list.');
+                } else if (msg) {
+                    var lines = msg.split('\n');
+                    for (var i = 0; i < lines.length; i++) {
+                        var line = lines[i];
+                        if (line.startsWith('Album: ')) {
+                            var artist = MpdUtils.parseResponseLine(line);
+                            if (artist.Album) {
+                                list.push(artist.Album);
+                            }
+                        }
+                    }
+                }
+
+                if (callback) callback(err, list, msg);
+            }
+        )
+    },
     removeItemFromQueue: function(pos, callback) {
         MpdUtils.sendCommand(
             cmd(MpdUtils.Commands.REMOVE_FROM_QUEUE, [pos]),

@@ -27,10 +27,12 @@ $(document).ready(function() {
 
     var ITEM_TEMPLATES = {
         artists: '#libraryBrowserArtistTemplate',
+        albums: '#libraryBrowserAlbumTemplate',
         genres: '#libraryBrowserGenreTemplate'
     };
     var RENDER_TARGETS = {
         artists: '#libraryBrowserArtistRenderTarget',
+        albums: '#libraryBrowserAlbumRenderTarget',
         genres: '#libraryBrowserGenreRenderTarget'
     };
 
@@ -54,6 +56,11 @@ $(document).ready(function() {
                     $('.result-artist', item).text(itemObject || '<none>');
                     item.data('artist', itemObject);
                     item.click(onArtistClick);
+                    break;
+                case 'albums':
+                    $('.result-album', item).text(itemObject || '<none>');
+                    item.data('album', itemObject);
+                    item.click(onAlbumClick);
                     break;
                 case 'genres':
                     $('.result-genre', item).text(itemObject || '<none>');
@@ -210,7 +217,7 @@ $(document).ready(function() {
         var target = renderedPrefilteredItems - (renderedPrefilteredItems % PAGE_SIZE);
         if (target === renderedPrefilteredItems) target -= PAGE_SIZE;
 
-        console.log('rendered:', renderedPrefilteredItems, 'target:', target);
+        //console.log('rendered:', renderedPrefilteredItems, 'target:', target);
 
         loadPrefilterItems(dataType, function(type, d) {
             if (d.length < target) {
@@ -222,7 +229,7 @@ $(document).ready(function() {
                     target -= PAGE_SIZE;
                 }
             }
-            console.log('rendered:', renderedPrefilteredItems, 'target:', target, 'length:', d.length);
+            //console.log('rendered:', renderedPrefilteredItems, 'target:', target, 'length:', d.length);
 
             fadeOutVisibleElements(RENDER_TARGETS[type], function() {
                 renderPrefilterItems(type, Math.max(0, target));
