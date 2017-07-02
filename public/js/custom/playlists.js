@@ -27,7 +27,15 @@ $(document).ready(function() {
     var renderedItems = 0;
     var PAGE_SIZE = 10;
 
+    function sortPlaylists(a, b){
+        if (a.playlist < b.playlist) return -1;
+        else if(a.playlist > b.playlist) return 1;
+        else return 0;
+    }
+
     function renderPlaylists(startIndex) {
+        playlists.sort(sortPlaylists);
+
         renderedItems = startIndex;
         for (var i = startIndex; i < startIndex + PAGE_SIZE && i < playlists.length; i++) {
             var playlist = playlists[i];
