@@ -110,6 +110,12 @@ function getNavItemActiveCss(currentPage, requiredPage) {
                                 Search
                             </a>
                         </li>
+                        <li <%= getNavItemActiveCss(page, 'playlists') %>>
+                            <a href="/playlists">
+                                <i class="material-icons">playlist_add</i>
+                                Playlists
+                            </a>
+                        </li>
                         <li <%= getNavItemActiveCss(page, 'settings') %>>
                             <a href="/settings">
                                 <i class="material-icons">settings</i>

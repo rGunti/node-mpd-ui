@@ -341,4 +341,26 @@ router.post('/output/:id', function(req, res, next) {
     });
 });
 
+// GET Playlists
+router.get('/playlists', function(req, res, next) {
+    mpd.getPlaylists(function(err, list, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to get playlists', err);
+        } else {
+            ResponseUtil.sendData(res, list);
+        }
+    });
+});
+
+// DELETE Playlist
+router.delete('/playlists', function(req, res, next) {
+    mpd.deletePlaylists(req.body.name, function(err, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to delete playlist', err);
+        } else {
+            ResponseUtil.sendEmptyResponse(res);
+        }
+    });
+});
+
 module.exports = router;

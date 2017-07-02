@@ -63,7 +63,9 @@ var MpdUtils = {
         CLEAR_QUEUE: "clear",
         OUTPUTS: "outputs",
         ENABLE_OUTPUT: "enableoutput",
-        DISABLE_OUTPUT: "disableoutput"
+        DISABLE_OUTPUT: "disableoutput",
+        LIST_PLAYLISTS: "listplaylists",
+        DELETE_PLAYLIST: "rm"
     },
     CachedData: {
         Status: {
@@ -573,6 +575,41 @@ var MpdUtils = {
                 if (callback) callback(err, msg);
             }
         )
+    },
+    getPlaylists: function(callback) {
+        MpdUtils.sendCommand(
+            MpdUtils.Commands.LIST_PLAYLISTS,
+            function(err, msg) {
+                var list = [];
+                if (err) {
+                    debug('ERROR while trying to get playlists');
+                } else if (msg) {
+                    var lines = msg.split('\n');
+                    var playlist = null;
+                    for (var i = 0; i < lines.length; i++) {
+                        var line = lines[i];
+                        if (line.startsWith('playlist: ')) {
+                            if (playlist) list.push(playlist);
+                            playlist = {};
+                        }
+                        MpdUtils.parseResponseLine(line, playlist);
+                    }
+                    list.push(playlist);
+                }
+                if (callback) callback(err, list, msg);
+            }
+        );
+    },
+    deletePlaylists: function(playlist, callback) {
+        MpdUtils.sendCommand(
+            cmd(MpdUtils.Commands.DELETE_PLAYLIST, [playlist]),
+            function(err, msg) {
+                if (err) {
+                    debug('ERROR while deleting playlist %s', playlist);
+                }
+                if (callback) callback(err, msg);
+            }
+        );
     }
 };
 

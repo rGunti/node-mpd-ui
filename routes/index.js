@@ -70,6 +70,13 @@ router.get('/library/search', function(req, res, next) {
     ]);
 });
 
+/* GET "Playlists" */
+router.get('/playlists', function(req, res, next) {
+    respond(res, 'main', 'playlists', 'Playlists', [
+        'modals/playlist_select'
+    ]);
+});
+
 /* GET "About" */
 router.get('/about', function(req, res, next) {
     respond(res, 'main', 'about', 'About', null, {
