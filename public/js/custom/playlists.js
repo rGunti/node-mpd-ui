@@ -176,18 +176,43 @@ $(document).ready(function() {
         if (!action) { return; }
 
         switch (action) {
+            case "load-playlist":
+                $('#playlistLoading').fadeIn();
+                sendSimpleAjaxRequest(
+                    '/mpd/queue/fromPlaylist',
+                    'post',
+                    { name: playlist.playlist },
+                    function (d) {
+                        $('#playlistLoading').fadeOut();
+                        $('.playlistReloadButton:first').click();
+
+                        $.toaster({
+                            title: 'Playlist loaded',
+                            message: playlist.playlist
+                        });
+                    },
+                    function() {
+                        $('#playlistLoading').fadeOut();
+                    }
+                );
+                break;
             case "delete-playlist":
-                $('#selectActionModal').fadeIn();
+                $('#playlistLoading').fadeIn();
                 sendSimpleAjaxRequest(
                     '/mpd/playlists',
                     'delete',
                     { name: playlist.playlist },
                     function (d) {
-                        $('#selectActionModal').fadeOut();
+                        $('#playlistLoading').fadeOut();
                         $('.playlistReloadButton:first').click();
+
+                        $.toaster({
+                            title: 'Playlist deleted',
+                            message: playlist.playlist
+                        });
                     },
                     function() {
-                        $('#selectActionModal').fadeOut();
+                        $('#playlistLoading').fadeOut();
                     }
                 );
                 break;

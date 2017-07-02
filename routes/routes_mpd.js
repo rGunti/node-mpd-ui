@@ -242,6 +242,34 @@ router.post('/queue/toPlaylist', function(req, res, next) {
     });
 });
 
+// POST Load Playlist into Queue
+router.post('/queue/fromPlaylist', function(req, res, next) {
+    var playlistName = req.body.name;
+    var keepQueue = req.body.keepQueue;
+
+    if (!keepQueue) {
+        mpd.clearQueue(function(err, msg) {
+            if (err) {
+                ResponseUtil.sendError(res, 'FAILED to clear the queue before loading the playlist', err);
+            } else {
+                queue_fromPlaylist_LoadPlaylist(res, playlistName);
+            }
+        });
+    } else {
+        queue_fromPlaylist_LoadPlaylist(res, playlistName);
+    }
+});
+
+function queue_fromPlaylist_LoadPlaylist(res, playlistName) {
+    mpd.loadPlaylist(playlistName, function(err, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to load playlist', err);
+        } else {
+            ResponseUtil.sendEmptyResponse(res);
+        }
+    });
+}
+
 // POST Clear Queue
 router.post('/queue/clear', function(req, res, next) {
     mpd.clearQueue(function(err, msg) {
