@@ -47,7 +47,8 @@ router.get('/', function(req, res, next) {
 /* GET "Queue" */
 router.get('/queue', function(req, res, next) {
     respond(res, 'main', 'queue', 'Queue', [
-        'modals/queue_select'
+        'modals/queue_select',
+        'modals/queue_create_playlist'
     ]);
 });
 

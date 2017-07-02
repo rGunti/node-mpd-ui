@@ -230,6 +230,18 @@ router.post('/queue/:queuePos/move/:targetPos', function(req, res, next) {
     });
 });
 
+// POST Queue to playlist
+router.post('/queue/toPlaylist', function(req, res, next) {
+    var playlistName = req.body.name;
+    mpd.createPlaylistFromQueue(playlistName, function(err, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to store queue as playlist', err);
+        } else {
+            ResponseUtil.sendEmptyResponse(res);
+        }
+    });
+});
+
 // POST Clear Queue
 router.post('/queue/clear', function(req, res, next) {
     mpd.clearQueue(function(err, msg) {

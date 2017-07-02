@@ -209,6 +209,40 @@ $(document).ready(function() {
         $('#selectActionModal').modal('hide');
     });
 
+    $('#createPlaylistFromQueueLink').click(function(e) {
+        e.preventDefault();
+        $('#createPlaylistModal').modal('show');
+    });
+
+    $('#createPlaylistModal button.modal-button-cancel').click(function() {
+        $('#createPlaylistModal').modal('hide');
+    });
+
+    $('#createPlaylistModal form').submit(function(e) {
+        e.preventDefault();
+        $('#queueLoading').fadeIn();
+
+        var playlistName = $('#createPlaylistPlaylistName').val();
+        sendSimpleAjaxRequest(
+            '/mpd/queue/toPlaylist',
+            'post',
+            { name: playlistName },
+            function() {
+                $('#createPlaylistPlaylistName').val('');
+                $('#createPlaylistModal').modal('hide');
+                $('#queueLoading').fadeOut();
+
+                $.toaster({
+                    title: 'Playlist created',
+                    message: playlistName
+                });
+            },
+            function() {
+                $('#queueLoading').fadeOut();
+            }
+        );
+    });
+
     function reloadQueueData(renderCallback) {
         $.ajax({
             url: '/mpd/queue',

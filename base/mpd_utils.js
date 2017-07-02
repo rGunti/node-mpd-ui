@@ -65,7 +65,8 @@ var MpdUtils = {
         ENABLE_OUTPUT: "enableoutput",
         DISABLE_OUTPUT: "disableoutput",
         LIST_PLAYLISTS: "listplaylists",
-        DELETE_PLAYLIST: "rm"
+        DELETE_PLAYLIST: "rm",
+        SAVE_QUEUE_TO_PLAYLIST: "save"
     },
     CachedData: {
         Status: {
@@ -606,6 +607,17 @@ var MpdUtils = {
             function(err, msg) {
                 if (err) {
                     debug('ERROR while deleting playlist %s', playlist);
+                }
+                if (callback) callback(err, msg);
+            }
+        );
+    },
+    createPlaylistFromQueue: function(playlistName, callback) {
+        MpdUtils.sendCommand(
+            cmd(MpdUtils.Commands.SAVE_QUEUE_TO_PLAYLIST, [playlistName]),
+            function(err, msg) {
+                if (err) {
+                    debug('ERROR while saving queue in playlist %s', playlistName);
                 }
                 if (callback) callback(err, msg);
             }
