@@ -209,6 +209,36 @@ $(document).ready(function() {
         $('#selectActionModal').modal('hide');
     });
 
+    $('#clearQueueLink').click(function(e) {
+        $('#clearQueueModal').modal('show');
+    });
+
+    $('#clearQueueModal .confirm-yes').click(function(e) {
+        sendSimpleAjaxRequest(
+            '/mpd/queue/clear',
+            'post',
+            null,
+            function() {
+                $('#clearQueueModal').modal('hide');
+                $('#queueLoading').fadeOut();
+
+                $.toaster({
+                    title: 'Success',
+                    message: 'Queue cleared!'
+                });
+
+                $('.queueReloadButton').first().click();
+            },
+            function() {
+                $('#queueLoading').fadeOut();
+            }
+        );
+    });
+
+    $('#clearQueueModal .confirm-no').click(function(e) {
+        $('#clearQueueModal').modal('hide');
+    });
+
     $('#createPlaylistFromQueueLink').click(function(e) {
         e.preventDefault();
         $('#createPlaylistModal').modal('show');
