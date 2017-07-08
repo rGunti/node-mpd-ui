@@ -60,6 +60,25 @@ $(document).ready(function() {
                 DEFAULT_ERROR_TOAST();
                 if (callback) callback();
             });
+        },
+        'mpd-generate-full-playlist': function(callback) {
+            $('#processingModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+            sendSimpleAjaxRequest('/mpd/playlists/create_full', 'post', {
+                name: 'All Tracks'
+            }, function(d) {
+                $.toaster({
+                    title: 'Playlist created',
+                    message: 'You might want to rescan your library just to be sure.'
+                });
+                $('#processingModal').modal('hide');
+                if (callback) callback();
+            }, function() {
+                DEFAULT_ERROR_TOAST();
+                if (callback) callback();
+            });
         }
     };
     var CONFIRMS = {
@@ -71,6 +90,10 @@ $(document).ready(function() {
         'mpd-clear-queue': {
             title: 'Clear Queue',
             message: 'Would you like to clear the queue?'
+        },
+        'mpd-generate-full-playlist': {
+            title: 'Generate Full Playlist',
+            message: 'Would you like to generate a playlist with all songs? This might take a few seconds.'
         }
     };
     var CONFIRM_MODAL = $('#confirmActionModal');

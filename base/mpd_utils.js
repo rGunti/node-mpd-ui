@@ -69,7 +69,9 @@ var MpdUtils = {
         SAVE_QUEUE_TO_PLAYLIST: "save",
         LOAD_PLAYLIST: "load",
         LIST_PLAYLIST_INFO: "listplaylistinfo",
-        REMOVE_ITEM_FROM_PLAYLIST: "playlistdelete"
+        REMOVE_ITEM_FROM_PLAYLIST: "playlistdelete",
+        LIST_SONGS: "list",
+        ADD_SONG_TO_PLAYLIST: "playlistadd"
     },
     CachedData: {
         Status: {
@@ -657,6 +659,50 @@ var MpdUtils = {
             function(err, msg) {
                 if (err) {
                     debug('ERROR while trying to remove item %s from playlist %s', pos, playlist);
+                }
+                if (callback) callback(err, msg);
+            }
+        );
+    },
+    generateLibraryPlaylist: function(name, callback) {
+        MpdUtils.sendCommand(
+            cmd(MpdUtils.Commands.LIST_SONGS, ["file"]),
+            function (err, msg) {
+                if (err) {
+                    debug('FAILED to get all songs');
+                    if (callback) callback(err, msg);
+                } else if (msg) {
+                    debug(' - Generate Playlist; Get All : ' + msg);
+                    var songList = MpdUtils.parseSongList(msg);
+
+                    function _repeater(i, finalCallback) {
+                        if (i < songList.length) {
+                            MpdUtils.addSongToPlaylist(name, songList[i].file, function(err, msg) {
+                                debug(' - Generate Playlist; Item ' + i + ' : ' + msg);
+                                if (err) {
+                                    debug('FAILED to add song %s to %s', songList[i].file, name);
+                                } else {
+                                    setTimeout(_repeater, 10, i + 1, finalCallback);
+                                }
+                            });
+                        } else if (finalCallback) {
+                            finalCallback(err, msg);
+                        }
+                    }
+
+                    _repeater(0, callback);
+                } else {
+                    if (callback) callback(err, msg);
+                }
+            }
+        )
+    },
+    addSongToPlaylist: function(name, uri, callback) {
+        MpdUtils.sendCommand(
+            cmd(MpdUtils.Commands.ADD_SONG_TO_PLAYLIST, [name, uri]),
+            function(err, msg) {
+                if (err) {
+                    debug('FAILED to add song to playlist')
                 }
                 if (callback) callback(err, msg);
             }

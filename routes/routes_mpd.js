@@ -425,4 +425,15 @@ router.delete('/playlists/item/remove', function(req, res, next) {
     });
 });
 
+// POST Generate a playlist with all items
+router.post('/playlists/create_full', function(req, res, next) {
+    mpd.generateLibraryPlaylist(req.body.name, function(err, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to generate full playlist', err);
+        } else {
+            ResponseUtil.sendEmptyResponse(res);
+        }
+    });
+});
+
 module.exports = router;

@@ -126,7 +126,8 @@ router.get('/license', function(req, res, next) {
 router.get('/settings', function(req, res, next) {
     respond(res, 'main', 'settings', 'Settings', [
         'modals/settings_confirm',
-        'modals/settings_output'
+        'modals/settings_output',
+        'modals/processing'
     ]);
 });
 
