@@ -238,17 +238,18 @@ $(document).ready(function() {
             }
         }).done(function(data, textStatus, jqXHR) {
             if (data.ok) {
+                var oldPlaylists = playlists;
                 if (data.data && data.data.length >= 1) {
-                    var oldSongs = playlists;
                     playlists = data.data;
-                    renderCallback(playlists, oldSongs);
+                    renderCallback(playlists, oldPlaylists);
                 } else {
                     $.toaster({
                         title: 'No Playlists found',
                         message: 'Create a playlist by saving the current queue.',
                         priority: 'info'
                     });
-                    renderCallback([], playlists);
+                    playlists = [];
+                    renderCallback([], oldPlaylists);
                 }
             } else {
                 $.toaster({
