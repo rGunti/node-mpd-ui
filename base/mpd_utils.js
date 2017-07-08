@@ -67,7 +67,9 @@ var MpdUtils = {
         LIST_PLAYLISTS: "listplaylists",
         DELETE_PLAYLIST: "rm",
         SAVE_QUEUE_TO_PLAYLIST: "save",
-        LOAD_PLAYLIST: "load"
+        LOAD_PLAYLIST: "load",
+        LIST_PLAYLIST_INFO: "listplaylistinfo",
+        REMOVE_ITEM_FROM_PLAYLIST: "playlistdelete"
     },
     CachedData: {
         Status: {
@@ -630,6 +632,31 @@ var MpdUtils = {
             function(err, msg) {
                 if (err) {
                     debug('ERROR while loading playlist %s', playlistName);
+                }
+                if (callback) callback(err, msg);
+            }
+        );
+    },
+    getPlaylistContent: function(playlist, callback) {
+        MpdUtils.sendCommand(
+            cmd(MpdUtils.Commands.LIST_PLAYLIST_INFO, [playlist]),
+            function(err, msg) {
+                var list = [];
+                if (err) {
+                    debug('ERROR while trying to get playlists');
+                } else if (msg) {
+                    list = MpdUtils.parseSongList(msg);
+                }
+                if (callback) callback(err, list, msg);
+            }
+        );
+    },
+    removeItemFromPlaylist: function(playlist, pos, callback) {
+        MpdUtils.sendCommand(
+            cmd(MpdUtils.Commands.REMOVE_ITEM_FROM_PLAYLIST, [playlist, pos]),
+            function(err, msg) {
+                if (err) {
+                    debug('ERROR while trying to remove item %s from playlist %s', pos, playlist);
                 }
                 if (callback) callback(err, msg);
             }

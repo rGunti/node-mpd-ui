@@ -403,4 +403,26 @@ router.delete('/playlists', function(req, res, next) {
     });
 });
 
+// GET Playlist Content
+router.get('/playlists/content', function(req, res, next) {
+    mpd.getPlaylistContent(req.query.name, function(err, list, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to get playlist content', err);
+        } else {
+            ResponseUtil.sendData(res, list);
+        }
+    });
+});
+
+// DELETE Playlist Item
+router.delete('/playlists/item/remove', function(req, res, next) {
+    mpd.removeItemFromPlaylist(req.body.name, req.body.pos, function(err, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to remove item from playlist', err);
+        } else {
+            ResponseUtil.sendEmptyResponse(res);
+        }
+    });
+});
+
 module.exports = router;

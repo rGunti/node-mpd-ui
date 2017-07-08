@@ -23,42 +23,40 @@
  * ********************************************************************************* */
 
 $(document).ready(function() {
-    var playlists = [];
+    var playlist_name = $('#playlistName').val();
+    var songs = [];
     var renderedItems = 0;
     var PAGE_SIZE = 10;
 
-    function sortPlaylists(a, b){
-        if (a.playlist < b.playlist) return -1;
-        else if(a.playlist > b.playlist) return 1;
-        else return 0;
-    }
-
-    function renderPlaylists(startIndex) {
-        playlists.sort(sortPlaylists);
-
+    function renderPlaylist(startIndex) {
         renderedItems = startIndex;
-        for (var i = startIndex; i < startIndex + PAGE_SIZE && i < playlists.length; i++) {
-            var playlist = playlists[i];
+        for (var i = startIndex; i < startIndex + PAGE_SIZE && i < songs.length; i++) {
+            var song = songs[i];
 
             // Song can be null (for some reason)
-            if (!playlist) {
-                playlists.splice(i, 1);
+            if (!song) {
+                songs.splice(i, 1);
                 continue;
             }
 
             var item = $('#playlistItemTemplate').clone();
             item.attr('id', '');
 
-            $('.result-name', item).text(playlist.playlist);
+            $('.result-pos', item).text(i + 1);
+            $('.result-title', item).text(song.Title || song.file);
+            $('.result-artist', item).text(song.Artist || '-');
+            $('.result-length', item).text(formatTimeWithMinutes(song.Time));
 
-            item.data('playlist', playlist);
-            item.click(onPlaylistClick);
+            song.Pos = i;
+
+            item.data('song', song);
+            item.click(onSongClick);
             item.appendTo('#playlistRenderTarget').hide();
 
             renderedItems++;
         }
         fadeInHiddenElement();
-        $('.playlistPositionIndicator').text((startIndex + 1) + '-' + renderedItems + '/' + playlists.length);
+        $('.playlistPositionIndicator').text((startIndex + 1) + '-' + renderedItems + '/' + songs.length);
     }
 
     function fadeInHiddenElement() {
@@ -82,13 +80,14 @@ $(document).ready(function() {
         }
     }
 
-    function onPlaylistClick(e) {
+    function onSongClick(e) {
         var target = $(e.currentTarget);
-        var playlist = target.data('playlist');
+        var song = target.data('song');
 
-        $('#selectActionModal .result-name').text(playlist.playlist);
-        $('#selectActionModal input.result-name').val(playlist.playlist);
-        $('#selectActionModal').data('playlist', playlist).modal('show');
+        $('#selectActionModal .result-pos').text((song.Pos + 1));
+        $('#selectActionModal .result-title').text(song.Title || song.file);
+        $('#selectActionModal .result-artist').text(song.Artist || '-');
+        $('#selectActionModal').data('song', song).modal('show');
     }
 
     $('.playlistLoadMoreButton').click(function(e) {
@@ -113,7 +112,7 @@ $(document).ready(function() {
                 }
             }
             fadeOutVisibleElements(function() {
-                renderPlaylists(target);
+                renderPlaylist(target);
             });
         });
     });
@@ -135,7 +134,7 @@ $(document).ready(function() {
             }
 
             fadeOutVisibleElements(function() {
-                renderPlaylists(Math.max(0, target));
+                renderPlaylist(Math.max(0, target));
             });
         });
     });
@@ -164,57 +163,34 @@ $(document).ready(function() {
             }
 
             fadeOutVisibleElements(function() {
-                renderPlaylists(Math.max(0, target));
+                renderPlaylist(Math.max(0, target));
             });
         });
     });
 
     $('#selectActionModal button').click(function(e) {
-        var playlist = $('#selectActionModal').data('playlist');
+        var song = $('#selectActionModal').data('song');
         var action = $(e.currentTarget).data('action');
         //console.log(song, action);
 
         if (!action) { return; }
 
         switch (action) {
-            case "load-playlist":
-                $('#playlistLoading').fadeIn();
+            case 'delete-song':
                 sendSimpleAjaxRequest(
-                    '/mpd/queue/fromPlaylist',
-                    'post',
-                    { name: playlist.playlist },
-                    function (d) {
-                        $('#playlistLoading').fadeOut();
-                        $('.playlistReloadButton:first').click();
-
-                        $.toaster({
-                            title: 'Playlist loaded',
-                            message: playlist.playlist
-                        });
-                    },
-                    function() {
-                        $('#playlistLoading').fadeOut();
-                    }
-                );
-                break;
-            case "delete-playlist":
-                $('#playlistLoading').fadeIn();
-                sendSimpleAjaxRequest(
-                    '/mpd/playlists',
+                    '/mpd/playlists/item/remove',
                     'delete',
-                    { name: playlist.playlist },
-                    function (d) {
+                    { name: playlist_name, pos: song.Pos },
+                    function(d) {
                         $('#playlistLoading').fadeOut();
                         $('.playlistReloadButton:first').click();
 
                         $.toaster({
-                            title: 'Playlist deleted',
-                            message: playlist.playlist
+                            title: 'Song removed',
+                            message: song.Title || song.file
                         });
                     },
-                    function() {
-                        $('#playlistLoading').fadeOut();
-                    }
+                    function() { $('#playlistLoading').fadeOut(); }
                 );
                 break;
             default:
@@ -230,25 +206,28 @@ $(document).ready(function() {
 
     function reloadPlaylistData(renderCallback) {
         $.ajax({
-            url: '/mpd/playlists',
+            url: '/mpd/playlists/content',
+            data: { name: playlist_name, '_t': new Date().getTime() },
             method: 'get',
             beforeSend: function() {
                 $('.loading-indicator').fadeIn();
                 $('.playlistNavigationButtons').attr('disabled', true);
             }
         }).done(function(data, textStatus, jqXHR) {
+            console.log(data);
             if (data.ok) {
+                var oldSongs = songs;
                 if (data.data && data.data.length >= 1) {
-                    var oldSongs = playlists;
-                    playlists = data.data;
-                    renderCallback(playlists, oldSongs);
+                    songs = data.data;
+                    renderCallback(songs, oldSongs);
                 } else {
                     $.toaster({
-                        title: 'No Playlists found',
-                        message: 'Create a playlist by saving the current queue.',
+                        title: 'Playlist empty',
+                        message: 'Add items to the playlist by using the Library functions.',
                         priority: 'info'
                     });
-                    renderCallback([], playlists);
+                    songs = [];
+                    renderCallback([], oldSongs);
                 }
             } else {
                 $.toaster({
@@ -270,6 +249,6 @@ $(document).ready(function() {
     }
 
     reloadPlaylistData(function(data) {
-        renderPlaylists(0);
+        renderPlaylist(0);
     });
 });

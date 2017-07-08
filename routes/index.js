@@ -79,6 +79,13 @@ router.get('/playlists', function(req, res, next) {
     ]);
 });
 
+/* POST "Playlist Editor" */
+router.post('/playlists/editor', function(req, res, next) {
+    respond(res, 'main', 'playlist_editor', req.body.playlistName, [
+        'modals/playlist_editor_select'
+    ], req.body.playlistName);
+});
+
 /* GET "About" */
 router.get('/about', function(req, res, next) {
     respond(res, 'main', 'about', 'About', null, {
