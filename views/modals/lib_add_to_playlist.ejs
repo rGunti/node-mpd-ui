@@ -24,33 +24,41 @@
  * ********************************************************************************* */
 %>
 
-<div class="modal fade" id="selectActionModal" tabindex="-1" role="dialog" aria-labelledby="selectActionModalLabel">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="addToPlaylistModal" tabindex="-1" role="dialog" aria-labelledby="createPlaylistModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="selectActionModalLabel">
-                    Select an action
+                <h4 class="modal-title" id="createPlaylistModalLabel">
+                    Create playlist from queue
                 </h4>
             </div>
-            <div class="modal-body">
-                <p><span class="result-title"></span></p>
-                <p><span class="result-artist"></span></p>
-                <div class="list-group">
-                    <button type="button" class="list-group-item" id="songActionAddToQueueButton">
-                        <span class="glyphicon glyphicon-plus"></span>
-                        Add Song to Queue
+            <form>
+                <div class="modal-body">
+                    <p><span class="result-title"></span></p>
+                    <p><span class="result-artist"></span></p>
+                    <div class="form-group">
+                        <label>Select a playlist</label>
+                        <select class="form-control" id="createPlaylistSelector"></select>
+                    </div>
+                    <div class="form-group label-floating">
+                        <label class="control-label" for="createPlaylistPlaylistName">Playlist Name</label>
+                        <input type="text" name="name" id="createPlaylistPlaylistName" class="form-control" autocomplete="off" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-simple modal-button-cancel">
+                        Cancel
                     </button>
-                    <button type="button" class="list-group-item" id="songActionAddToPlaylistButton">
-                        <span class="glyphicon glyphicon-plus-sign"></span>
-                        Add Song to Playlist
+                    <button type="submit" class="btn btn-primary btn-simple modal-button-confirm">
+                        Save
                     </button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
 
-<script src="/js/custom/modal/lib_play.js"></script>
+<script src="/js/custom/modal/lib_add_to_playlist.js"></script>

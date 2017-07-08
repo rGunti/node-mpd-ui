@@ -23,7 +23,7 @@
  * ********************************************************************************* */
 
 $(document).ready(function() {
-    $('#songActionAddToPlaylistButton').click(function(e) {
+    $('#songActionAddToQueueButton').click(function(e) {
         var modal = $('#selectActionModal');
         var song = modal.data('song');
         modal.modal('hide');
@@ -47,5 +47,14 @@ $(document).ready(function() {
                 });
             }
         });
+    });
+
+    $('#songActionAddToPlaylistButton').click(function(e) {
+        var modal = $('#selectActionModal');
+        var song = modal.data('song');
+
+        $('#addToPlaylistModal').data('song', song).modal('show');
+
+        modal.modal('hide');
     });
 });

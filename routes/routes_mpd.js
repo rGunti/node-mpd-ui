@@ -414,6 +414,17 @@ router.get('/playlists/content', function(req, res, next) {
     });
 });
 
+// POST Add Item to playlist
+router.post('/playlists/content', function(req, res, next) {
+    mpd.addSongToPlaylist(req.body.playlist, req.body.uri, function(err, msg) {
+        if (err) {
+            ResponseUtil.sendError(res, 'FAILED to add playlist content', err);
+        } else {
+            ResponseUtil.sendEmptyResponse(res);
+        }
+    });
+});
+
 // DELETE Playlist Item
 router.delete('/playlists/item/remove', function(req, res, next) {
     mpd.removeItemFromPlaylist(req.body.name, req.body.pos, function(err, msg) {
