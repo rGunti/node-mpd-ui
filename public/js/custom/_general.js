@@ -105,23 +105,6 @@ $(document).ready(function() {
     // Hide when a Nav item has been clicked
     $('nav .nav a').on('click', function(e) { if (!$(e.currentTarget).hasClass('dropdown-toggle')) $('.navbar-toggle').click(); });
 
-    // Pre-Set Toaster Settings
-    $.toaster({
-        settings: {
-            timeout: 5000,
-            toast: {
-                template:
-                '<div class="alert alert-%priority% alert-dismissible" role="alert">' +
-                    '<button type="button" class="close" data-dismiss="alert" onclick="closeToast">' +
-                        '<span aria-hidden="true">&times;</span>' +
-                        '<span class="sr-only">Close</span>' +
-                    '</button>' +
-                    '<span class="title"></span>: <span class="message"></span>' +
-                '</div>'
-            }
-        }
-    });
-
     // Hide when clicked outside of the nav menu
     $(document).click(function (event) {
         var clickover = $(event.target);

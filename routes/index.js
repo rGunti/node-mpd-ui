@@ -25,6 +25,7 @@
 const debug = require('debug')('mpd-ui:Routes/Index');
 const config = require('../base/config');
 const os = require('os');
+const package = require('../package.json');
 
 var express = require('express');
 var router = express.Router();
@@ -34,6 +35,7 @@ function respond(res, view, page, title, additionalIncludes, data) {
         title: title,
         page: page,
         config: config.items,
+        packageInfo: package,
         additionalIncludes: additionalIncludes || [],
         data: data
     });

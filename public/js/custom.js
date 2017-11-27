@@ -1,4 +1,3 @@
-<%
 /*********************************************************************************** *
  * MIT License
  *
@@ -22,25 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  * ********************************************************************************* */
-%>
-<footer class="page-footer hide-on-med-and-down indigo darken-4">
-    <div class="footer-copyright">
-        <div class="container">
-            &COPY; <%= new Date().getFullYear() %>, rGunti
-            Ver. <%= packageInfo.version %>
-            <% if (config.flag) { %>
-            &ndash; <i><%= config.flag || '-' %></i>
-            <% } %>
-            &ndash;
-            <a href="/about">About</a>
-            &ndash;
-            <a href="/license">License</a>
-            &nbsp;
-            <small>
-                App Icon by <a href="http://icons8.com" target="_blank">icons8.com</a>,
-                UI Icons by <a href="http://fontawesome.io/" target="_blank">FontAwesome</a>,
-                Made with <b>Materialize</b>
-            </small>
-        </div>
-    </div>
-</footer>
+
+$(document).ready(function() {
+    $('.button-collapse').sideNav();
+});

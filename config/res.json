@@ -4,5 +4,6 @@
   "/node_modules/font-awesome": "/public",
   "/node_modules/jquery/dist": "/public/js",
   "/node_modules/material-design-icons-iconfont/dist": "/public/css",
-  "/node_modules/moment/min": "/public/js"
+  "/node_modules/moment/min": "/public/js",
+  "/node_modules/typeface-roboto-condensed": "/public/css/roboto-condensed"
 }

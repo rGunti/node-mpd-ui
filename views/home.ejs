@@ -25,20 +25,20 @@
 %>
 <div class="container">
     <!-- Album Cover -->
-    <div class="row album-cover-row">
+    <div class="row center-align">
         <img src="/public/img/unknown-album.png">
     </div>
 
     <!-- Title -->
     <div class="row">
-        <div class="col-xs-12 text-center">
+        <div class="col s12 center-align">
             <span id="currentTitle">{{title}}</span>
         </div>
     </div>
 
     <!-- Artist / Album -->
     <div class="row">
-        <div class="col-xs-12 text-center">
+        <div class="col s12 center-align">
             <span id="currentArtist">{{artist}}</span>
             &ndash;
             <span id="currentAlbum">{{album}}</span>
@@ -47,43 +47,38 @@
 
     <!-- Timestamp -->
     <div class="row">
-        <div class="col-xs-6">
+        <div class="col s6 left-align">
             <span id="currentTimestamp">00:00:00</span>
         </div>
-        <div class="col-xs-6 text-right">
+        <div class="col s6 right-align">
             <span id="currentSongLength">00:00:00</span>
         </div>
     </div>
     <div class="row">
         <div class="progress">
-            <div class="progress-bar"
+            <div class="determinate indigo"
                  id="timestampProgressBar"
-                 role="progressbar"
-                 aria-valuenow="0"
-                 aria-valuemin="0"
-                 aria-valuemax="100"
-                 style="width: 0;">
-            </div>
+                 style="width: 0%"></div>
         </div>
     </div>
 
     <!-- Buttons -->
-    <div class="row text-center">
-        <button id="repeatButton" class="btn btn-primary btn-round btn-just-icon">
-            <i class="material-icons">repeat</i>
-        </button>
-
-        <button id="previousSongButton" class="btn btn-primary btn-round btn-just-icon">
+    <div class="row center-align">
+        <button id="previousSongButton" class="btn waves-effect waves-light indigo">
             <i class="material-icons">skip_previous</i>
         </button>
-        <button id="playPauseButton" class="btn btn-primary btn-round">
+        <button id="playPauseButton" class="btn waves-effect waves-light indigo">
             <i class="material-icons">play_arrow</i>
         </button>
-        <button id="nextSongButton" class="btn btn-primary btn-round btn-just-icon">
+        <button id="nextSongButton" class="btn waves-effect waves-light indigo">
             <i class="material-icons">skip_next</i>
         </button>
-
-        <button id="randomButton" class="btn btn-primary btn-round btn-just-icon">
+    </div>
+    <div class="row center-align">
+        <button id="repeatButton" class="btn waves-effect waves-light indigo">
+            <i class="material-icons">repeat</i>
+        </button>
+        <button id="randomButton" class="btn waves-effect waves-light indigo">
             <i class="material-icons">shuffle</i>
         </button>
     </div>
