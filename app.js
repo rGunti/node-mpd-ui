@@ -56,7 +56,13 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+
+const staticRoutes = require('./config/res.json');
+for (let source in staticRoutes) {
+    let route = staticRoutes[source];
+    debug(` - Mounting route for ${source} to ${route}`);
+    app.use(route, express.static(path.join(__dirname, source)));
+}
 
 app.use('/', route_index);
 app.use('/mpd', route_mpd);
