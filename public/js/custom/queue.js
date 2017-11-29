@@ -94,7 +94,7 @@ $(document).ready(function() {
         $('#selectActionModal .result-pos').text(Number(song.Pos) + 1);
         $('#selectActionModal .result-title').text(song.Title || song.file);
         $('#selectActionModal .result-artist').text(song.Artist || '');
-        $('#selectActionModal').data('song', song).modal('show');
+        $('#selectActionModal').data('song', song).modal('open');
     }
 
     $('.queueLoadMoreButton').click(function(e) {
@@ -208,7 +208,7 @@ $(document).ready(function() {
                 });
                 break;
         }
-        $('#selectActionModal').modal('hide');
+        $('#selectActionModal').modal('close');
     });
 
     $('#clearQueueLink').click(function(e) {
@@ -234,17 +234,16 @@ $(document).ready(function() {
 
     $('#createPlaylistFromQueueLink').click(function(e) {
         e.preventDefault();
-        $('#createPlaylistModal').modal('show');
+        $('#createPlaylistModal').modal('open');
     });
 
     $('#createPlaylistModal button.modal-button-cancel').click(function() {
-        $('#createPlaylistModal').modal('hide');
+        $('#createPlaylistModal').modal('close');
     });
 
     $('#createPlaylistModal form').submit(function(e) {
         e.preventDefault();
         LoadingIndicator.show();
-
 
         var playlistName = $('#createPlaylistPlaylistName').val();
         sendSimpleAjaxRequest(
@@ -253,13 +252,9 @@ $(document).ready(function() {
             { name: playlistName },
             function() {
                 $('#createPlaylistPlaylistName').val('');
-                $('#createPlaylistModal').modal('hide');
+                $('#createPlaylistModal').modal('close');
                 LoadingIndicator.hide();
-
-                $.toaster({
-                    title: 'Playlist created',
-                    message: playlistName
-                });
+                Materialize.toast('Playlist "' + playlistName + '" created', 2500);
             },
             function() {
                 LoadingIndicator.hide();
