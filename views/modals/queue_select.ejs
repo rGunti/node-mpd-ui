@@ -24,6 +24,31 @@
  * ********************************************************************************* */
 %>
 
+<div class="modal bottom-sheet" id="selectActionModal">
+    <div class="modal-content">
+        <h4>Select an action:</h4>
+        <p>
+            #<span class="result-pos"></span><br>
+            <span class="result-title"></span> &ndash;
+            <span class="result-artist"></span>
+        </p>
+        <div class="collection">
+            <a href="#!" class="collection-item" data-action="play">
+                <i class="material-icons left">play_arrow</i>
+                Play
+            </a>
+            <a href="#!" class="collection-item" data-action="remove">
+                <i class="material-icons left">delete</i>
+                Remove from Queue
+            </a>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+    </div>
+</div>
+
+<!--
 <div class="modal fade" id="selectActionModal" tabindex="-1" role="dialog" aria-labelledby="selectActionModalLabel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -67,3 +92,4 @@
         </div>
     </div>
 </div>
+-->

@@ -171,7 +171,7 @@ $(document).ready(function() {
         });
     });
 
-    $('#selectActionModal button').click(function(e) {
+    $('#selectActionModal a.collection-item').click(function(e) {
         var song = $('#selectActionModal').data('song');
         var action = $(e.currentTarget).data('action');
         //console.log(song, action);
