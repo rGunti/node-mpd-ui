@@ -102,11 +102,7 @@ $(document).ready(function() {
         reloadQueueData(function(d,o) {
             //console.log(d.length, o.length, renderedItems);
             if (d.length === o.length && target === o.length) {
-                $.toaster({
-                    title: 'Info',
-                    message: 'You\'ve reached the end of the queue.',
-                    priority: 'info'
-                });
+                Materialize.toast("You've reached the end of the queue.", 2500);
                 return;
             }
             if (d.length <= target) {
@@ -185,18 +181,14 @@ $(document).ready(function() {
         switch (action) {
             case 'play':
                 sendSimpleAjaxRequest('/mpd/queue/' + song.Pos + '/play', 'post', null, function(r) {
-                    $.toaster({
-                        title: 'Now Playing',
-                        message: generateSongInfoText(song)
-                    });
+                    Materialize.toast(
+                        '<p>Now playing<br>' + generateSongInfoText(song) + '</p>', 2500);
                 });
                 break;
             case 'remove':
                 sendSimpleAjaxRequest('/mpd/queue/' + song.Pos + '/remove', 'post', null, function(r) {
-                    $.toaster({
-                        title: 'Removed from queue',
-                        message: generateSongInfoText(song)
-                    });
+                    Materialize.toast('<p>' + generateSongInfoText(song) +
+                        '<br> has been removed from the queue.</p>', 2500);
                     $('.queueReloadButton').first().click();
                 });
                 break;
@@ -272,30 +264,18 @@ $(document).ready(function() {
             }
         }).done(function(data, textStatus, jqXHR) {
             if (data.ok) {
-                if (data.data && data.data.length >= 1) {
+                if (data.data && data.data.length >= 1 && data.data[0] !== null) {
                     var oldSongs = songs;
                     songs = data.data;
                     renderCallback(songs, oldSongs);
                 } else {
-                    $.toaster({
-                        title: 'No Songs found',
-                        message: 'Add a few songs to the queue to start the party.',
-                        priority: 'info'
-                    });
+                    Materialize.toast('No Songs found! Add a few songs to the queue to start the party.', 2500);
                 }
             } else {
-                $.toaster({
-                    title: 'Error',
-                    message: data.message,
-                    priority: 'danger'
-                });
+                Materialize.toast('Error! ' + data.message);
             }
         }).fail(function(jqXHR, textStatus, errorThrown) {
-            $.toaster({
-                title: 'Error',
-                message: 'Something went horribly wrong here D:\nSome more detail for you: ' + textStatus,
-                priority: 'danger'
-            });
+            Materialize.toast('Error! Something went horribly wrong here D:<br>Some more detail for you:<br>' + textStatus);
         }).always(function(data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
             LoadingIndicator.hide();
             $('.queueNavigationButtons').attr('disabled', false);

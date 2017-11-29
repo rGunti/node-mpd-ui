@@ -58,3 +58,6 @@ i.circle.not-i {
 .queueNavigationButtons {
     padding: 0 15px;
 }
+.toast {
+    word-break: normal;
+}
