@@ -193,11 +193,6 @@ $(document).ready(function() {
                 });
                 break;
             default:
-                $.toaster({
-                    title: 'Unknown Action',
-                    message: action,
-                    priority: 'danger'
-                });
                 break;
         }
         $('#selectActionModal').modal('close');
