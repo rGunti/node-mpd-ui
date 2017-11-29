@@ -23,17 +23,17 @@
  * SOFTWARE.
  * ********************************************************************************* */
 %>
-<div class="modal fade" id="processingModal" tabindex="-1" role="dialog" aria-labelledby="processingModalLabel">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="processingModalLabel">
-                    Processing...
-                </h4>
+
+<div id="processingModal" class="modal bottom-sheet non-dismissible">
+    <div class="modal-content">
+        <h4>Processing ...</h4>
+        <div class="center-align">
+            <div class="progress">
+                <div class="indeterminate indigo"></div>
             </div>
-            <div class="modal-body text-center">
-                <img src="/public/img/loading.gif" />
-            </div>
+            <p class="flow-text">
+                This might take a minute ...
+            </p>
         </div>
     </div>
 </div>

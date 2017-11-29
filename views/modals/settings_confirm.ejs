@@ -24,29 +24,17 @@
  * ********************************************************************************* */
 %>
 
-<div class="text-center loading-indicator">
-    <button type="submit" id="actionLoadingIndicator" class="btn btn-primary" disabled>
-        <img class="loading-shown" src="/public/img/loading32_colored.gif">
-        Loading &hellip;
-    </button>
-</div>
-
-<div class="modal fade" id="confirmActionModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title confirm-title">{{confirm title}}</h4>
-            </div>
-            <div class="modal-body">
-                <p class="confirm-message">{{confirm message}}</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-default btn-simple confirm-no">No</button>
-                <button class="btn btn-primary btn-simple confirm-yes">Yes</button>
-            </div>
-        </div>
+<div class="modal bottom-sheet" id="confirmActionModal">
+    <div class="modal-content">
+        <h4 class="modal-title confirm-title">{{confirm title}}</h4>
+        <p class="confirm-message">{{confirm message}}</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-flat waves-effect waves-light confirm-no">
+            No
+        </button>
+        <button type="submit" class="btn waves-effect waves-light indigo confirm-yes">
+            Yes
+        </button>
     </div>
 </div>

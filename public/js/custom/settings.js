@@ -24,7 +24,7 @@
 
 $(document).ready(function() {
     var DEFAULT_CALLBACK = function() {
-        LOADING_INDICATOR.fadeOut();
+        LoadingIndicator.fadeOut();
     };
 
     var DEFAULT_ERROR_TOAST = function() {
@@ -51,15 +51,13 @@ $(document).ready(function() {
             });
         },
         'mpd-generate-full-playlist': function(callback) {
-            $('#processingModal').modal({
-                backdrop: 'static',
-                keyboard: false
-            });
+            var processingDialog = $('#processingModal');
+            processingDialog.modal('open');
             sendSimpleAjaxRequest('/mpd/playlists/create_full', 'post', {
                 name: 'All Tracks'
             }, function(d) {
-                Materialize.toast('Full Playlist created');
-                $('#processingModal').modal('hide');
+                Materialize.toast('Full Playlist created', 2500);
+                $('#processingModal').modal('close');
                 if (callback) callback();
             }, function() {
                 DEFAULT_ERROR_TOAST();
@@ -85,7 +83,7 @@ $(document).ready(function() {
     var CONFIRM_MODAL = $('#confirmActionModal');
     var LOADING_INDICATOR = $('#actionLoadingIndicator').hide();
 
-    $('.settings-action').click(function(e) {
+    $('.card-action a').click(function(e) {
         var source = $(e.currentTarget);
         var action = source.data('action');
         var needConfirm = source.data('need-confirm');
@@ -95,9 +93,9 @@ $(document).ready(function() {
             CONFIRM_MODAL.data('action', action);
             $('.confirm-title', CONFIRM_MODAL).text(confirmData.title);
             $('.confirm-message', CONFIRM_MODAL).text(confirmData.message);
-            CONFIRM_MODAL.modal('show');
+            CONFIRM_MODAL.modal('open');
         } else {
-            LOADING_INDICATOR.fadeIn();
+            LoadingIndicator.show();
             ACTIONS[action](DEFAULT_CALLBACK);
         }
     });
@@ -105,10 +103,10 @@ $(document).ready(function() {
     $('.confirm-yes', CONFIRM_MODAL).click(function(e) {
         var action = CONFIRM_MODAL.data('action');
         ACTIONS[action](DEFAULT_CALLBACK);
-        CONFIRM_MODAL.modal('hide').data('action', '');
+        CONFIRM_MODAL.modal('close').data('action', '');
     });
 
     $('.confirm-no', CONFIRM_MODAL).click(function(e) {
-        CONFIRM_MODAL.modal('hide').data('action', '');
+        CONFIRM_MODAL.modal('close').data('action', '');
     });
 });
