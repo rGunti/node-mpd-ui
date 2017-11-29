@@ -229,7 +229,7 @@ $(document).ready(function() {
         $('#createPlaylistModal').modal('close');
     });
 
-    $('#createPlaylistModal form').submit(function(e) {
+    $('#createPlaylistModalForm').submit(function(e) {
         e.preventDefault();
         LoadingIndicator.show();
 
