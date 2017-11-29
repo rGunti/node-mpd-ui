@@ -49,8 +49,10 @@ $(document).ready(function() {
 
             song.Pos = i;
 
-            item.data('song', song);
-            item.click(onSongClick);
+            var button = $('.result-actions', item);
+            button.click(onSongClick);
+            button.data('song', song);
+
             item.appendTo('#playlistRenderTarget').hide();
 
             renderedItems++;
@@ -61,7 +63,7 @@ $(document).ready(function() {
 
     function fadeInHiddenElement() {
         //console.log('Fade In');
-        var item = $('#playlistRenderTarget .list-group-item:hidden:first');
+        var item = $('#playlistRenderTarget .collection-item:hidden:first');
         if (item.length > 0) {
             item.fadeIn(100, fadeInHiddenElement);
         }
@@ -69,7 +71,7 @@ $(document).ready(function() {
 
     function fadeOutVisibleElements(callback) {
         //console.log('Fade Out');
-        var item = $('#playlistRenderTarget .list-group-item:visible:last');
+        var item = $('#playlistRenderTarget .collection-item:visible:last');
         if (item.length > 0) {
             item.fadeOut(50, function() {
                 item.remove();
@@ -87,7 +89,7 @@ $(document).ready(function() {
         $('#selectActionModal .result-pos').text((song.Pos + 1));
         $('#selectActionModal .result-title').text(song.Title || song.file);
         $('#selectActionModal .result-artist').text(song.Artist || '-');
-        $('#selectActionModal').data('song', song).modal('show');
+        $('#selectActionModal').data('song', song).modal('open');
     }
 
     $('.playlistLoadMoreButton').click(function(e) {
@@ -95,11 +97,7 @@ $(document).ready(function() {
         reloadPlaylistData(function(d,o) {
             //console.log(d.length, o.length, renderedItems);
             if (d.length === o.length && target === o.length) {
-                $.toaster({
-                    title: 'Info',
-                    message: 'You\'ve reached the end of the playlist.',
-                    priority: 'info'
-                });
+                Materialize.toast("You've reached the end of the playlist.", 2500);
                 return;
             }
             if (d.length <= target) {
@@ -168,7 +166,7 @@ $(document).ready(function() {
         });
     });
 
-    $('#selectActionModal button').click(function(e) {
+    $('#selectActionModal .collection-item').click(function(e) {
         var song = $('#selectActionModal').data('song');
         var action = $(e.currentTarget).data('action');
         //console.log(song, action);
@@ -182,7 +180,7 @@ $(document).ready(function() {
                     'delete',
                     { name: playlist_name, pos: song.Pos },
                     function(d) {
-                        $('#playlistLoading').fadeOut();
+                        LoadingIndicator.hide();
                         $('.playlistReloadButton:first').click();
 
                         $.toaster({
@@ -190,18 +188,13 @@ $(document).ready(function() {
                             message: song.Title || song.file
                         });
                     },
-                    function() { $('#playlistLoading').fadeOut(); }
+                    function() { LoadingIndicator.hide(); }
                 );
                 break;
             default:
-                $.toaster({
-                    title: 'Unknown Action',
-                    message: action,
-                    priority: 'danger'
-                });
                 break;
         }
-        $('#selectActionModal').modal('hide');
+        $('#selectActionModal').modal('close');
     });
 
     function reloadPlaylistData(renderCallback) {
@@ -210,7 +203,7 @@ $(document).ready(function() {
             data: { name: playlist_name, '_t': new Date().getTime() },
             method: 'get',
             beforeSend: function() {
-                $('.loading-indicator').fadeIn();
+                LoadingIndicator.show();
                 $('.playlistNavigationButtons').attr('disabled', true);
             }
         }).done(function(data, textStatus, jqXHR) {
@@ -221,29 +214,17 @@ $(document).ready(function() {
                     songs = data.data;
                     renderCallback(songs, oldSongs);
                 } else {
-                    $.toaster({
-                        title: 'Playlist empty',
-                        message: 'Add items to the playlist by using the Library functions.',
-                        priority: 'info'
-                    });
+                    Materialize.toast('Playlist is empty', 2500);
                     songs = [];
                     renderCallback([], oldSongs);
                 }
             } else {
-                $.toaster({
-                    title: 'Error',
-                    message: data.message,
-                    priority: 'danger'
-                });
+                Materialize.toast('Error! ' + data.message);
             }
         }).fail(function(jqXHR, textStatus, errorThrown) {
-            $.toaster({
-                title: 'Error',
-                message: 'Something went horribly wrong here D:\nSome more detail for you: ' + textStatus,
-                priority: 'danger'
-            });
+            Materialize.toast('Error! Something went horribly wrong here D:<br>Some more detail for you:<br>' + textStatus);
         }).always(function(data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
-            $('.loading-indicator').fadeOut();
+            LoadingIndicator.hide();
             $('.playlistNavigationButtons').attr('disabled', false);
         });
     }
