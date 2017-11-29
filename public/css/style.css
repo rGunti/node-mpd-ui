@@ -46,3 +46,15 @@ samp.break-all {
     font-weight: bold;
     font-size: x-large;
 }
+i.circle.not-i {
+    font-style: normal;
+}
+.result-title.truncate {
+    padding-right: 32px;
+}
+.hidden {
+    display: none;
+}
+.queueNavigationButtons {
+    padding: 0 15px;
+}

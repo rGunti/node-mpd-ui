@@ -24,82 +24,64 @@
  * ********************************************************************************* */
 %>
 
-<div class="container">
-    <div class="text-center loading-indicator">
-        <button type="submit" id="queueLoading" class="btn btn-primary" disabled>
-            <img class="loading-shown" src="/public/img/loading32_colored.gif">
-            Loading &hellip;
-        </button>
-    </div>
-
-    <div class="container-fluid text-center">
-        <button class="btn btn-primary btn-just-icon queueNavigationButtons queueLoadLessButton">
-            <i class="material-icons">keyboard_arrow_up</i>
-        </button>
-        <button class="btn btn-primary btn-just-icon queueNavigationButtons queueReloadButton">
-            <i class="material-icons">refresh</i>
-            <span class="queuePositionIndicator">0-0/0</span>
-        </button>
-        <button class="btn btn-primary btn-just-icon queueNavigationButtons queueLoadMoreButton">
-            <i class="material-icons">keyboard_arrow_down</i>
-        </button>
-    </div>
-
-    <div class="list-group" id="queueRenderTarget"></div>
-
-    <div class="container-fluid text-center">
-        <button class="btn btn-primary btn-just-icon queueNavigationButtons queueLoadLessButton">
-            <i class="material-icons">keyboard_arrow_up</i>
-        </button>
-        <button class="btn btn-primary btn-just-icon queueNavigationButtons queueReloadButton">
-            <i class="material-icons">refresh</i>
-            <span class="queuePositionIndicator">0-0/0</span>
-        </button>
-        <button class="btn btn-primary btn-just-icon queueNavigationButtons queueLoadMoreButton">
-            <i class="material-icons">keyboard_arrow_down</i>
-        </button>
-    </div>
-
-    <div class="container text-center">
-        <!-- More Actions -->
-        <div class="btn-group dropup">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                More Options
-                <i class="material-icons">keyboard_arrow_up</i>
-            </button>
-            <ul class="dropdown-menu">
-                <li>
-                    <a href="#" id="createPlaylistFromQueueLink">
-                        <i class="material-icons">playlist_add</i>
-                        Create playlist from queue
-                    </a>
-                </li>
-                <li>
-                    <a href="#" id="clearQueueLink">
-                        <i class="material-icons">clear_all</i>
-                        Clear queue
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Item Template -->
-    <div class="list-group hidden" id="queueRenderTargetTemplates">
-        <button type="button" class="list-group-item" id="queueItemTemplate">
-            <div class="row">
-                <div class="col-xs-2 text-right">
-                    <span class="result-pos">{{#}}</span>
-                </div>
-                <div class="col-xs-6">
-                    <span class="result-title">{{title}}</span><br>
-                    <span class="result-artist">{{artist}}</span>
-                </div>
-                <div class="col-xs-4 text-right">
-                    <span class="result-length">00:00</span>
-                </div>
-            </div>
-        </button>
-    </div>
+<div class="center-align">
+    <button class="waves-effect waves-light btn indigo queueNavigationButtons queueLoadLessButton">
+        <i class="material-icons center">keyboard_arrow_up</i>
+    </button>
+    <button class="waves-effect waves-light btn indigo queueNavigationButtons queueReloadButton">
+        <i class="material-icons left">refresh</i>
+        <span class="queuePositionIndicator">0-0/0</span>
+    </button>
+    <button class="waves-effect waves-light btn indigo queueNavigationButtons queueLoadMoreButton">
+        <i class="material-icons center">keyboard_arrow_down</i>
+    </button>
 </div>
+
+<ul class="collection" id="queueRenderTarget"></ul>
+
+<div class="center-align">
+    <button class="waves-effect waves-light btn indigo queueNavigationButtons queueLoadLessButton">
+        <i class="material-icons center">keyboard_arrow_up</i>
+    </button>
+    <button class="waves-effect waves-light btn indigo queueNavigationButtons queueReloadButton">
+        <i class="material-icons left">refresh</i>
+        <span class="queuePositionIndicator">0-0/0</span>
+    </button>
+    <button class="waves-effect waves-light btn indigo queueNavigationButtons queueLoadMoreButton">
+        <i class="material-icons center">keyboard_arrow_down</i>
+    </button>
+</div>
+
+<div class="fixed-action-btn toolbar">
+    <a class="btn-floating btn-large indigo" href="#!">
+        <i class="large material-icons">more_vert</i>
+    </a>
+    <ul>
+        <li class="waves-effect waves-light"><a href="#!" id="createPlaylistFromQueueLink">
+            <i class="material-icons">playlist_add</i>
+            Queue to playlist
+        </a></li>
+        <li class="waves-effect waves-light"><a href="#!" id="clearQueueLink">
+            <i class="material-icons">clear_all</i>
+            Clear queue
+        </a></li>
+    </ul>
+</div>
+
+<div class="bottom-spacer">&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br></div>
+
+<!-- Item Template -->
+<ul class="collection hidden" id="queueRenderTargetTemplates">
+    <li class="collection-item avatar" id="queueItemTemplate">
+        <i class="circle not-i indigo result-pos">{{#}}</i>
+        <span class="title result-title truncate">{{title}}</span>
+
+        <p class="result-artist">{{artist}}</p>
+        <p class="result-length">00:00</p>
+
+        <a href="#!" class="secondary-content indigo-text result-actions">
+            <i class="material-icons">more_horiz</i>
+        </a>
+    </li>
+</ul>
 <script src="/public/js/custom/queue.js"></script>

@@ -54,8 +54,10 @@ $(document).ready(function() {
             $('.result-length', item).text(formatTimeWithMinutes(song.Time));
             $('.result-pos', item).text(Number(song.Pos) + 1);
 
-            item.data('song', song);
-            item.click(onSongClick);
+            var button = $('.result-actions', item);
+            button.click(onSongClick);
+            button.data('song', song);
+
             item.appendTo('#queueRenderTarget').hide();
 
             renderedItems++;
@@ -66,7 +68,7 @@ $(document).ready(function() {
 
     function fadeInHiddenElement() {
         //console.log('Fade In');
-        var item = $('#queueRenderTarget .list-group-item:hidden:first');
+        var item = $('#queueRenderTarget .collection-item:hidden:first');
         if (item.length > 0) {
             item.fadeIn(100, fadeInHiddenElement);
         }
@@ -74,7 +76,7 @@ $(document).ready(function() {
 
     function fadeOutVisibleElements(callback) {
         //console.log('Fade Out');
-        var item = $('#queueRenderTarget .list-group-item:visible:last');
+        var item = $('#queueRenderTarget .collection-item:visible:last');
         if (item.length > 0) {
             item.fadeOut(50, function() {
                 item.remove();
@@ -220,7 +222,7 @@ $(document).ready(function() {
             null,
             function() {
                 $('#clearQueueModal').modal('hide');
-                $('#queueLoading').fadeOut();
+                LoadingIndicator.hide();
 
                 $.toaster({
                     title: 'Success',
@@ -230,7 +232,7 @@ $(document).ready(function() {
                 $('.queueReloadButton').first().click();
             },
             function() {
-                $('#queueLoading').fadeOut();
+                LoadingIndicator.hide();
             }
         );
     });
@@ -250,7 +252,8 @@ $(document).ready(function() {
 
     $('#createPlaylistModal form').submit(function(e) {
         e.preventDefault();
-        $('#queueLoading').fadeIn();
+        LoadingIndicator.show();
+
 
         var playlistName = $('#createPlaylistPlaylistName').val();
         sendSimpleAjaxRequest(
@@ -260,7 +263,7 @@ $(document).ready(function() {
             function() {
                 $('#createPlaylistPlaylistName').val('');
                 $('#createPlaylistModal').modal('hide');
-                $('#queueLoading').fadeOut();
+                LoadingIndicator.hide();
 
                 $.toaster({
                     title: 'Playlist created',
@@ -268,7 +271,7 @@ $(document).ready(function() {
                 });
             },
             function() {
-                $('#queueLoading').fadeOut();
+                LoadingIndicator.hide();
             }
         );
     });
@@ -278,7 +281,7 @@ $(document).ready(function() {
             url: '/mpd/queue',
             method: 'get',
             beforeSend: function() {
-                $('.loading-indicator').fadeIn();
+                LoadingIndicator.show();
                 $('.queueNavigationButtons').attr('disabled', true);
             }
         }).done(function(data, textStatus, jqXHR) {
@@ -308,7 +311,7 @@ $(document).ready(function() {
                 priority: 'danger'
             });
         }).always(function(data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
-            $('.loading-indicator').fadeOut();
+            LoadingIndicator.hide();
             $('.queueNavigationButtons').attr('disabled', false);
         });
     }
