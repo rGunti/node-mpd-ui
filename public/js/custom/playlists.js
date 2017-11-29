@@ -166,7 +166,7 @@ $(document).ready(function() {
         });
     });
 
-    $('#selectActionModal .result-actions').click(function(e) {
+    $('#selectActionModal .collection-item').click(function(e) {
         var playlist = $('#selectActionModal').data('playlist');
         var action = $(e.currentTarget).data('action');
         //console.log(song, action);
@@ -182,8 +182,6 @@ $(document).ready(function() {
                     { name: playlist.playlist },
                     function (d) {
                         LoadingIndicator.hide();
-                        $('.playlistReloadButton:first').click();
-
                         Materialize.toast('Playlist "' + playlist.playlist + '" loaded', 2500)
                     },
                     function() {
@@ -208,7 +206,17 @@ $(document).ready(function() {
                     }
                 );
                 break;
+            case "edit-playlist":
+                LoadingIndicator.show();
+                // Navigate via POST
+                var $playlist = $('<input type="hidden" name="playlistName">');
+                $playlist.attr('value', playlist.playlist);
+                $form = $('<form class="hidden" action="/playlists/editor" method="post">');
+                $playlist.appendTo($form);
+                $form.appendTo('body').submit();
+                break;
             default:
+                alert('Unknown Action ' + action);
                 break;
         }
         $('#selectActionModal').modal('close');

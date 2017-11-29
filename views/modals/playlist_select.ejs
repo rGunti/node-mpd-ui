@@ -24,57 +24,26 @@
  * ********************************************************************************* */
 %>
 
-<div class="modal fade" id="selectActionModal" tabindex="-1" role="dialog" aria-labelledby="selectActionModalLabel">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="selectActionModalLabel">
-                    Select an action
-                </h4>
-            </div>
-            <div class="modal-body">
-                <p><span class="result-name"></span></p>
-                <div class="list-group">
-                    <button type="button" class="list-group-item" data-action="load-playlist">
-                        <div class="row">
-                            <div class="col-xs-2">
-                                <span class="glyphicon glyphicon-play"></span>
-                            </div>
-                            <div class="col-xs-9">
-                                Load this playlist
-                            </div>
-                        </div>
-                    </button>
-                    <button type="button" class="list-group-item" data-action="delete-playlist">
-                        <div class="row">
-                            <div class="col-xs-2">
-                                <span class="glyphicon glyphicon-trash"></span>
-                            </div>
-                            <div class="col-xs-9">
-                                Delete this playlist
-                            </div>
-                        </div>
-                    </button>
-                    <form method="post" action="/playlists/editor">
-                        <input type="hidden" class="result-name" name="playlistName">
-                        <button type="submit" class="list-group-item">
-                            <div class="row">
-                                <div class="col-xs-2">
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                </div>
-                                <div class="col-xs-9">
-                                    Edit this playlist
-                                </div>
-                            </div>
-                        </button>
-                    </form>
-                </div>
-            </div>
+<div class="modal bottom-sheet" id="selectActionModal">
+    <div class="modal-content">
+        <h4>Select an action:</h4>
+        <p><span class="result-name"></span></p>
+        <div class="collection">
+            <a href="#!" class="collection-item" data-action="load-playlist">
+                <i class="material-icons left">play_arrow</i>
+                Load this playlist
+            </a>
+            <a href="#!" class="collection-item" data-action="edit-playlist">
+                <i class="material-icons left">edit</i>
+                Edit this playlist
+            </a>
+            <a href="#!" class="collection-item" data-action="delete-playlist">
+                <i class="material-icons left">delete</i>
+                Delete this playlist
+            </a>
         </div>
     </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+    </div>
 </div>
-
-
