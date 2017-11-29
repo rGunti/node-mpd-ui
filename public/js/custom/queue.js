@@ -214,9 +214,10 @@ $(document).ready(function() {
             null,
             function() {
                 $('#clearQueueModal').modal('close');
-                LoadingIndicator.hide();
                 Materialize.toast('Queue cleared!', 2500);
-                $('.queueReloadButton').first().click();
+
+                fadeOutVisibleElements();
+                $('.queuePositionIndicator').text('1-0/0');
             },
             function() {
                 LoadingIndicator.hide();
