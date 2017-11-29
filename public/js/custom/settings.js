@@ -63,6 +63,40 @@ $(document).ready(function() {
                 DEFAULT_ERROR_TOAST();
                 if (callback) callback();
             });
+        },
+        'change-outputs': function(callback) {
+            LoadingIndicator.hide();
+            $('#outputsRenderTarget').empty();
+
+            $.ajax({
+                url: '/mpd/outputs',
+                beforeSend: function() {
+                    LoadingIndicator.show();
+                }
+            }).done(function(d) {
+                if (d.ok) {
+                    var outputs = d.data;
+                    for (var i = 0; i < d.data.length; i++) {
+                        var output = d.data[i];
+                        var item = $('#mpdOutputTemplate').clone();
+                        item.removeAttr('id');
+                        $('.output-name', item).text(output.outputname);
+                        $('input[type=checkbox]', item)
+                            .prop('checked', output.outputenabled == 1)
+                            .data('id', output.outputid)
+                            .change(outputCheckboxClick)
+                        ;
+                        item.click(outputCheckboxClick);
+                        item.data('id', output.outputid);
+                        item.removeClass('hidden');
+                        item.appendTo('#outputsRenderTarget');
+                    }
+
+                    $('#setOutputModal').modal('open');
+                }
+            }).always(function() {
+                LoadingIndicator.hide();
+            });
         }
     };
     var CONFIRMS = {
@@ -109,4 +143,20 @@ $(document).ready(function() {
     $('.confirm-no', CONFIRM_MODAL).click(function(e) {
         CONFIRM_MODAL.modal('close').data('action', '');
     });
+
+    function outputCheckboxClick(e) {
+        var checkbox = $('input[type=checkbox]', this);
+        if (checkbox.is('input')) {
+            var id = checkbox.data('id');
+            var newValue = !checkbox.prop('checked');
+
+            console.log(id, newValue);
+
+            LoadingIndicator.show();
+            sendSimpleAjaxRequest('/mpd/output/' + id, 'post', { state: (newValue == true) }, function(d) {
+                LoadingIndicator.hide();
+                checkbox.prop('checked', newValue);
+            });
+        }
+    }
 });

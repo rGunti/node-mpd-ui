@@ -24,31 +24,24 @@
  * ********************************************************************************* */
 %>
 
-<div class="modal fade" id="setOutputModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title confirm-title">Outputs</h4>
-            </div>
-            <div class="modal-body">
-                <p>
-                    Select the outputs you want to use:
-                </p>
+<div class="modal bottom-sheet" id="setOutputModal">
+    <div class="modal-content">
+        <h4>Outputs</h4>
+        <p>
+            Select the outputs you want to use:
+        </p>
 
-                <form id="outputsRenderTarget">
-                </form>
+        <div id="outputsRenderTarget">
+        </div>
 
-                <div class="checkbox hidden" id="mpdOutputTemplate">
-                    <label>
-                        <input type="checkbox"> <span class="output-name">{{output_name}}</span>
-                    </label>
-                </div>
-            </div>
+        <div class="checkbox hidden" id="mpdOutputTemplate">
+            <input type="checkbox" class="filled-in">
+            <label><span class="output-name">{{output_name}}</span></label>
         </div>
     </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-flat waves-effect waves-light modal-close">
+            Ok
+        </button>
+    </div>
 </div>
-
-<script src="/public/js/custom/modal/settings_output.js"></script>
