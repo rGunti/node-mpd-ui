@@ -114,6 +114,9 @@ $(document).ready(function() {
         }
     });
 
+    // Initialize Modals
+    $('.modal').modal();
+
     // Full Screen Apps throw you out into Safari on iOS if you click a regular <a> link
     var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     if (iOS) iOSLinkFixer();

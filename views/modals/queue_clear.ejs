@@ -24,27 +24,18 @@
  * ********************************************************************************* */
 %>
 
-<div class="modal fade" id="clearQueueModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title confirm-title">Clear Queue</h4>
-            </div>
-            <div class="modal-body">
-                <p>
-                    Would you like to clear the queue?
-                </p>
-                <p>
-                    Playback will be stopped when clearing the queue.
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-default btn-simple confirm-no">No</button>
-                <button class="btn btn-danger btn-simple confirm-yes">Yes</button>
-            </div>
-        </div>
+<div id="clearQueueModal" class="modal bottom-sheet">
+    <div class="modal-content">
+        <h4>Clear Queue?</h4>
+        <p>
+            Would you like to clear the queue?
+        </p>
+        <p>
+            Playback will be stopped when clearing the queue.
+        </p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close modal-trigger waves-effect waves-green btn indigo confirm-yes">Yes</a>
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">No</a>
     </div>
 </div>

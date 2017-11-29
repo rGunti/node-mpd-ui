@@ -212,7 +212,7 @@ $(document).ready(function() {
     });
 
     $('#clearQueueLink').click(function(e) {
-        $('#clearQueueModal').modal('show');
+        $('#clearQueueModal').modal('open');
     });
 
     $('#clearQueueModal .confirm-yes').click(function(e) {
@@ -221,24 +221,15 @@ $(document).ready(function() {
             'post',
             null,
             function() {
-                $('#clearQueueModal').modal('hide');
+                $('#clearQueueModal').modal('close');
                 LoadingIndicator.hide();
-
-                $.toaster({
-                    title: 'Success',
-                    message: 'Queue cleared!'
-                });
-
+                Materialize.toast('Queue cleared!', 2500);
                 $('.queueReloadButton').first().click();
             },
             function() {
                 LoadingIndicator.hide();
             }
         );
-    });
-
-    $('#clearQueueModal .confirm-no').click(function(e) {
-        $('#clearQueueModal').modal('hide');
     });
 
     $('#createPlaylistFromQueueLink').click(function(e) {
