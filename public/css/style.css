@@ -49,15 +49,19 @@ samp.break-all {
 i.circle.not-i {
     font-style: normal;
 }
-.result-title.truncate {
+.collection-item .title.truncate {
     padding-right: 32px;
 }
 .hidden {
     display: none;
 }
-.queueNavigationButtons {
+.queueNavigationButtons,
+.playlistNavigationButtons {
     padding: 0 15px;
 }
 .toast {
     word-break: normal;
+}
+.collection .collection-item.avatar.small {
+    min-height: 62px;
 }
