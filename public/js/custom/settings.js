@@ -28,21 +28,13 @@ $(document).ready(function() {
     };
 
     var DEFAULT_ERROR_TOAST = function() {
-        $.toaster({
-            title: 'Error',
-            message: 'Something went terribly wrong here D:',
-            priority: 'danger'
-        });
+        Materialize.toast('Something went terribly wrong here D:', Infinity, 'red');
     };
 
     var ACTIONS = {
         'mpd-rescan-library': function(callback) {
             sendSimpleAjaxRequest('/mpd/rescan', 'post', null, function(d) {
-                $.toaster({
-                    title: 'Update requested',
-                    message: 'Server is updating the library...',
-                    priority: 'info'
-                });
+                Materialize.toast('Rescan has been requested, this might take a minute.', 2500);
                 if (callback) callback();
             }, function() {
                 DEFAULT_ERROR_TOAST();
@@ -51,10 +43,7 @@ $(document).ready(function() {
         },
         'mpd-clear-queue': function(callback) {
             sendSimpleAjaxRequest('/mpd/queue/clear', 'post', null, function(d) {
-                $.toaster({
-                    title: 'Queue cleared',
-                    message: 'The queue has been cleared'
-                });
+                Materialize.toast('Queue cleared', 2500);
                 if (callback) callback();
             }, function() {
                 DEFAULT_ERROR_TOAST();
@@ -69,10 +58,7 @@ $(document).ready(function() {
             sendSimpleAjaxRequest('/mpd/playlists/create_full', 'post', {
                 name: 'All Tracks'
             }, function(d) {
-                $.toaster({
-                    title: 'Playlist created',
-                    message: 'You might want to rescan your library just to be sure.'
-                });
+                Materialize.toast('Full Playlist created');
                 $('#processingModal').modal('hide');
                 if (callback) callback();
             }, function() {
