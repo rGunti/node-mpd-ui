@@ -80,7 +80,9 @@
 <ul class="collection with-header hidden" id="searchResultRenderTargetTemplates">
     <li class="collection-header" id="searchHeaderTemplate">
         <h5>
-            <i class="material-icons left">view_list</i>
+            <a href="#addAllSearchResultsToQueue" class="indigo-text modal-trigger">
+                <i class="material-icons left">view_list</i>
+            </a>
             <span class="result-count">0</span>
             song(s) found
         </h5>
@@ -107,6 +109,16 @@
     <a href="#!" id="scrollToTop" class="btn-floating btn-large waves-effect waves-light indigo z-depth-3">
         <i class="material-icons">arrow_upward</i>
     </a>
+</div>
+
+<div class="modal bottom-sheet" id="addAllSearchResultsToQueue">
+    <div class="modal-content">
+        <h4>Add <span class="result-count">0</span> item(s) to queue?</h4>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn indigo" id="add-all-confirm">Yes</a>
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">No</a>
+    </div>
 </div>
 
 <script src="/public/js/custom/lib_search.js"></script>

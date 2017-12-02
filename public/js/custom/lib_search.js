@@ -29,8 +29,8 @@ $(document).ready(function() {
 
     function renderSongs(startIndex) {
         var header = $('#searchHeaderTemplate').clone();
-        $('.result-count', header).text(songs.length);
         header.appendTo('#searchResultRenderTarget').hide().fadeIn(100);
+        $('.result-count').text(songs.length);
 
         for (var i = startIndex; i < songs.length; i++) {
             var song = songs[i];
@@ -122,14 +122,12 @@ $(document).ready(function() {
         });
     });
 
-    $('#addEverythingButton').click(function(e) {
-        if (confirm('Would you like to add ' + songs.length + ' song(s) to the queue?')) {
-            LoadingIndicator.show();
-            sendSimpleAjaxRequest('/mpd/queue/addsearch', 'post', lastSearch, function() {
-                LoadingIndicator.hide();
-                Materialize.toast(songs.length + ' song(s) added to queue.', 2500)
-            });
-        }
+    $('#add-all-confirm').click(function(e) {
+        LoadingIndicator.show();
+        sendSimpleAjaxRequest('/mpd/queue/addsearch', 'post', lastSearch, function() {
+            LoadingIndicator.hide();
+            Materialize.toast(songs.length + ' song(s) added to queue.', 2500)
+        });
     });
 
     $('#scrollToTop').click(function() {
