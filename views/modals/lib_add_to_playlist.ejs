@@ -31,12 +31,24 @@
             <p>Enter a name for the playlist or select an existing one:</p>
             <div class="row">
                 <div class="input-field col s12">
-                    <select id="createPlaylistSelector"></select>
-                    <label for="createPlaylistSelector">Playlist</label>
+                    <input placeholder="Enter a name for the playlist or select an existing one"
+                           type="text"
+                           name="name"
+                           id="createPlaylistPlaylistName"
+                           class="validate"
+                           autocomplete="off"
+                           required>
+                    <label for="createPlaylistPlaylistName">Playlist Name</label>
                 </div>
                 <div class="input-field col s12">
-                    <input type="text" name="name" id="createPlaylistPlaylistName" class="validate" autocomplete="off" required>
-                    <label for="createPlaylistPlaylistName">Playlist Name</label>
+                    <p>Existing Playlists</p>
+                    <div class="collection" id="createPlaylistPlaylistCollection">
+                        <a href="#!" class="collection-item">Derp</a>
+                        <a href="#!" class="collection-item">Derp</a>
+                        <a href="#!" class="collection-item">Derp</a>
+                        <a href="#!" class="collection-item">Derp</a>
+                        <a href="#!" class="collection-item">Derp</a>
+                    </div>
                 </div>
             </div>
         </div>
