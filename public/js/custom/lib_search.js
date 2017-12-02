@@ -28,7 +28,11 @@ $(document).ready(function() {
     var renderedItems = 0;
 
     function renderSongs(startIndex) {
-        for (var i = startIndex; i < startIndex + 10 && i < songs.length; i++) {
+        var header = $('#searchHeaderTemplate').clone();
+        $('.result-count', header).text(songs.length);
+        header.appendTo('#searchResultRenderTarget').hide().fadeIn(100);
+
+        for (var i = startIndex; i < songs.length; i++) {
             var song = songs[i];
             var item = $('#searchResultItemTemplate').clone();
 
@@ -40,32 +44,22 @@ $(document).ready(function() {
             }
             $('.result-length', item).text(formatTimeWithMinutes(song.Time));
 
-            item.data('song', song);
-            item.click(onSongClick);
+            var button = $('.result-actions', item);
+            button.data('song', song);
+            button.click(onSongClick);
             item.appendTo('#searchResultRenderTarget').hide();
 
             renderedItems++;
         }
         fadeInHiddenElement();
-        if (!hasMoreSongs()) {
-            $('#searchResultLoadMoreButton').attr('disabled', true);
-        }
     }
 
     function fadeInHiddenElement() {
         console.log('Fade In');
-        var item = $('#searchResultRenderTarget .list-group-item:hidden:first');
+        var item = $('#searchResultRenderTarget .collection-item:hidden:first');
         if (item.length > 0) {
             item.fadeIn(100, fadeInHiddenElement);
         }
-    }
-
-    $('#searchResultLoadMoreButton').click(function(e) {
-        renderSongs(renderedItems);
-    });
-
-    function hasMoreSongs() {
-        return (renderedItems < songs.length);
     }
 
     function onSongClick(e) {
@@ -78,23 +72,19 @@ $(document).ready(function() {
         $('#selectActionModal').modal('show');
     }
 
-    $('#librarySearchForm').submit(function(e) {
+    $('#searchForm').submit(function(e) {
         e.preventDefault();
 
         var data = {
-            title: $('#librarySearchTitle').val(),
-            artist: $('#librarySearchArtist').val(),
-            album: $('#librarySearchAlbum').val(),
-            genre: $('#librarySearchGenre').val()
+            title: $('#searchTitle').val(),
+            artist: $('#searchArtist').val(),
+            album: $('#searchAlbum').val(),
+            genre: $('#searchGenre').val()
         };
         lastSearch = data;
 
         if (!data.title && !data.artist && !data.album && !data.genre) {
-            $.toaster({
-                title: 'Nothing entered',
-                message: 'Please enter something to search for.',
-                priority: 'warning'
-            });
+            Materialize.toast('No search criteria entered', 2500);
             $('#librarySearchTitle').focus().select();
             return;
         }
@@ -104,8 +94,7 @@ $(document).ready(function() {
             method: 'post',
             data: data,
             beforeSend: function() {
-                $('#collapseSearchForm button[type=submit] img.loading').show();
-                $('#collapseSearchForm button[type=submit] i').hide();
+                LoadingIndicator.show();
                 $('#collapseSearchForm button[type=submit]').attr('disabled', true);
 
                 $('#searchResultRenderTarget').empty();
@@ -115,59 +104,45 @@ $(document).ready(function() {
             if (data.ok) {
                 if (data.data && data.data.length >= 1) {
                     songs = data.data;
+                    $('.collapsible').collapsible('close', 0);
                     renderSongs(0);
 
-                    $('#collapseSearchForm').collapse('hide');
-                    $('#collapseSearchResult').collapse('show');
+                    //$('#collapseSearchForm').collapse('hide');
+                    //$('#collapseSearchResult').collapse('show');
                 } else {
-                    $.toaster({
-                        title: 'No Songs found',
-                        message: 'Maybe try something else.',
-                        priority: 'info'
-                    });
+                    Materialize.toast('Nothing found', 2500);
                 }
             } else {
-                $.toaster({
-                    title: 'Error',
-                    message: data.message,
-                    priority: 'danger'
-                });
+                Materialize.toast('Error! ' + data.message);
             }
         }).fail(function(jqXHR, textStatus, errorThrown) {
         }).always(function(data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
-            $('#collapseSearchForm button img.loading').hide();
-            $('#collapseSearchForm button i').show();
             $('#collapseSearchForm button[type=submit]').attr('disabled', false);
+            LoadingIndicator.hide();
         });
-    });
-
-    $('#searchAgainButton').click(function(e) {
-        $('#collapseSearchForm').collapse('show');
-        $('#collapseSearchResult').collapse('hide');
-        $('#librarySearchTitle').focus().select();
-
-        $('#searchResultLoadMoreButton').attr('disabled', false);
-        songs = [];
-        renderedItems = 0;
     });
 
     $('#addEverythingButton').click(function(e) {
         if (confirm('Would you like to add ' + songs.length + ' song(s) to the queue?')) {
-            $('#queueLoading').fadeIn();
+            LoadingIndicator.show();
             sendSimpleAjaxRequest('/mpd/queue/addsearch', 'post', lastSearch, function() {
-                $('#queueLoading').fadeOut();
-                $.toaster({
-                    title: 'Added to queue',
-                    message: songs.length + ' song(s) added to queue.'
-                });
+                LoadingIndicator.hide();
+                Materialize.toast(songs.length + ' song(s) added to queue.', 2500)
             });
         }
     });
 
-    $.get('/mpd/library/genres', function(data) {
-        $('#librarySearchGenre').typeahead({ source: data.data }, 'json');
+    $('#scrollToTop').click(function() {
+        window.scroll({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
     });
 
-    $('#queueLoading').hide();
-    $('#librarySearchTitle').focus().select();
+    //$.get('/mpd/library/genres', function(data) {
+    //    $('#librarySearchGenre').typeahead({ source: data.data }, 'json');
+    //});
+
+    $('#searchTitle').focus().select();
 });

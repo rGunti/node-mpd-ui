@@ -65,3 +65,9 @@ i.circle.not-i {
 .collection .collection-item.avatar.small {
     min-height: 62px;
 }
+#searchForm {
+    padding: 0 25px;
+}
+#searchForm input {
+    margin-bottom: 0;
+}
