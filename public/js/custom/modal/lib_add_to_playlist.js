@@ -22,42 +22,43 @@
  * SOFTWARE.
  * ********************************************************************************* */
 
+var options;
+function onAddToPlaylistModalOpen() {
+    var song = $('#addToPlaylistModal').data('song');
+    $('#addToPlaylistModal .result-title').text(song.Title || song.file);
+    $('#addToPlaylistModal .result-artist').text(song.Artist || '-');
+
+    LoadingIndicator.show();
+
+    options.material_select('destroy');
+    options.empty();
+    $.ajax({
+        url: '/mpd/playlists',
+        method: 'get'
+    }).done(function(d) {
+        if (d.ok) {
+            options.append($('<option></option>').val('NEW').text(' <New Playlist> '));
+            $.each(d.data, function() {
+                options.append($('<option></option>').text(this.playlist));
+            });
+
+            // Selects
+            options.material_select();
+        }
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        Materialize.toast('Something went horribly wrong here D:\nSome more detail for you: ' + textStatus);
+    }).always(function(data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
+        LoadingIndicator.hide();
+    });
+}
+
 $(document).ready(function() {
-    var options = $('#createPlaylistSelector');
+    options = $('#createPlaylistSelector');
     var playlistNameTextbox = $('#createPlaylistPlaylistName');
 
-    $('#addToPlaylistModal').on('shown.bs.modal', function() {
-        var song = $('#addToPlaylistModal').data('song');
-        $('#addToPlaylistModal .result-title').text(song.Title || song.file);
-        $('#addToPlaylistModal .result-artist').text(song.Artist || '-');
-
-        $('.loading-indicator').fadeIn();
-
-        options.empty();
-        $.ajax({
-            url: '/mpd/playlists',
-            method: 'get'
-        }).done(function(d) {
-            if (d.ok) {
-                options.append($('<option></option>').val('NEW').text(' <New Playlist> '));
-                $.each(d.data, function() {
-                    options.append($('<option></option>').text(this.playlist));
-                });
-            }
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-            $.toaster({
-                title: 'Error',
-                message: 'Something went horribly wrong here D:\nSome more detail for you: ' + textStatus,
-                priority: 'danger'
-            });
-        }).always(function(data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
-            $('.loading-indicator').fadeOut();
-        });
-    });
-
-    $('#addToPlaylistModal form').submit(function(e) {
+    $('#addToPlaylistModalForm').submit(function(e) {
         e.preventDefault();
-        $('.loading-indicator').fadeIn();
+        LoadingIndicator.show();
 
         var song = $('#addToPlaylistModal').data('song');
         var data = {
@@ -66,15 +67,13 @@ $(document).ready(function() {
         };
 
         sendSimpleAjaxRequest('/mpd/playlists/content', 'post', data, function(d) {
-            $('#addToPlaylistModal').modal('hide');
-            $('.loading-indicator').fadeOut();
-            $.toaster({
-                title: 'Song added',
-                message: '"' + (song.Title || song.file) + '" to Playlist "' + data.playlist + '"'
-            });
+            $('#addToPlaylistModal').modal('close');
+            LoadingIndicator.hide();
+            Materialize.toast('"' + (song.Title || song.file) + '" added to Playlist "' + data.playlist + '"',
+                2500);
         }, function() {
-            $('#addToPlaylistModal').modal('hide');
-            $('.loading-indicator').fadeOut();
+            $('#addToPlaylistModal').modal('close');
+            LoadingIndicator.hide();
         });
         playlistNameTextbox.val('');
     });

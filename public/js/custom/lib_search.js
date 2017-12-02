@@ -69,7 +69,7 @@ $(document).ready(function() {
         $('#selectActionModal .result-title').text(song.Title || song.file);
         $('#selectActionModal .result-artist').text(song.Artist || '');
         $('#selectActionModal').data('song', song);
-        $('#selectActionModal').modal('show');
+        $('#selectActionModal').modal('open');
     }
 
     $('#searchForm').submit(function(e) {
