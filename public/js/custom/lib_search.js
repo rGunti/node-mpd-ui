@@ -127,6 +127,9 @@ $(document).ready(function() {
         sendSimpleAjaxRequest('/mpd/queue/addsearch', 'post', lastSearch, function() {
             LoadingIndicator.hide();
             Materialize.toast(songs.length + ' song(s) added to queue.', 2500)
+        }, function() {
+            LoadingIndicator.hide();
+            Materialize.toast('Failed to add songs to playlist.', 2500);
         });
     });
 

@@ -70,12 +70,10 @@ function sendSimpleAjaxRequest(url, method, data, callback, errorCallback) {
                 data: data,
                 response: res
             });
-            else $.toaster({
-                title: 'Error in AJAX Request',
-                message: 'An error occurred while sending the following AJAX request:<br>' +
-                    '<pre>' + method + ' ' + url + '</pre>',
-                priority: 'danger'
-            });
+            else {
+                Materialize.toast('An error occurred while sending the following AJAX request:<br>' +
+                    '<pre>' + method + ' ' + url + '</pre>');
+            }
         } else if (callback) {
             callback(res);
         }
@@ -94,7 +92,7 @@ var getLocation = function(href) {
     var l = document.createElement("a");
     l.href = href;
     return l;
-}
+};
 
 // -
 function closeToast(e) {
