@@ -23,19 +23,17 @@
  * ********************************************************************************* */
 
 $(document).ready(function() {
-    $('#queueLoading').hide();
+    $('ul.tabs').tabs('select_tab', 'tab_id');
 
     var ITEM_TEMPLATES = {
-        artists: '#libraryBrowserArtistTemplate',
-        albums: '#libraryBrowserAlbumTemplate',
-        genres: '#libraryBrowserGenreTemplate',
-        songs: '#libraryBrowserSongsTemplate'
+        artists: '#browserArtistTemplate',
+        albums: '#browserAlbumTemplate',
+        genres: '#browserGenreTemplate'
     };
     var RENDER_TARGETS = {
-        artists: '#libraryBrowserArtistRenderTarget',
-        albums: '#libraryBrowserAlbumRenderTarget',
-        genres: '#libraryBrowserGenreRenderTarget',
-        songs: '#libraryBrowserSongsRenderTarget'
+        artists: '#browserArtistRenderTarget',
+        albums: '#browserAlbumRenderTarget',
+        genres: '#browserGenreRenderTarget'
     };
 
     var PAGE_SIZE = 10;
@@ -48,8 +46,8 @@ $(document).ready(function() {
     var renderedSongItems = 0;
 
     function renderPrefilterItems(type, startIndex) {
-        renderedPrefilteredItems = startIndex;
-        for (var i = startIndex; i < startIndex + PAGE_SIZE && i < prefilteredItems.length; i++) {
+        //renderedPrefilteredItems = startIndex;
+        for (var i = startIndex; i < prefilteredItems.length; i++) {
             var itemObject = prefilteredItems[i];
 
             var item = $(ITEM_TEMPLATES[type]).clone();
@@ -72,21 +70,22 @@ $(document).ready(function() {
                     break;
             }
 
-            item.appendTo(RENDER_TARGETS[type]).hide();
-            renderedPrefilteredItems++;
+            item.appendTo(RENDER_TARGETS[type]);//.hide();
+            //renderedPrefilteredItems++;
         }
-        fadeInHiddenElement(RENDER_TARGETS[type]);
-        $(RENDER_TARGETS[type])
-            .parent()
-            .find('.libraryBrowserPositionIndicator')
-            .text((startIndex + 1) + '-' + renderedPrefilteredItems + '/' + prefilteredItems.length);
+        //fadeInHiddenElement(RENDER_TARGETS[type]);
+        //$(RENDER_TARGETS[type])
+        //    .parent()
+        //    .find('.libraryBrowserPositionIndicator')
+        //    .text((startIndex + 1) + '-' + renderedPrefilteredItems + '/' + prefilteredItems.length);
     }
 
     function renderSongItems(startIndex) {
         renderedSongItems = startIndex;
+        $('#songBrowserSongList').empty();
         for (var i = startIndex; i < startIndex + PAGE_SIZE && i < songItems.length; i++) {
             var song = songItems[i];
-            var item = $('#libraryBrowserSongsTemplate').clone();
+            var item = $('#songBrowserItemTemplate').clone();
             item.removeAttr('id');
             $('.result-title', item).text(song.Title || song.file);
             if (song.Artist) {
@@ -98,13 +97,11 @@ $(document).ready(function() {
 
             item.data('song', song);
             item.click(onSongClick);
-            item.appendTo('#libraryBrowserSongsRenderTarget').hide();
+            item.appendTo('#songBrowserSongList');//.hide();
             renderedSongItems++;
         }
 
-        fadeInHiddenElement('#libraryBrowserSongsRenderTarget');
-        $('#collapseLibraryBrowserSongs .libraryBrowserPositionIndicator')
-            .text((startIndex + 1) + '-' + renderedSongItems + '/' + songItems.length);
+        //fadeInHiddenElement('#libraryBrowserSongsRenderTarget');
     }
 
     function fadeInHiddenElement(target) {
@@ -133,8 +130,7 @@ $(document).ready(function() {
             url: '/mpd/library/' + type,
             method: 'get',
             beforeSend: function() {
-                $('#queueLoading').fadeIn();
-                $('.libraryBrowserNavigationButtons').attr('disabled', true);
+                LoadingIndicator.show();
             }
         }).done(function(data, textStatus, jqXHR) {
             if (data.ok) {
@@ -144,28 +140,16 @@ $(document).ready(function() {
                     prefilteredItems = data.data;
                     renderCallback(type, prefilteredItems, oldList);
                 } else {
-                    $.toaster({
-                        title: 'No Items found',
-                        message: 'Maybe try something else.',
-                        priority: 'info'
-                    });
+                    Materialize.toast('No items found', 2500)
                 }
             } else {
-                $.toaster({
-                    title: 'Error',
-                    message: data.message,
-                    priority: 'danger'
-                });
+                Materialize.toast('Error! ' + data.message, 2500);
             }
         }).fail(function(jqXHR, textStatus, errorThrown) {
-            $.toaster({
-                title: 'Error',
-                message: 'Something went horribly wrong while getting that list!',
-                priority: 'danger'
-            });
+            Materialize.toast('An unexpected error occurred while getting that list.');
         }).always(function(data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
-            $('#queueLoading').fadeOut();
-            $('.libraryBrowserNavigationButtons').attr('disabled', false);
+            LoadingIndicator.hide();
+            //$('.libraryBrowserNavigationButtons').attr('disabled', false);
         });
     }
 
@@ -175,8 +159,7 @@ $(document).ready(function() {
             method: 'post',
             data: data,
             beforeSend: function() {
-                $('#queueLoading').fadeIn();
-                $('.librarySongBrowserNavigationButtons').attr('disabled', true);
+                LoadingIndicator.show();
             }
         }).done(function(data, textStatus, jqXHR) {
             if (data.ok) {
@@ -185,32 +168,20 @@ $(document).ready(function() {
                     songItems = data.data;
                     renderCallback(songItems, oldList);
                 } else {
-                    $.toaster({
-                        title: 'No Items found',
-                        message: 'Maybe try something else.',
-                        priority: 'info'
-                    });
+                    Materialize.toast('No items found', 2500)
                 }
             } else {
-                $.toaster({
-                    title: 'Error',
-                    message: data.message,
-                    priority: 'danger'
-                });
+                Materialize.toast('Error! ' + data.message, 2500);
             }
         }).fail(function(jqXHR, textStatus, errorThrown) {
-            $.toaster({
-                title: 'Error',
-                message: 'Something went horribly wrong while getting that list!',
-                priority: 'danger'
-            });
+            Materialize.toast('An unexpected error occurred while getting that list.');
         }).always(function(data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
-            $('#queueLoading').fadeOut();
-            $('.librarySongBrowserNavigationButtons').attr('disabled', false);
+            LoadingIndicator.hide();
+            //$('.librarySongBrowserNavigationButtons').attr('disabled', false);
         });
     }
 
-    $('#collapseLibrarySection button').click(function(e) {
+    $('.collapsible-header').click(function(e) {
         var filter = $(e.currentTarget).data('library-filter');
         var goToBrowser = null;
         switch (filter) {
@@ -224,16 +195,9 @@ $(document).ready(function() {
                 goToBrowser = 'collapseLibraryBrowserGenre';
                 break;
             default:
-                $.toaster({
-                    title: 'Unknown Filter',
-                    message: filter,
-                    priority: 'danger'
-                });
+                Materialize.toast('Unknown filter ' + filter);
                 return;
         }
-
-        $('#collapseLibrarySection').collapse('hide');
-        $('#' + goToBrowser).collapse('show');
 
         loadPrefilterItems(filter, function(type, items) {
             renderPrefilterItems(type, 0)
@@ -409,28 +373,23 @@ $(document).ready(function() {
     });
 
     $('#addSearchResultToQueue').click(function() {
-        if (confirm('Would you like to add ' + songItems.length + ' song(s) to the queue?')) {
-            $('#queueLoading').fadeIn();
-            sendSimpleAjaxRequest('/mpd/queue/addsearch', 'post', songRestrictions, function() {
-                $('#queueLoading').fadeOut();
-                $.toaster({
-                    title: 'Added to queue',
-                    message: songItems.length + ' song(s) added to queue.'
-                });
-            });
-        }
+        LoadingIndicator.show();
+        sendSimpleAjaxRequest('/mpd/queue/addsearch', 'post', songRestrictions, function() {
+            LoadingIndicator.hide();
+            Materialize.toast(songItems.length + ' song(s) added to queue.', 2500);
+        });
     });
 
     function onArtistClick(e) {
         var artist = $(e.currentTarget).data('artist');
         console.log('Artist: ', artist);
 
-        $('#collapseLibraryBrowserSongs .selectLibraryFilterButton').data('from-source', '#collapseLibraryBrowserArtist');
-        $('#collapseLibraryBrowserArtist').collapse('hide');
-        $('#collapseLibraryBrowserSongs').collapse('show');
-
         songRestrictions = { artist: artist, emptySearch: 'artist' };
         loadSongItems(songRestrictions, function(songs, oldSongs) {
+            $('#songBrowserModal .modal-title').text(artist || '<none>');
+            $('#songBrowserModal h4 .material-icons').hide();
+            $('#songBrowserModal h4 .header-icon-artist').show();
+            $('#songBrowserModal').modal('open');
             renderSongItems(0);
         });
     }
@@ -439,12 +398,12 @@ $(document).ready(function() {
         var album = $(e.currentTarget).data('album');
         console.log('Album: ', album);
 
-        $('#collapseLibraryBrowserSongs .selectLibraryFilterButton').data('from-source', '#collapseLibraryBrowserAlbum');
-        $('#collapseLibraryBrowserAlbum').collapse('hide');
-        $('#collapseLibraryBrowserSongs').collapse('show');
-
         songRestrictions = { album: album, emptySearch: 'album' };
         loadSongItems(songRestrictions, function(songs, oldSongs) {
+            $('#songBrowserModal .modal-title').text(album || '<none>');
+            $('#songBrowserModal h4 .material-icons').hide();
+            $('#songBrowserModal h4 .header-icon-album').show();
+            $('#songBrowserModal').modal('open');
             renderSongItems(0);
         });
     }
@@ -453,12 +412,12 @@ $(document).ready(function() {
         var genre = $(e.currentTarget).data('genre');
         console.log('Genre: ', genre);
 
-        $('#collapseLibraryBrowserSongs .selectLibraryFilterButton').data('from-source', '#collapseLibraryBrowserGenre');
-        $('#collapseLibraryBrowserGenre').collapse('hide');
-        $('#collapseLibraryBrowserSongs').collapse('show');
-
         songRestrictions = { genre: genre, emptySearch: 'genre' };
         loadSongItems(songRestrictions, function(songs, oldSongs) {
+            $('#songBrowserModal .modal-title').text(genre || '<none>');
+            $('#songBrowserModal h4 .material-icons').hide();
+            $('#songBrowserModal h4 .header-icon-genre').show();
+            $('#songBrowserModal').modal('open');
             renderSongItems(0);
         });
     }
@@ -469,6 +428,20 @@ $(document).ready(function() {
         $('#selectActionModal .result-title').text(song.Title || song.file);
         $('#selectActionModal .result-artist').text(song.Artist || '');
         $('#selectActionModal').data('song', song);
-        $('#selectActionModal').modal('show');
+        $('#selectActionModal').modal('open');
     }
+
+    $('#scrollToTop').click(function() {
+        window.scroll({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    $('#songBrowserModal h4 .material-icons').hide();
+
+    //loadPrefilterItems('artists', function(type, items) {
+    //    renderPrefilterItems(type, 0)
+    //});
 });

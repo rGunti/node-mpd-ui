@@ -26,7 +26,7 @@ $(document).ready(function() {
     $('#songActionAddToQueueButton').click(function(e) {
         var modal = $('#selectActionModal');
         var song = modal.data('song');
-        modal.modal('hide');
+        modal.modal('close');
         $.ajax({
             url: '/mpd/queue/add',
             method: 'post',
@@ -35,16 +35,9 @@ $(document).ready(function() {
             }
         }).done(function(data, textStatus, jqXHR) {
             if (data.ok) {
-                $.toaster({
-                    title: 'Added to Queue',
-                    message: song.Title || song.file
-                });
+                Materialize.toast('Song added to queue', 2500);
             } else {
-                $.toaster({
-                    title: 'Error',
-                    message: data.message,
-                    priority: 'danger'
-                });
+                Materialize.toast('Error! ' + data.message);
             }
         });
     });
@@ -53,8 +46,8 @@ $(document).ready(function() {
         var modal = $('#selectActionModal');
         var song = modal.data('song');
 
-        $('#addToPlaylistModal').data('song', song).modal('show');
-
-        modal.modal('hide');
+        modal.modal('close');
+        $('#addToPlaylistModal').data('song', song).modal('open');
+        onAddToPlaylistModalOpen();
     });
 });

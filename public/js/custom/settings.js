@@ -24,25 +24,17 @@
 
 $(document).ready(function() {
     var DEFAULT_CALLBACK = function() {
-        LOADING_INDICATOR.fadeOut();
+        LoadingIndicator.fadeOut();
     };
 
     var DEFAULT_ERROR_TOAST = function() {
-        $.toaster({
-            title: 'Error',
-            message: 'Something went terribly wrong here D:',
-            priority: 'danger'
-        });
+        Materialize.toast('Something went terribly wrong here D:', Infinity, 'red');
     };
 
     var ACTIONS = {
         'mpd-rescan-library': function(callback) {
             sendSimpleAjaxRequest('/mpd/rescan', 'post', null, function(d) {
-                $.toaster({
-                    title: 'Update requested',
-                    message: 'Server is updating the library...',
-                    priority: 'info'
-                });
+                Materialize.toast('Rescan has been requested, this might take a minute.', 2500);
                 if (callback) callback();
             }, function() {
                 DEFAULT_ERROR_TOAST();
@@ -51,10 +43,7 @@ $(document).ready(function() {
         },
         'mpd-clear-queue': function(callback) {
             sendSimpleAjaxRequest('/mpd/queue/clear', 'post', null, function(d) {
-                $.toaster({
-                    title: 'Queue cleared',
-                    message: 'The queue has been cleared'
-                });
+                Materialize.toast('Queue cleared', 2500);
                 if (callback) callback();
             }, function() {
                 DEFAULT_ERROR_TOAST();
@@ -62,22 +51,51 @@ $(document).ready(function() {
             });
         },
         'mpd-generate-full-playlist': function(callback) {
-            $('#processingModal').modal({
-                backdrop: 'static',
-                keyboard: false
-            });
+            var processingDialog = $('#processingModal');
+            processingDialog.modal('open');
             sendSimpleAjaxRequest('/mpd/playlists/create_full', 'post', {
                 name: 'All Tracks'
             }, function(d) {
-                $.toaster({
-                    title: 'Playlist created',
-                    message: 'You might want to rescan your library just to be sure.'
-                });
-                $('#processingModal').modal('hide');
+                Materialize.toast('Full Playlist created', 2500);
+                $('#processingModal').modal('close');
                 if (callback) callback();
             }, function() {
                 DEFAULT_ERROR_TOAST();
                 if (callback) callback();
+            });
+        },
+        'change-outputs': function(callback) {
+            LoadingIndicator.hide();
+            $('#outputsRenderTarget').empty();
+
+            $.ajax({
+                url: '/mpd/outputs',
+                beforeSend: function() {
+                    LoadingIndicator.show();
+                }
+            }).done(function(d) {
+                if (d.ok) {
+                    var outputs = d.data;
+                    for (var i = 0; i < d.data.length; i++) {
+                        var output = d.data[i];
+                        var item = $('#mpdOutputTemplate').clone();
+                        item.removeAttr('id');
+                        $('.output-name', item).text(output.outputname);
+                        $('input[type=checkbox]', item)
+                            .prop('checked', output.outputenabled == 1)
+                            .data('id', output.outputid)
+                            .change(outputCheckboxClick)
+                        ;
+                        item.click(outputCheckboxClick);
+                        item.data('id', output.outputid);
+                        item.removeClass('hidden');
+                        item.appendTo('#outputsRenderTarget');
+                    }
+
+                    $('#setOutputModal').modal('open');
+                }
+            }).always(function() {
+                LoadingIndicator.hide();
             });
         }
     };
@@ -99,7 +117,7 @@ $(document).ready(function() {
     var CONFIRM_MODAL = $('#confirmActionModal');
     var LOADING_INDICATOR = $('#actionLoadingIndicator').hide();
 
-    $('.settings-action').click(function(e) {
+    $('.card-action a').click(function(e) {
         var source = $(e.currentTarget);
         var action = source.data('action');
         var needConfirm = source.data('need-confirm');
@@ -109,9 +127,9 @@ $(document).ready(function() {
             CONFIRM_MODAL.data('action', action);
             $('.confirm-title', CONFIRM_MODAL).text(confirmData.title);
             $('.confirm-message', CONFIRM_MODAL).text(confirmData.message);
-            CONFIRM_MODAL.modal('show');
+            CONFIRM_MODAL.modal('open');
         } else {
-            LOADING_INDICATOR.fadeIn();
+            LoadingIndicator.show();
             ACTIONS[action](DEFAULT_CALLBACK);
         }
     });
@@ -119,10 +137,26 @@ $(document).ready(function() {
     $('.confirm-yes', CONFIRM_MODAL).click(function(e) {
         var action = CONFIRM_MODAL.data('action');
         ACTIONS[action](DEFAULT_CALLBACK);
-        CONFIRM_MODAL.modal('hide').data('action', '');
+        CONFIRM_MODAL.modal('close').data('action', '');
     });
 
     $('.confirm-no', CONFIRM_MODAL).click(function(e) {
-        CONFIRM_MODAL.modal('hide').data('action', '');
+        CONFIRM_MODAL.modal('close').data('action', '');
     });
+
+    function outputCheckboxClick(e) {
+        var checkbox = $('input[type=checkbox]', this);
+        if (checkbox.is('input')) {
+            var id = checkbox.data('id');
+            var newValue = !checkbox.prop('checked');
+
+            console.log(id, newValue);
+
+            LoadingIndicator.show();
+            sendSimpleAjaxRequest('/mpd/output/' + id, 'post', { state: (newValue == true) }, function(d) {
+                LoadingIndicator.hide();
+                checkbox.prop('checked', newValue);
+            });
+        }
+    }
 });

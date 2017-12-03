@@ -24,33 +24,25 @@
  * ********************************************************************************* */
 %>
 
-<div class="modal fade" id="selectActionModal" tabindex="-1" role="dialog" aria-labelledby="selectActionModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="selectActionModalLabel">
-                    Select an action
-                </h4>
-            </div>
-            <div class="modal-body">
-                <p><span class="result-title"></span></p>
-                <p><span class="result-artist"></span></p>
-                <div class="list-group">
-                    <button type="button" class="list-group-item" id="songActionAddToQueueButton">
-                        <span class="glyphicon glyphicon-plus"></span>
-                        Add Song to Queue
-                    </button>
-                    <button type="button" class="list-group-item" id="songActionAddToPlaylistButton">
-                        <span class="glyphicon glyphicon-plus-sign"></span>
-                        Add Song to Playlist
-                    </button>
-                </div>
-            </div>
+<div class="modal modal-fixed-footer bottom-sheet" id="selectActionModal">
+    <div class="modal-content">
+        <h4>Select an action:</h4>
+        <p><span class="result-title"></span></p>
+        <p><span class="result-artist"></span></p>
+        <div class="collection">
+            <a href="#!" class="collection-item" id="songActionAddToQueueButton">
+                <i class="material-icons left">playlist_play</i>
+                Add Song to Queue
+            </a>
+            <a href="#!" class="collection-item" id="songActionAddToPlaylistButton">
+                <i class="material-icons left">playlist_add</i>
+                Add Song to Playlist
+            </a>
         </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
     </div>
 </div>
 
-<script src="/js/custom/modal/lib_play.js"></script>
+<script src="/public/js/custom/modal/lib_play.js"></script>

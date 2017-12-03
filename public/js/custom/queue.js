@@ -54,8 +54,10 @@ $(document).ready(function() {
             $('.result-length', item).text(formatTimeWithMinutes(song.Time));
             $('.result-pos', item).text(Number(song.Pos) + 1);
 
-            item.data('song', song);
-            item.click(onSongClick);
+            var button = $('.result-actions', item);
+            button.click(onSongClick);
+            button.data('song', song);
+
             item.appendTo('#queueRenderTarget').hide();
 
             renderedItems++;
@@ -66,7 +68,7 @@ $(document).ready(function() {
 
     function fadeInHiddenElement() {
         //console.log('Fade In');
-        var item = $('#queueRenderTarget .list-group-item:hidden:first');
+        var item = $('#queueRenderTarget .collection-item:hidden:first');
         if (item.length > 0) {
             item.fadeIn(100, fadeInHiddenElement);
         }
@@ -74,7 +76,7 @@ $(document).ready(function() {
 
     function fadeOutVisibleElements(callback) {
         //console.log('Fade Out');
-        var item = $('#queueRenderTarget .list-group-item:visible:last');
+        var item = $('#queueRenderTarget .collection-item:visible:last');
         if (item.length > 0) {
             item.fadeOut(50, function() {
                 item.remove();
@@ -92,7 +94,7 @@ $(document).ready(function() {
         $('#selectActionModal .result-pos').text(Number(song.Pos) + 1);
         $('#selectActionModal .result-title').text(song.Title || song.file);
         $('#selectActionModal .result-artist').text(song.Artist || '');
-        $('#selectActionModal').data('song', song).modal('show');
+        $('#selectActionModal').data('song', song).modal('open');
     }
 
     $('.queueLoadMoreButton').click(function(e) {
@@ -100,11 +102,7 @@ $(document).ready(function() {
         reloadQueueData(function(d,o) {
             //console.log(d.length, o.length, renderedItems);
             if (d.length === o.length && target === o.length) {
-                $.toaster({
-                    title: 'Info',
-                    message: 'You\'ve reached the end of the queue.',
-                    priority: 'info'
-                });
+                Materialize.toast("You've reached the end of the queue.", 2500);
                 return;
             }
             if (d.length <= target) {
@@ -173,7 +171,7 @@ $(document).ready(function() {
         });
     });
 
-    $('#selectActionModal button').click(function(e) {
+    $('#selectActionModal a.collection-item').click(function(e) {
         var song = $('#selectActionModal').data('song');
         var action = $(e.currentTarget).data('action');
         //console.log(song, action);
@@ -183,34 +181,25 @@ $(document).ready(function() {
         switch (action) {
             case 'play':
                 sendSimpleAjaxRequest('/mpd/queue/' + song.Pos + '/play', 'post', null, function(r) {
-                    $.toaster({
-                        title: 'Now Playing',
-                        message: generateSongInfoText(song)
-                    });
+                    Materialize.toast(
+                        '<p>Now playing<br>' + generateSongInfoText(song) + '</p>', 2500);
                 });
                 break;
             case 'remove':
                 sendSimpleAjaxRequest('/mpd/queue/' + song.Pos + '/remove', 'post', null, function(r) {
-                    $.toaster({
-                        title: 'Removed from queue',
-                        message: generateSongInfoText(song)
-                    });
+                    Materialize.toast('<p>' + generateSongInfoText(song) +
+                        '<br> has been removed from the queue.</p>', 2500);
                     $('.queueReloadButton').first().click();
                 });
                 break;
             default:
-                $.toaster({
-                    title: 'Unknown Action',
-                    message: action,
-                    priority: 'danger'
-                });
                 break;
         }
-        $('#selectActionModal').modal('hide');
+        $('#selectActionModal').modal('close');
     });
 
     $('#clearQueueLink').click(function(e) {
-        $('#clearQueueModal').modal('show');
+        $('#clearQueueModal').modal('open');
     });
 
     $('#clearQueueModal .confirm-yes').click(function(e) {
@@ -219,38 +208,30 @@ $(document).ready(function() {
             'post',
             null,
             function() {
-                $('#clearQueueModal').modal('hide');
-                $('#queueLoading').fadeOut();
+                $('#clearQueueModal').modal('close');
+                Materialize.toast('Queue cleared!', 2500);
 
-                $.toaster({
-                    title: 'Success',
-                    message: 'Queue cleared!'
-                });
-
-                $('.queueReloadButton').first().click();
+                fadeOutVisibleElements();
+                $('.queuePositionIndicator').text('1-0/0');
             },
             function() {
-                $('#queueLoading').fadeOut();
+                LoadingIndicator.hide();
             }
         );
     });
 
-    $('#clearQueueModal .confirm-no').click(function(e) {
-        $('#clearQueueModal').modal('hide');
-    });
-
     $('#createPlaylistFromQueueLink').click(function(e) {
         e.preventDefault();
-        $('#createPlaylistModal').modal('show');
+        $('#createPlaylistModal').modal('open');
     });
 
     $('#createPlaylistModal button.modal-button-cancel').click(function() {
-        $('#createPlaylistModal').modal('hide');
+        $('#createPlaylistModal').modal('close');
     });
 
-    $('#createPlaylistModal form').submit(function(e) {
+    $('#createPlaylistModalForm').submit(function(e) {
         e.preventDefault();
-        $('#queueLoading').fadeIn();
+        LoadingIndicator.show();
 
         var playlistName = $('#createPlaylistPlaylistName').val();
         sendSimpleAjaxRequest(
@@ -259,16 +240,12 @@ $(document).ready(function() {
             { name: playlistName },
             function() {
                 $('#createPlaylistPlaylistName').val('');
-                $('#createPlaylistModal').modal('hide');
-                $('#queueLoading').fadeOut();
-
-                $.toaster({
-                    title: 'Playlist created',
-                    message: playlistName
-                });
+                $('#createPlaylistModal').modal('close');
+                LoadingIndicator.hide();
+                Materialize.toast('Playlist "' + playlistName + '" created', 2500);
             },
             function() {
-                $('#queueLoading').fadeOut();
+                LoadingIndicator.hide();
             }
         );
     });
@@ -278,37 +255,25 @@ $(document).ready(function() {
             url: '/mpd/queue',
             method: 'get',
             beforeSend: function() {
-                $('.loading-indicator').fadeIn();
+                LoadingIndicator.show();
                 $('.queueNavigationButtons').attr('disabled', true);
             }
         }).done(function(data, textStatus, jqXHR) {
             if (data.ok) {
-                if (data.data && data.data.length >= 1) {
+                if (data.data && data.data.length >= 1 && data.data[0] !== null) {
                     var oldSongs = songs;
                     songs = data.data;
                     renderCallback(songs, oldSongs);
                 } else {
-                    $.toaster({
-                        title: 'No Songs found',
-                        message: 'Add a few songs to the queue to start the party.',
-                        priority: 'info'
-                    });
+                    Materialize.toast('No Songs found! Add a few songs to the queue to start the party.', 2500);
                 }
             } else {
-                $.toaster({
-                    title: 'Error',
-                    message: data.message,
-                    priority: 'danger'
-                });
+                Materialize.toast('Error! ' + data.message);
             }
         }).fail(function(jqXHR, textStatus, errorThrown) {
-            $.toaster({
-                title: 'Error',
-                message: 'Something went horribly wrong here D:\nSome more detail for you: ' + textStatus,
-                priority: 'danger'
-            });
+            Materialize.toast('Error! Something went horribly wrong here D:<br>Some more detail for you:<br>' + textStatus);
         }).always(function(data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
-            $('.loading-indicator').fadeOut();
+            LoadingIndicator.hide();
             $('.queueNavigationButtons').attr('disabled', false);
         });
     }

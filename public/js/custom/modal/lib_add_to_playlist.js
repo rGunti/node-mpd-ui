@@ -22,42 +22,44 @@
  * SOFTWARE.
  * ********************************************************************************* */
 
-$(document).ready(function() {
-    var options = $('#createPlaylistSelector');
-    var playlistNameTextbox = $('#createPlaylistPlaylistName');
+var options;
+var playlistNameTextbox;
+function onAddToPlaylistModalOpen() {
+    var song = $('#addToPlaylistModal').data('song');
+    $('#addToPlaylistModal .result-title').text(song.Title || song.file);
+    $('#addToPlaylistModal .result-artist').text(song.Artist || '-');
 
-    $('#addToPlaylistModal').on('shown.bs.modal', function() {
-        var song = $('#addToPlaylistModal').data('song');
-        $('#addToPlaylistModal .result-title').text(song.Title || song.file);
-        $('#addToPlaylistModal .result-artist').text(song.Artist || '-');
+    LoadingIndicator.show();
 
-        $('.loading-indicator').fadeIn();
-
-        options.empty();
-        $.ajax({
-            url: '/mpd/playlists',
-            method: 'get'
-        }).done(function(d) {
-            if (d.ok) {
-                options.append($('<option></option>').val('NEW').text(' <New Playlist> '));
-                $.each(d.data, function() {
-                    options.append($('<option></option>').text(this.playlist));
+    options.empty();
+    $.ajax({
+        url: '/mpd/playlists',
+        method: 'get'
+    }).done(function(d) {
+        if (d.ok) {
+            $.each(d.data, function() {
+                var option = $('<a class="collection-item"></a>');
+                option.text(this.playlist);
+                option.click(function() {
+                    playlistNameTextbox.val(option.text())
                 });
-            }
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-            $.toaster({
-                title: 'Error',
-                message: 'Something went horribly wrong here D:\nSome more detail for you: ' + textStatus,
-                priority: 'danger'
+                options.append(option);
             });
-        }).always(function(data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
-            $('.loading-indicator').fadeOut();
-        });
+        }
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        Materialize.toast('Something went horribly wrong here D:\nSome more detail for you: ' + textStatus);
+    }).always(function(data_or_jqXHR, textStatus, jqXHR_or_errorThrown) {
+        LoadingIndicator.hide();
     });
+}
 
-    $('#addToPlaylistModal form').submit(function(e) {
+$(document).ready(function() {
+    options = $('#createPlaylistPlaylistCollection');
+    playlistNameTextbox = $('#createPlaylistPlaylistName');
+
+    $('#addToPlaylistModalForm').submit(function(e) {
         e.preventDefault();
-        $('.loading-indicator').fadeIn();
+        LoadingIndicator.show();
 
         var song = $('#addToPlaylistModal').data('song');
         var data = {
@@ -66,30 +68,18 @@ $(document).ready(function() {
         };
 
         sendSimpleAjaxRequest('/mpd/playlists/content', 'post', data, function(d) {
-            $('#addToPlaylistModal').modal('hide');
-            $('.loading-indicator').fadeOut();
-            $.toaster({
-                title: 'Song added',
-                message: '"' + (song.Title || song.file) + '" to Playlist "' + data.playlist + '"'
-            });
+            $('#addToPlaylistModal').modal('close');
+            LoadingIndicator.hide();
+            Materialize.toast('"' + (song.Title || song.file) + '" added to Playlist "' + data.playlist + '"',
+                2500);
         }, function() {
-            $('#addToPlaylistModal').modal('hide');
-            $('.loading-indicator').fadeOut();
+            $('#addToPlaylistModal').modal('close');
+            LoadingIndicator.hide();
         });
         playlistNameTextbox.val('');
     });
 
     $('#addToPlaylistModal button.modal-button-cancel').click(function() {
         $('#addToPlaylistModal').modal('hide');
-    });
-
-    options.change(function(e) {
-        console.log(e);
-        if (options.val() === 'NEW') {
-            playlistNameTextbox.val('').parent().show();
-        } else {
-            var selectedText = $('option:selected', options).text();
-            playlistNameTextbox.val(selectedText).parent().hide();
-        }
     });
 });

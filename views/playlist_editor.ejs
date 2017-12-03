@@ -23,61 +23,51 @@
  * SOFTWARE.
  * ********************************************************************************* */
 %>
-<div class="container">
-    <input type="hidden" id="playlistName" value="<%= data %>">
+<input type="hidden" id="playlistName" value="<%= data %>">
 
-    <div class="text-center loading-indicator">
-        <button type="submit" id="playlistLoading" class="btn btn-primary" disabled>
-            <img class="loading-shown" src="/img/loading32_colored.gif">
-            Loading &hellip;
-        </button>
-    </div>
+<h5 class="condensed truncate"><i class="material-icons left">playlist_play</i> <%= data %></h5>
 
-    <div class="container-fluid text-center">
-        <button class="btn btn-primary btn-just-icon playlistNavigationButtons playlistLoadLessButton">
-            <i class="material-icons">keyboard_arrow_up</i>
-        </button>
-        <button class="btn btn-primary btn-just-icon playlistNavigationButtons playlistReloadButton">
-            <i class="material-icons">refresh</i>
-            <span class="playlistPositionIndicator">0-0/0</span>
-        </button>
-        <button class="btn btn-primary btn-just-icon playlistNavigationButtons playlistLoadMoreButton">
-            <i class="material-icons">keyboard_arrow_down</i>
-        </button>
-    </div>
-
-    <div class="list-group" id="playlistRenderTarget"></div>
-
-    <div class="container-fluid text-center">
-        <button class="btn btn-primary btn-just-icon playlistNavigationButtons playlistLoadLessButton">
-            <i class="material-icons">keyboard_arrow_up</i>
-        </button>
-        <button class="btn btn-primary btn-just-icon playlistNavigationButtons playlistReloadButton">
-            <i class="material-icons">refresh</i>
-            <span class="playlistPositionIndicator">0-0/0</span>
-        </button>
-        <button class="btn btn-primary btn-just-icon playlistNavigationButtons playlistLoadMoreButton">
-            <i class="material-icons">keyboard_arrow_down</i>
-        </button>
-    </div>
-
-    <!-- Item Template -->
-    <div class="list-group hidden" id="playlistRenderTargetTemplates">
-        <button type="button" class="list-group-item" id="playlistItemTemplate">
-            <div class="row">
-                <div class="col-xs-2 text-right">
-                    <span class="result-pos">{{#}}</span>
-                </div>
-                <div class="col-xs-6">
-                    <span class="result-title">{{title}}</span><br>
-                    <span class="result-artist">{{artist}}</span>
-                </div>
-                <div class="col-xs-4 text-right">
-                    <span class="result-length">00:00</span>
-                </div>
-            </div>
-        </button>
-    </div>
+<div class="center-align">
+    <button class="waves-effect waves-light btn indigo playlistNavigationButtons playlistLoadLessButton">
+        <i class="material-icons center">keyboard_arrow_up</i>
+    </button>
+    <button class="waves-effect waves-light btn indigo playlistNavigationButtons playlistReloadButton">
+        <i class="material-icons left">refresh</i>
+        <span class="playlistPositionIndicator">0-0/0</span>
+    </button>
+    <button class="waves-effect waves-light btn indigo playlistNavigationButtons playlistLoadMoreButton">
+        <i class="material-icons center">keyboard_arrow_down</i>
+    </button>
 </div>
 
-<script src="/js/custom/playlist_editor.js"></script>
+<ul class="collection" id="playlistRenderTarget"></ul>
+
+<div class="center-align">
+    <button class="waves-effect waves-light btn indigo playlistNavigationButtons playlistLoadLessButton">
+        <i class="material-icons center">keyboard_arrow_up</i>
+    </button>
+    <button class="waves-effect waves-light btn indigo playlistNavigationButtons playlistReloadButton">
+        <i class="material-icons left">refresh</i>
+        <span class="playlistPositionIndicator">0-0/0</span>
+    </button>
+    <button class="waves-effect waves-light btn indigo playlistNavigationButtons playlistLoadMoreButton">
+        <i class="material-icons center">keyboard_arrow_down</i>
+    </button>
+</div>
+
+<!-- Item Template -->
+<ul class="collection hide" id="playlistRenderTargetTemplates">
+    <li class="collection-item avatar" id="playlistItemTemplate">
+        <i class="circle not-i indigo result-pos">{{#}}</i>
+        <span class="title result-title truncate">{{title}}</span>
+
+        <p class="result-artist">{{artist}}</p>
+        <p class="result-length">00:00</p>
+
+        <a href="#!" class="secondary-content indigo-text result-actions">
+            <i class="material-icons center">more_horiz</i>
+        </a>
+    </li>
+</ul>
+
+<script src="/public/js/custom/playlist_editor.js"></script>

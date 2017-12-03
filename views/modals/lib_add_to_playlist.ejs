@@ -24,41 +24,43 @@
  * ********************************************************************************* */
 %>
 
-<div class="modal fade" id="addToPlaylistModal" tabindex="-1" role="dialog" aria-labelledby="createPlaylistModalLabel">
-    <div class="modal-dialog modal-sm" role="document">
+<form id="addToPlaylistModalForm">
+    <div id="addToPlaylistModal" class="modal bottom-sheet">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="createPlaylistModalLabel">
-                    Create playlist from queue
-                </h4>
+            <h4>Add song to playlist</h4>
+            <p>Enter a name for the playlist or select an existing one:</p>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input placeholder="Enter a name for the playlist or select an existing one"
+                           type="text"
+                           name="name"
+                           id="createPlaylistPlaylistName"
+                           class="validate"
+                           autocomplete="off"
+                           required>
+                    <label for="createPlaylistPlaylistName">Playlist Name</label>
+                </div>
+                <div class="input-field col s12">
+                    <p>Existing Playlists</p>
+                    <div class="collection" id="createPlaylistPlaylistCollection">
+                        <a href="#!" class="collection-item">Derp</a>
+                        <a href="#!" class="collection-item">Derp</a>
+                        <a href="#!" class="collection-item">Derp</a>
+                        <a href="#!" class="collection-item">Derp</a>
+                        <a href="#!" class="collection-item">Derp</a>
+                    </div>
+                </div>
             </div>
-            <form>
-                <div class="modal-body">
-                    <p><span class="result-title"></span></p>
-                    <p><span class="result-artist"></span></p>
-                    <div class="form-group">
-                        <label>Select a playlist</label>
-                        <select class="form-control" id="createPlaylistSelector"></select>
-                    </div>
-                    <div class="form-group label-floating">
-                        <label class="control-label" for="createPlaylistPlaylistName">Playlist Name</label>
-                        <input type="text" name="name" id="createPlaylistPlaylistName" class="form-control" autocomplete="off" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-simple modal-button-cancel">
-                        Cancel
-                    </button>
-                    <button type="submit" class="btn btn-primary btn-simple modal-button-confirm">
-                        Save
-                    </button>
-                </div>
-            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-flat modal-close waves-effect waves-light">
+                Cancel
+            </button>
+            <button type="submit" class="btn waves-effect waves-light indigo modal-button-confirm">
+                Save
+            </button>
         </div>
     </div>
-</div>
+</form>
 
-<script src="/js/custom/modal/lib_add_to_playlist.js"></script>
+<script src="/public/js/custom/modal/lib_add_to_playlist.js"></script>
