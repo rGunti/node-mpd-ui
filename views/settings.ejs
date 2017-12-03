@@ -23,44 +23,72 @@
  * SOFTWARE.
  * ********************************************************************************* */
 %>
-<div class="container">
+
+<div class="col s12 m6">
+    <h5>MPD Settings</h5>
     <div class="row">
-        <div class="col-lg-4 col-sm-6 col-xs-12">
-            <h4>MPD Settings</h4>
-            <div class="list-group">
-                <button class="list-group-item settings-action" data-action="mpd-rescan-library" data-need-confirm="true">
-                    <h4 class="list-group-item-heading">Update Library</h4>
-                    <p class="list-group-item-text">
-                        If you've recently added songs you might need to rescan your library.
-                    </p>
-                </button>
-                <button class="list-group-item" id="changeOutputsButton">
-                    <h4 class="list-group-item-heading">Change Outputs</h4>
-                    <p class="list-group-item-text">
-                        Enable more than one way to play your music.
-                    </p>
-                </button>
+        <div class="col s12 m6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Update Library</span>
+                    <p>If you've recently added songs you might need to rescan your library.</p>
+                </div>
+                <div class="card-action">
+                    <a href="#!" data-action="mpd-rescan-library" data-need-confirm="true">
+                        Run Update
+                    </a>
+                </div>
             </div>
         </div>
-        <div class="col-lg-4 col-sm-6 col-xs-12">
-            <h4>Queue & Library</h4>
-            <div class="list-group">
-                <button class="list-group-item settings-action" data-action="mpd-clear-queue" data-need-confirm="true">
-                    <h4 class="list-group-item-heading">Clear Queue</h4>
-                    <p class="list-group-item-text">
-                        Use this option if you have a large queue to clear.
-                    </p>
-                </button>
-                <button class="list-group-item settings-action" data-action="mpd-generate-full-playlist" data-need-confirm="true">
-                    <h4 class="list-group-item-heading">Generate Full Playlist</h4>
-                    <p class="list-group-item-text">
-                        Use this option to create a playlist with all tracks.<br>
-                        You might want to update the library afterwards.
-                    </p>
-                </button>
+        <div class="col s12 m6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Change Outputs</span>
+                    <p>Enable more than one way to play your music.</p>
+                </div>
+                <div class="card-action">
+                    <a href="#!" data-action="change-outputs">
+                        Change Outputs
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="/js/custom/settings.js"></script>
+<div class="col s12 m6">
+    <h5>Queue & Library</h5>
+    <div class="row">
+        <div class="col s12 m6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Clear Queue</span>
+                    <p>Use this option if you have a large queue to clear.</p>
+                </div>
+                <div class="card-action">
+                    <a href="#!" data-action="mpd-clear-queue" data-need-confirm="true">
+                        Clear queue
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Generate Full Playlist</span>
+                    <p>
+                        Use this option to create a playlist with all tracks.
+                        You might want to update the library afterwards.
+                    </p>
+                </div>
+                <div class="card-action">
+                    <a href="#!" data-action="mpd-generate-full-playlist" data-need-confirm="true">
+                        Generate
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/public/js/custom/settings.js"></script>

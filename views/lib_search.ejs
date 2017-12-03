@@ -23,73 +23,102 @@
  * SOFTWARE.
  * ********************************************************************************* */
 %>
-<div class="text-center loading-indicator">
-    <button type="submit" id="queueLoading" class="btn btn-primary" disabled>
-        <img class="loading-shown" src="/img/loading32_colored.gif">
-        Loading &hellip;
-    </button>
-</div>
 
-<div class="container collapse in" id="collapseSearchForm">
-    <form id="librarySearchForm">
-        <div class="form-group label-floating">
-            <label class="control-label" for="librarySearchTitle">Title</label>
-            <input type="text" name="title" id="librarySearchTitle" class="form-control" autocomplete="off">
-        </div>
-        <div class="form-group label-floating">
-            <label class="control-label" for="librarySearchArtist">Artist</label>
-            <input type="text" name="artist" id="librarySearchArtist" class="form-control" autocomplete="off">
-        </div>
-        <div class="form-group label-floating">
-            <label class="control-label" for="librarySearchAlbum">Album</label>
-            <input type="text" name="album" id="librarySearchAlbum" class="form-control" autocomplete="off">
-        </div>
-        <div class="form-group label-floating">
-            <label class="control-label" for="librarySearchGenre">Genre</label>
-            <input type="text" name="genre" id="librarySearchGenre" class="form-control" autocomplete="off">
-        </div>
-        <div class="form-group text-center">
-            <button type="submit" class="btn btn-primary">
-                <img class="loading" src="/img/loading32_colored.gif">
-                <i class="material-icons">search</i>
-                Search
-            </button>
-        </div>
-    </form>
-</div>
-
-<div class="container collapse" id="collapseSearchResult">
-    <div class="text-center">
-        <button class="btn btn-primary btn-sm" id="addEverythingButton">
-            <i class="material-icons">library_add</i>
-        </button>
-        <button class="btn btn-sm" id="searchAgainButton">
+<ul class="collapsible" data-collapsible="expandable">
+    <li>
+        <div class="collapsible-header active">
             <i class="material-icons">search</i>
-            Search Again
-        </button>
-    </div>
-    <div class="list-group" id="searchResultRenderTarget"></div>
-    <div class="container-fluid text-center">
-        <button id="searchResultLoadMoreButton" class="btn btn-primary">
-            <i class="material-icons">keyboard_arrow_down</i>
-            Show more
-        </button>
-    </div>
-
-    <!-- Item Template -->
-    <div class="list-group hidden" id="searchResultRenderTargetTemplates">
-        <button type="button" class="list-group-item" id="searchResultItemTemplate">
+            Search
+        </div>
+        <div class="collapsible-body">
             <div class="row">
-                <div class="col-xs-8">
-                    <span class="result-title">{{title}}</span><br>
-                    <span class="result-artist">{{artist}}</span>
-                </div>
-                <div class="col-xs-4 text-right">
-                    <span class="result-length">00:00</span>
-                </div>
+                <form class="col s12" id="searchForm">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="searchTitle" type="text" class="validate">
+                            <label for="searchTitle">Title</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="searchArtist" type="text" class="validate">
+                            <label for="searchArtist">Artist</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="searchAlbum" type="text" class="validate">
+                            <label for="searchAlbum">Album</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="searchGenre" type="text" class="validate">
+                            <label for="searchGenre">Genre</label>
+                        </div>
+                    </div>
+                    <div class="row center-align">
+                        <button class="btn grey darken-1 waves-effect waves-light" type="reset" name="action">
+                            <i class="material-icons left">clear</i>
+                            Clear
+                        </button>
+                        <button class="btn indigo waves-effect waves-light" type="submit" name="action">
+                            <i class="material-icons left">search</i>
+                            Search
+                        </button>
+                    </div>
+                </form>
             </div>
-        </button>
+        </div>
+    </li>
+</ul>
+
+
+<ul class="collection with-header" id="searchResultRenderTarget">
+</ul>
+
+<ul class="collection with-header hidden" id="searchResultRenderTargetTemplates">
+    <li class="collection-header" id="searchHeaderTemplate">
+        <h5>
+            <a href="#addAllSearchResultsToQueue" class="indigo-text modal-trigger">
+                <i class="material-icons left">playlist_add</i>
+            </a>
+            <span class="result-count">0</span>
+            song(s) found
+        </h5>
+    </li>
+    <li class="collection-item avatar" id="searchResultItemTemplate">
+        <i class="material-icons circle indigo">music_note</i>
+        <span class="title result-title truncate">{{title}}</span>
+
+        <p class="result-artist">{{artist}}</p>
+        <p class="result-length">00:00</p>
+
+        <a href="#!" class="secondary-content indigo-text result-actions">
+            <i class="material-icons">more_horiz</i>
+        </a>
+    </li>
+    <li class="collection-item" id="searchResultLoadMoreTemplate">
+        <span class="title">Go back to top</span>
+    </li>
+</ul>
+
+<div class="bottom-spacer">&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br></div>
+
+<div class="fixed-action-btn">
+    <a href="#!" id="scrollToTop" class="btn-floating btn-large waves-effect waves-light indigo z-depth-3">
+        <i class="material-icons">arrow_upward</i>
+    </a>
+</div>
+
+<div class="modal bottom-sheet" id="addAllSearchResultsToQueue">
+    <div class="modal-content">
+        <h4>Add <span class="result-count">0</span> item(s) to queue?</h4>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn indigo" id="add-all-confirm">Yes</a>
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">No</a>
     </div>
 </div>
 
-<script src="/js/custom/lib_search.js"></script>
+<script src="/public/js/custom/lib_search.js"></script>

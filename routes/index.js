@@ -25,6 +25,7 @@
 const debug = require('debug')('mpd-ui:Routes/Index');
 const config = require('../base/config');
 const os = require('os');
+const package = require('../package.json');
 
 var express = require('express');
 var router = express.Router();
@@ -34,6 +35,7 @@ function respond(res, view, page, title, additionalIncludes, data) {
         title: title,
         page: page,
         config: config.items,
+        packageInfo: package,
         additionalIncludes: additionalIncludes || [],
         data: data
     });
@@ -83,7 +85,7 @@ router.get('/playlists', function(req, res, next) {
 
 /* POST "Playlist Editor" */
 router.post('/playlists/editor', function(req, res, next) {
-    respond(res, 'main', 'playlist_editor', req.body.playlistName, [
+    respond(res, 'main', 'playlist_editor', 'Playlist Editor', [
         'modals/playlist_editor_select'
     ], req.body.playlistName);
 });

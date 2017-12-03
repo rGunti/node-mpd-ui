@@ -69,7 +69,7 @@ function calculateArtworkWidth() {
  */
 function updateSongInfoText(target, value, preventEvent) {
     $(target).text(value);
-    if (!preventEvent) calculateArtworkWidth();
+    //if (!preventEvent) calculateArtworkWidth();
 }
 
 function updateSongTitle(value, preventEvent) { updateSongInfoText('#currentTitle', value, preventEvent) }
@@ -89,11 +89,11 @@ function updateTimestampProgressBar(val, max) {
 }
 
 function updateStatusButton(id, val) {
-    var hasClass = $(id).hasClass('btn-success');
+    var hasClass = $(id).hasClass('green');
     if (val === "1" && !hasClass) {
-        $(id).addClass('btn-success');
+        $(id).addClass('green');
     } else if (val === "0" && hasClass) {
-        $(id).removeClass('btn-success');
+        $(id).removeClass('green');
     }
 }
 
@@ -118,7 +118,7 @@ function updateAllSongInfo(title,
     updateStatusButton('#repeatButton', repeat);
     updateStatusButton('#randomButton', random);
 
-    calculateArtworkWidth();
+    //calculateArtworkWidth();
 }
 
 function updateUILoop() {
@@ -153,7 +153,7 @@ $(document).ready(function() {
     $(window).resize(calculateArtworkWidth);
 
     // Initial Recalc Method
-    calculateArtworkWidth();
+    //calculateArtworkWidth();
 
     // Initialize UI Loop
     updateUILoop();
@@ -167,7 +167,7 @@ $(document).ready(function() {
         $.ajax({
             url: '/mpd/repeat',
             data: {
-                repeat: ($('#repeatButton').hasClass('btn-success') ? 0 : 1)
+                repeat: ($('#repeatButton').hasClass('green') ? 0 : 1)
             },
             method: 'post'
         });
@@ -176,7 +176,7 @@ $(document).ready(function() {
         $.ajax({
             url: '/mpd/random',
             data: {
-                random: ($('#randomButton').hasClass('btn-success') ? 0 : 1)
+                random: ($('#randomButton').hasClass('green') ? 0 : 1)
             },
             method: 'post'
         });

@@ -70,12 +70,10 @@ function sendSimpleAjaxRequest(url, method, data, callback, errorCallback) {
                 data: data,
                 response: res
             });
-            else $.toaster({
-                title: 'Error in AJAX Request',
-                message: 'An error occurred while sending the following AJAX request:<br>' +
-                    '<pre>' + method + ' ' + url + '</pre>',
-                priority: 'danger'
-            });
+            else {
+                Materialize.toast('An error occurred while sending the following AJAX request:<br>' +
+                    '<pre>' + method + ' ' + url + '</pre>');
+            }
         } else if (callback) {
             callback(res);
         }
@@ -94,7 +92,7 @@ var getLocation = function(href) {
     var l = document.createElement("a");
     l.href = href;
     return l;
-}
+};
 
 // -
 function closeToast(e) {
@@ -105,23 +103,6 @@ $(document).ready(function() {
     // Hide when a Nav item has been clicked
     $('nav .nav a').on('click', function(e) { if (!$(e.currentTarget).hasClass('dropdown-toggle')) $('.navbar-toggle').click(); });
 
-    // Pre-Set Toaster Settings
-    $.toaster({
-        settings: {
-            timeout: 5000,
-            toast: {
-                template:
-                '<div class="alert alert-%priority% alert-dismissible" role="alert">' +
-                    '<button type="button" class="close" data-dismiss="alert" onclick="closeToast">' +
-                        '<span aria-hidden="true">&times;</span>' +
-                        '<span class="sr-only">Close</span>' +
-                    '</button>' +
-                    '<span class="title"></span>: <span class="message"></span>' +
-                '</div>'
-            }
-        }
-    });
-
     // Hide when clicked outside of the nav menu
     $(document).click(function (event) {
         var clickover = $(event.target);
@@ -130,6 +111,10 @@ $(document).ready(function() {
             $("button.navbar-toggle").click();
         }
     });
+
+    // Initialize Modals
+    $('.modal').modal();
+    $('.modal.non-dismissible').modal({dismissible: false});
 
     // Full Screen Apps throw you out into Safari on iOS if you click a regular <a> link
     var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;

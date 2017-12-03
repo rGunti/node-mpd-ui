@@ -1,4 +1,3 @@
-<%
 /*********************************************************************************** *
  * MIT License
  *
@@ -22,28 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  * ********************************************************************************* */
-%>
 
-<div class="modal bottom-sheet" id="selectActionModal">
-    <div class="modal-content">
-        <h4>Select an action:</h4>
-        <p><span class="result-name"></span></p>
-        <div class="collection">
-            <a href="#!" class="collection-item" data-action="load-playlist">
-                <i class="material-icons left">play_arrow</i>
-                Load this playlist
-            </a>
-            <a href="#!" class="collection-item" data-action="edit-playlist">
-                <i class="material-icons left">edit</i>
-                Edit this playlist
-            </a>
-            <a href="#!" class="collection-item" data-action="delete-playlist">
-                <i class="material-icons left">delete</i>
-                Delete this playlist
-            </a>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
-    </div>
-</div>
+const LoadingIndicator = {
+    getContent: function() {
+        return '<div class="preloader-wrapper small active">' +
+            '<div class="spinner-layer spinner-blue-only">' +
+            '<div class="circle-clipper left">' +
+            '<div class="circle"></div>' +
+            '</div>' +
+            '<div class="gap-patch">' +
+            '<div class="circle"></div>' +
+            '</div>' +
+            '<div class="circle-clipper right">' +
+            '<div class="circle"></div>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '&nbsp;&nbsp;&nbsp;' +
+            'Loading ...';
+    },
+    instance: null,
+    show: function() {
+        if (!LoadingIndicator.instance) {
+            LoadingIndicator.instance = Materialize.toast(LoadingIndicator.getContent(), Infinity, 'indigo darken-4');
+        }
+    },
+    hide: function() {
+        if (LoadingIndicator.instance) {
+            LoadingIndicator.instance.remove();
+            LoadingIndicator.instance = null;
+        }
+    }
+};
