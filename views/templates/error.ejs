@@ -1,134 +1,33 @@
-<%
-/*********************************************************************************** *
- * MIT License
- *
- * Copyright (c) 2017 Raphael "rGunti" Guntersweiler
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- * ********************************************************************************* */
-%>
-<!DOCTYPE html>
-<html>
-<head>
-    <title><%= config.title %> &ndash; <%= title %></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
+<p class="flow-text">
+    <b>WE HAVE A SYSTEM FAILURE!
+        EVERYONE PANIC!!
+        WE ARE ALL GONNA DIE!!!
+        AAAAAARGH!!!</b>
+</p>
+<p class="flow-text">
+    Okay, a little overexaggerated... But seriously we had a
+    serious error which may or may not have caused the
+    web server to crash... I don't know.
+</p>
+<p class="flow-text">
+    If you know the developer or the owner of this server,
+    please send them the error detail below so they can
+    fix it... maybe.
+</p>
 
-    <link rel="stylesheet" href="/public/css/font-roboto.css" />
-    <link rel="stylesheet" href="/public/css/iconfont/material-icons.css" />
-    <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/public/css/material-kit.css" />
-    <link rel="stylesheet" href="/public/css/custom.css" />
+<h4>
+    Error Detail:
+    <small>
+        a.k.a. The stuff you should send to the dev
+    </small>
+</h4>
+<dl>
+    <dt>Message</dt>
+    <dd><%- data.message %></dd>
 
-    <script src="/public/js/jquery-3.2.1.min.js"></script>
-    <script src="/public/js/bootstrap.min.js"></script>
-    <script src="/public/js/material.min.js"></script>
-    <script src="/public/js/material-kit.js"></script>
-    <script src="/public/js/custom/_general.js"></script>
-</head>
-<body>
-<!-- NAV -->
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">
-                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                <b><%= title %></b>
-                &ndash;
-                <small class="font-condensed"><%= config.title %></small>
-            </a>
-        </div>
-    </div>
-</nav>
+    <dt>Status</dt>
+    <dd><%- data.error.status %></dd>
 
-<!-- CONTENT -->
-<div class="main main-raised">
-    <div class="container">
-        <div class="alert alert-danger">
-            <div class="container-fluid">
-                <div class="alert-icon">
-                    <i class="material-icons">error_outline</i>
-                </div>
-                <h4><%= title %></h4>
-                <p>
-                    <b>WE HAVE A SYSTEM FAILURE!
-                        EVERYONE PANIC!!
-                        WE ARE ALL GONNA DIE!!!
-                        AAAAAARGH!!!</b>
-                </p>
-                <p>
-                    Okay, a little overexaggerated... But seriously we had a serious error which may or may not have caused the
-                    web server to crash... I don't know.
-                </p>
-                <p>
-                    If you know the developer or the owner of this server, please send them the error detail below so they can
-                    fix it... maybe.
-                </p>
-
-                <h4>
-                    Error Detail:
-                    <span class="label label-warning">
-                        a.k.a. The stuff you should send to the dev
-                    </span>
-                </h4>
-                <p>
-                    <b>Note:</b> Don't screenshot this page. Instead use the copy button
-                    at the bottom of the page to get the error info. Also, include a
-                    report of the error so the dev can try to recreate the error. That makes
-                    work easier for them and they will thank you for this.
-                </p>
-                <dl class="dl-horizontal">
-                    <dt><b>Message</b></dt>
-                    <dd><%= message %></dd>
-
-                    <dt><b>Status</b></dt>
-                    <dd><%= error.status || '-' %></dd>
-
-                    <dt><b>Stack Trace</b></dt>
-                    <dd><pre><%= error.stack %></pre></dd>
-                </dl>
-                <div>
-                    <div class="sr-only" id="jsonErrorContent"><%=
-                        JSON.stringify({ message: message, error: error, stack: error.stack })
-                        %></div>
-                    <button class="btn btn-warning" id="copyErrorDetail">
-                        Copy Error Detail to Clipboard
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<%- include('footer') %>
-
-<script>
-    $(document).ready(function() {
-        $('#copyErrorDetail').click(function() {
-            window.prompt(
-                'Copy the provided information and send it to the dev:',
-                $('#jsonErrorContent').text()
-            );
-        });
-    });
-</script>
-
-</body>
-</html>
+    <dt>Stack Trace</dt>
+    <dd><pre><%- data.error.stack %></pre></dd>
+</dl>
