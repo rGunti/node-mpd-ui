@@ -24,234 +24,87 @@
  * ********************************************************************************* */
 %>
 
-<div class="text-center loading-indicator">
-    <button type="submit" id="queueLoading" class="btn btn-primary" disabled>
-        <img class="loading-shown" src="/public/img/loading32_colored.gif">
-        Loading &hellip;
-    </button>
-</div>
-
-<div class="container collapse in" id="collapseLibrarySection">
-    <p>
-        Select a tag you want to browse:
-    </p>
-    <div class="list-group">
-        <button type="button" class="list-group-item" data-library-filter="artists">
-            <span class="glyphicon glyphicon-user"></span>
-            Artist
-        </button>
-        <button type="button" class="list-group-item" data-library-filter="albums">
-            <span class="glyphicon glyphicon-cd"></span>
-            Album
-        </button>
-        <button type="button" class="list-group-item" data-library-filter="genres">
-            <span class="glyphicon glyphicon-music"></span>
-            Genre
-        </button>
-    </div>
-</div>
-
-<!-- Artist Browser -->
-<div class="container collapse" id="collapseLibraryBrowserArtist">
-    <h6>
-        <button class="btn btn-sm btn-just-icon selectLibraryFilterButton" data-source="#collapseLibraryBrowserArtist" data-type="artists">
-            <i class="material-icons">arrow_back</i>
-        </button>
-        Artist Browser
-    </h6>
-
-    <div class="container-fluid text-center">
-        <button data-type="artists" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadLessButton">
-            <i class="material-icons">keyboard_arrow_up</i>
-        </button>
-        <button data-type="artists" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserReloadButton">
-            <i class="material-icons">refresh</i>
-            <span class="libraryBrowserPositionIndicator">0-0/0</span>
-        </button>
-        <button data-type="artists" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadMoreButton">
-            <i class="material-icons">keyboard_arrow_down</i>
-        </button>
-    </div>
-
-    <div class="list-group" id="libraryBrowserArtistRenderTarget"></div>
-
-    <div class="container-fluid text-center">
-        <button data-type="artists" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadLessButton">
-            <i class="material-icons">keyboard_arrow_up</i>
-        </button>
-        <button data-type="artists" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserReloadButton">
-            <i class="material-icons">refresh</i>
-            <span class="libraryBrowserPositionIndicator">0-0/0</span>
-        </button>
-        <button data-type="artists" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadMoreButton">
-            <i class="material-icons">keyboard_arrow_down</i>
-        </button>
-    </div>
-
-    <!-- Item Template -->
-    <div class="list-group hidden">
-        <button type="button" class="list-group-item" id="libraryBrowserArtistTemplate">
-            <div class="row">
-                <div class="col-xs-12">
-                    <span class="result-artist">{{artist}}</span>
-                </div>
+<ul class="collapsible" data-collapsible="accordion">
+    <li>
+        <div class="collapsible-header" id="browserArtistHeader" data-library-filter="artists">
+            <i class="material-icons">person</i> Artist
+        </div>
+        <div class="collapsible-body">
+            <div class="collection" id="browserArtistRenderTarget">
             </div>
-        </button>
+        </div>
+    </li>
+    <li>
+        <div class="collapsible-header" id="browserAlbumHeader" data-library-filter="albums">
+            <i class="material-icons">album</i> Album
+        </div>
+        <div class="collapsible-body">
+            <div class="collection" id="browserAlbumRenderTarget">
+            </div>
+        </div>
+    </li>
+    <li>
+        <div class="collapsible-header" id="browserGenreHeader" data-library-filter="genres">
+            <i class="material-icons">music_note</i> Genre
+        </div>
+        <div class="collapsible-body">
+            <div class="collection" id="browserGenreRenderTarget">
+            </div>
+        </div>
+    </li>
+</ul>
+
+<div class="collection hidden">
+    <a href="#!" class="collection-item" id="browserArtistTemplate">
+        <i class="material-icons left">person</i>
+        <span class="result-artist">{{artist}}</span>
+    </a>
+    <a href="#!" class="collection-item" id="browserAlbumTemplate">
+        <i class="material-icons left">album</i>
+        <span class="result-album">{{album}}</span>
+    </a>
+    <a href="#!" class="collection-item" id="browserGenreTemplate">
+        <i class="material-icons left">music_note</i>
+        <span class="result-genre">{{genre}}</span>
+    </a>
+</div>
+
+<div class="bottom-spacer">&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;<br></div>
+
+<div class="fixed-action-btn">
+    <a href="#!" id="scrollToTop" class="btn-floating btn-large waves-effect waves-light indigo z-depth-3">
+        <i class="material-icons">arrow_upward</i>
+    </a>
+</div>
+
+<!-- (New) Song Browser -->
+<div id="songBrowserModal" class="modal modal-fixed-footer bottom-sheet">
+    <div class="modal-content">
+        <h4>
+            <i class="material-icons left header-icon-artist">person</i>
+            <i class="material-icons left header-icon-album">album</i>
+            <i class="material-icons left header-icon-genre">music_note</i>
+            <span class="modal-title"></span>
+        </h4>
+        <div class="collection" id="songBrowserSongList"></div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" id="addSearchResultToQueue" class="modal-action waves-effect waves-light btn-flat">
+            Add all to queue
+        </a>
+        <a href="#!" class="modal-action modal-close waves-effect waves-light btn-flat">
+            Close
+        </a>
     </div>
 </div>
 
-<!-- Album Browser -->
-<div class="container collapse" id="collapseLibraryBrowserAlbum">
-    <h6>
-        <button class="btn btn-sm btn-just-icon selectLibraryFilterButton" data-source="#collapseLibraryBrowserAlbum" data-type="albums">
-            <i class="material-icons">arrow_back</i>
-        </button>
-        Album Browser
-    </h6>
-
-    <div class="container-fluid text-center">
-        <button data-type="albums" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadLessButton">
-            <i class="material-icons">keyboard_arrow_up</i>
-        </button>
-        <button data-type="albums" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserReloadButton">
-            <i class="material-icons">refresh</i>
-            <span class="libraryBrowserPositionIndicator">0-0/0</span>
-        </button>
-        <button data-type="albums" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadMoreButton">
-            <i class="material-icons">keyboard_arrow_down</i>
-        </button>
-    </div>
-
-    <div class="list-group" id="libraryBrowserAlbumRenderTarget"></div>
-
-    <div class="container-fluid text-center">
-        <button data-type="albums" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadLessButton">
-            <i class="material-icons">keyboard_arrow_up</i>
-        </button>
-        <button data-type="albums" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserReloadButton">
-            <i class="material-icons">refresh</i>
-            <span class="libraryBrowserPositionIndicator">0-0/0</span>
-        </button>
-        <button data-type="albums" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadMoreButton">
-            <i class="material-icons">keyboard_arrow_down</i>
-        </button>
-    </div>
-
-    <!-- Item Template -->
-    <div class="list-group hidden">
-        <button type="button" class="list-group-item" id="libraryBrowserAlbumTemplate">
-            <div class="row">
-                <div class="col-xs-12">
-                    <span class="result-album">{{album}}</span>
-                </div>
-            </div>
-        </button>
-    </div>
-</div>
-
-<!-- Genre Browser -->
-<div class="container collapse" id="collapseLibraryBrowserGenre">
-    <h6>
-        <button class="btn btn-sm btn-just-icon selectLibraryFilterButton" data-source="#collapseLibraryBrowserGenre" data-type="genres">
-            <i class="material-icons">arrow_back</i>
-        </button>
-        Genre Browser
-    </h6>
-
-    <div class="container-fluid text-center">
-        <button data-type="genres" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadLessButton">
-            <i class="material-icons">keyboard_arrow_up</i>
-        </button>
-        <button data-type="genres" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserReloadButton">
-            <i class="material-icons">refresh</i>
-            <span class="libraryBrowserPositionIndicator">0-0/0</span>
-        </button>
-        <button data-type="genres" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadMoreButton">
-            <i class="material-icons">keyboard_arrow_down</i>
-        </button>
-    </div>
-
-    <div class="list-group" id="libraryBrowserGenreRenderTarget"></div>
-
-    <div class="container-fluid text-center">
-        <button data-type="genres" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadLessButton">
-            <i class="material-icons">keyboard_arrow_up</i>
-        </button>
-        <button data-type="genres" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserReloadButton">
-            <i class="material-icons">refresh</i>
-            <span class="libraryBrowserPositionIndicator">0-0/0</span>
-        </button>
-        <button data-type="genres" class="btn btn-primary btn-just-icon libraryBrowserNavigationButtons libraryBrowserLoadMoreButton">
-            <i class="material-icons">keyboard_arrow_down</i>
-        </button>
-    </div>
-
-    <!-- Item Template -->
-    <div class="list-group hidden">
-        <button type="button" class="list-group-item" id="libraryBrowserGenreTemplate">
-            <div class="row">
-                <div class="col-xs-12">
-                    <span class="result-genre">{{genre}}</span>
-                </div>
-            </div>
-        </button>
-    </div>
-</div>
-
-<!-- Song Browser -->
-<div class="container collapse" id="collapseLibraryBrowserSongs">
-    <h6>
-        <button class="btn btn-sm btn-just-icon selectLibraryFilterButton" data-type="songs">
-            <i class="material-icons">arrow_back</i>
-        </button>
-        <button class="btn btn-primary btn-just-icon" id="addSearchResultToQueue">
-            <i class="material-icons">library_add</i>
-        </button>
-        Songs
-    </h6>
-
-    <div class="container-fluid text-center">
-        <button data-type="songs" class="btn btn-primary btn-just-icon librarySongBrowserNavigationButtons libraryBrowserLoadLessButton">
-            <i class="material-icons">keyboard_arrow_up</i>
-        </button>
-        <button data-type="songs" class="btn btn-primary btn-just-icon librarySongBrowserNavigationButtons libraryBrowserReloadButton">
-            <i class="material-icons">refresh</i>
-            <span class="libraryBrowserPositionIndicator">...</span>
-        </button>
-        <button data-type="songs" class="btn btn-primary btn-just-icon librarySongBrowserNavigationButtons libraryBrowserLoadMoreButton">
-            <i class="material-icons">keyboard_arrow_down</i>
-        </button>
-    </div>
-
-    <div class="list-group" id="libraryBrowserSongsRenderTarget"></div>
-
-    <div class="container-fluid text-center">
-        <button data-type="songs" class="btn btn-primary btn-just-icon librarySongBrowserNavigationButtons libraryBrowserLoadLessButton">
-            <i class="material-icons">keyboard_arrow_up</i>
-        </button>
-        <button data-type="songs" class="btn btn-primary btn-just-icon librarySongBrowserNavigationButtons libraryBrowserReloadButton">
-            <i class="material-icons">refresh</i>
-            <span class="libraryBrowserPositionIndicator">0-0/0</span>
-        </button>
-        <button data-type="songs" class="btn btn-primary btn-just-icon librarySongBrowserNavigationButtons libraryBrowserLoadMoreButton">
-            <i class="material-icons">keyboard_arrow_down</i>
-        </button>
-    </div>
-
-    <!-- Item Template -->
-    <div class="list-group hidden">
-        <button type="button" class="list-group-item" id="libraryBrowserSongsTemplate">
-            <div class="row">
-                <div class="col-xs-8">
-                    <span class="result-title">{{title}}</span><br>
-                    <span class="result-artist">{{artist}}</span>
-                </div>
-                <div class="col-xs-4 text-right">
-                    <span class="result-length">00:00</span>
-                </div>
-            </div>
-        </button>
-    </div>
+<!-- (New) Song Browser Item Template -->
+<div class="collection hidden" id="songBrowserRenderTargetTemplates">
+    <a href="#!" class="collection-item" id="songBrowserItemTemplate">
+        <span class="badge result-length">{{time}}</span>
+        <i class="material-icons left">play_circle_filled</i>
+        <span class="result-title">{{title}}</span>
+    </a>
 </div>
 
 <script src="/public/js/custom/library.js"></script>

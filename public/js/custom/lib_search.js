@@ -29,6 +29,9 @@ $(document).ready(function() {
 
     function renderSongs(startIndex) {
         var header = $('#searchHeaderTemplate').clone();
+        $('.modal-trigger', header).click(function() {
+            $('#addAllSearchResultsToQueue').modal('open');
+        });
         header.appendTo('#searchResultRenderTarget').hide().fadeIn(100);
         $('.result-count').text(songs.length);
 
